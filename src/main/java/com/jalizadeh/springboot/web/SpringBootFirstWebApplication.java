@@ -1,4 +1,4 @@
-package com.jalizadeh.springboot.web.springbootfirstwebapplication;
+package com.jalizadeh.springboot.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
