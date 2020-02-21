@@ -7,6 +7,9 @@
 <title>Login & Enjoy</title>
 </head>
 <body>
+
+<font color="red">${error}</font>
+
 <form method="post">
 Name: <input type="text" name="name">
 <br/>
