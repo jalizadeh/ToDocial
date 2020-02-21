@@ -4,10 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class LoginController {
-	
-	@RequestMapping("/login")
-	public String LoginMessage() {
-		return "login";
+public class Signup {
+
+	@RequestMapping("/signup")
+	public String SignupMessage() {
+		return "signup";
 	}
 }
