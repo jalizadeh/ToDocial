@@ -4,14 +4,13 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Login & Enjoy</title>
+<title>Sign Up & Enjoy</title>
 </head>
 <body>
-<form method="post">
-Name: <input type="text" name="name">
+Hey ${firstname} ${lastname}, we sent you a email via ${email}
 <br/>
-Password: <input type="password" name="password">
-<input type="submit">
-</form>
+Please confirm it and enjoy :)
+
+
 </body>
 </html>

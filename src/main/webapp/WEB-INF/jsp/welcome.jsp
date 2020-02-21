@@ -4,14 +4,10 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Login & Enjoy</title>
+<title>Welcome</title>
 </head>
 <body>
-<form method="post">
-Name: <input type="text" name="name">
-<br/>
-Password: <input type="password" name="password">
-<input type="submit">
+Welcome ${name} :)
 </form>
 </body>
 </html>
