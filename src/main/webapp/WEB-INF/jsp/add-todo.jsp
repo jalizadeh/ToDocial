@@ -4,13 +4,15 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Todo Lists</title>
+<title>Add a new Todo</title>
 </head>
 <body>
-Hey ${name}, here is the list of your todos:
+Hey <font color="red">${name}</font>, add a new Todo:
 <br>
-${todos}
+<form method="post">
+Description: <input name="desc">
 <br>
-<a href="/add-todo">Add a Todo</a>
+<input type="submit">
+</form>
 </body>
 </html>
