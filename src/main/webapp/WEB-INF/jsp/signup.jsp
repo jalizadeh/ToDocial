@@ -20,6 +20,7 @@ Password: <input type="password" name="password"/>
 <br>
 Confirm Password: <input type="password" new="confirmpassword"/>
 <br>
+Remember me <input name="remember" type="checkbox" value="true"><br>
 <input type="submit"/>
 </form>
 

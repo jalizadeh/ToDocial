@@ -4,12 +4,14 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Todo Lists</title>
+<title>Your profile</title>
 </head>
 <body>
-Hey ${name}, here is the list of your todos:
-<br>
-${todos}
-</form>
+<h2>Your Profile:</h2>
+Firstname:<input name="firstname" value="${name}"/>
+<br/>
+Password:<input name="password" value="${password}">
+
+	</form>
 </body>
 </html>
