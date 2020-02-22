@@ -4,12 +4,12 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Welcome</title>
+<title>Todo Lists</title>
 </head>
 <body>
-<h2>Welcome ${name} :)</h2>
-<a href="/list-todos">Click here</a> to manage your todos.
-
+Here is the list of your todos:
+<br>
+${todos}
 </form>
 </body>
 </html>

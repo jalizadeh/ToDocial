@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class Signup {
+public class SignupController {
 
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
 	public String SignupMessage() {
@@ -19,6 +19,12 @@ public class Signup {
 			@RequestParam String firstname,
 			@RequestParam String lastname,
 			@RequestParam String email) {
+		
+		if(firstname.length() == 0 || lastname.length()==0) {
+			model.put("error", "Fields can't be empty");
+			return "signup";
+		}
+		
 		model.put("firstname", firstname);
 		model.put("lastname", lastname);
 		model.put("email", email);

@@ -7,6 +7,8 @@
 <title>Sign Up & Enjoy</title>
 </head>
 <body>
+<font color="red">${error}</font>
+
 <form method="post">
 Firstname: <input type="text" name="firstname"/>
 <br>
