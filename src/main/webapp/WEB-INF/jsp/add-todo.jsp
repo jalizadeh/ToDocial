@@ -23,32 +23,34 @@
 		
 		
 		<form:form method="post" modelAttribute="todo">
-		  <div class="form-row align-items-center">
-		  <div class="col-auto">
-		      <p>Description</p>
-		    </div>
-		    
-		    <div class="col-auto">
-		      <form:input type="text" class="form-control mb-2" path="desc" required="required" />
-		      <form:errors path="desc" cssClass="text-warning"/>
-		    </div>
-		
-			<div class="col-auto">
-		      <select path="isDone" id="inputState" class="form-control">
-		        <option selected>Choose...</option>
-		        <option>Completed</option>
-		        <option>Not Completed</option>
-		      </select>
-		    </div>
-		    
-		    <div class="col-auto">
-		      <button type="submit" class="btn btn-primary mb-2">Add</button>
-		    </div>
-		  </div>
+
+			
+			<fieldset class="form-group">
+				<form:label path="desc">Description</form:label> 
+				<form:input path="desc" type="text"
+					class="form-control" required="required"/>
+				<form:errors path="desc" cssClass="text-warning"/>
+			</fieldset>
+			
+			<fieldset class="form-group">
+				<form:label path="targetDate">Target Date</form:label> 
+				<form:input path="targetDate" type="text"
+					class="form-control" required="required"/>
+				<form:errors path="targetDate" cssClass="text-warning"/>
+			</fieldset>
+	
+			<button type="submit" class="btn btn-success">Update</button>
 		</form:form>
 	</div>
 
 	<script src="webjars/jquery/3.4.1/jquery.min.js"></script>
 	<script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+	
+	<script type="text/javascript">
+		$('#targetDate').datepicker({
+			format : 'dd/mm/yyyy'
+		});
+	</script>
 </body>
 </html>

@@ -1,13 +1,17 @@
 package com.jalizadeh.springboot.web.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +26,14 @@ public class TodoController {
 	
 	@Autowired
 	TodoService service;
+	
+	@InitBinder
+	protected void InitBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		binder.registerCustomEditor(Date.class, 
+				new CustomDateEditor(dateFormat, false));
+	}
+	
 	
 	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
 	public String ShowTodosList(ModelMap model) {
@@ -54,7 +66,8 @@ public class TodoController {
 			return "add-todo";
 		}
 		
-		service.addTodo((String) model.get("name"), todo.getDesc(), new Date(), false);
+		service.addTodo((String) model.get("name"), 
+				todo.getDesc(), todo.getTargetDate(), false);
 		return "redirect:/list-todos";
 	}
 	
@@ -73,7 +86,6 @@ public class TodoController {
 		}
 		
 		todo.setUser((String) model.get("name"));
-		todo.setTargetDate(new Date());
 		service.updateTodo(todo);
 		return "redirect:/list-todos";
 	}
