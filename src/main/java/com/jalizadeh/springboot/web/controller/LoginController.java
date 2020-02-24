@@ -19,10 +19,17 @@ public class LoginController {
 	@Autowired
 	LoginService loginService;
 	
-	//if it is GET, show the login page
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String ShowWelcomePage(ModelMap model) {
+		model.put("name", "javad");
+		return "welcome";
+	}
+	
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String ShowLoginPage(ModelMap model) {
-		//model.put("name", name);
+		
 		return "login";
 	}
 	
@@ -41,7 +48,7 @@ public class LoginController {
 			
 		model.put("name", name);
 		model.put("password", password);
-		return "welcome";
+		return "redirect:/list-todos";
 	}
 	
 }
