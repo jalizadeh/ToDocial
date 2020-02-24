@@ -16,9 +16,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		//auth.inMemoryAuthentication().withUser("javad").password("12345").roles("USER", "ADMIN");
 		
 		auth.inMemoryAuthentication()
-        .withUser("javad").password("{noop}12345").roles("USER", "ADMIN")
-        .and()
-        .withUser("admin").password("{noop}admin").roles("ADMIN");
+        	.withUser("javad").password("{noop}12345").roles("USER", "ADMIN");
 	}
 	
 	@Override

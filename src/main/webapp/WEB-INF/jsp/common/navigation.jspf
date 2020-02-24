@@ -19,7 +19,7 @@
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 		          <a class="dropdown-item" href="/profile">Logged in as ${name}</a>
 		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="#">Sign out</a>
+		          <a class="dropdown-item" href="/logout">Log out</a>
 		        </div>
 		    </li>
       	</c:when>
