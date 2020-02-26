@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SignupController {
 
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
-	public String SignupMessage() {
+	public String SignupMessage(ModelMap model) {
+		model.put("PageTitle", "Signup");
 		return "signup";
 	}
 	

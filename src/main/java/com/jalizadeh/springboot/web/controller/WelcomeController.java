@@ -19,6 +19,7 @@ public class WelcomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String ShowWelcomePage(ModelMap model) {
 		model.put("name", userService.GetLoggedinUsername());
+		model.put("PageTitle", "Welcome");
 		return "welcome";
 	}
 	
