@@ -3,7 +3,7 @@
 
 
 	<div class="container">
-	<h4 class="display-4">Hey <mark>${name}</mark>, here is the list of your todos:</h4>
+	<h4 class="display-4">Hey <mark>${name}</mark>, you have ${todo_count} todos:</h4>
 	<br/>
 	<table class="table table-striped table-hover">
 		<thead>
@@ -20,7 +20,8 @@
 					<th><fmt:formatDate value="${todo.targetDate}" pattern="dd/MM/yyyy"/></th>
 					<th>${todo.done}</th>
 					<th><a type="button" class="btn btn-warning" href="/delete-todo?id=${todo.id}">Delete</a>
-					<a type="button" class="btn btn-info" href="/update-todo?id=${todo.id}">Update</a></th>
+					<a type="button" class="btn btn-info" href="/update-todo?id=${todo.id}">Update</a>
+					<a type="button" class="btn btn-success" href="/todo-finished?id=${todo.id}">Finished?</a></th>
 				</tr>
 			</c:forEach>
 		<tbody>

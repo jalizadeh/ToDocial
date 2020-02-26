@@ -79,6 +79,23 @@
 		    <version>1.9.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-jpa</artifactId>
+		    <!-- <version>2.2.4.RELEASE</version> -->
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+		</dependency>
+        <dependency>
+          	<groupId>com.zsoltfabok</groupId>
+          	<artifactId>sqlite-dialect</artifactId>
+          	<version>1.0</version>
+        </dependency>
 
 	</dependencies>
 

@@ -22,6 +22,13 @@
 					class="form-control" required="required"/>
 				<form:errors path="targetDate" cssClass="text-warning"/>
 			</fieldset>
+			
+			<fieldset class="form-group">
+			    <label for="done">Is todo finished?</label>
+			    <form:select class="form-control"  path="done">
+				    <form:options items="${isDoneValues}" />
+				</form:select>
+			 </fieldset>
 	
 			<button type="submit" class="btn btn-success">Update</button>
 		</form:form>

@@ -2,13 +2,13 @@ package com.jalizadeh.springboot.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -19,13 +19,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jalizadeh.springboot.web.model.Todo;
-import com.jalizadeh.springboot.web.service.TodoService;
+import com.jalizadeh.springboot.web.repository.TodoRepository;
+import com.jalizadeh.springboot.web.service.UserService;
 
 @Controller
 public class TodoController {
+
+	@Autowired
+	UserService userService;
 	
 	@Autowired
-	TodoService service;
+	TodoRepository todoRepository;
 	
 	@InitBinder
 	protected void InitBinder(WebDataBinder binder) {
@@ -37,32 +41,16 @@ public class TodoController {
 	
 	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
 	public String ShowTodosList(ModelMap model) {
-		String name = GetLoggedInUserName();
-		
-		model.put("todos", service.retrieveTodos(name));
-		model.put("name", GetLoggedInUserName());
+		model.put("todos", todoRepository.findAll());
+		model.put("todo_count", todoRepository.count());
+		model.put("name", userService.GetLoggedinUsername());
 		return "list-todos";
 	}
-
-
-	private String GetLoggedInUserName() {
-		Object principal = SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		
-		if(principal instanceof UserDetails) {
-			return ((UserDetails) principal).getUsername();
-			
-		}
-		
-		return principal.toString();
-	}
-	
-	
 	
 	
 	@RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
-	public String DeleteTodo(ModelMap model, @RequestParam int id) {
-		service.deleteTodo(id);
+	public String DeleteTodo(ModelMap model, @RequestParam Long id) {
+		todoRepository.deleteById(id);
 		return "redirect:/list-todos";
 	}
 	
@@ -70,8 +58,15 @@ public class TodoController {
 	
 	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
 	public String ShowAddTodo(ModelMap model) {
-		model.addAttribute("todo",new Todo(0, GetLoggedInUserName(),
-				"Default", new Date(), false));
+		model.put("name", userService.GetLoggedinUsername());
+		model.addAttribute("todo",new Todo());
+	
+		Map<String,String> isDoneValues = new LinkedHashMap<String,String>();
+		isDoneValues.put("true", "Yes");
+		isDoneValues.put("false", "No");
+		model.put("isDoneValues", isDoneValues);
+			    
+			    
 		return "add-todo";
 	}
 	
@@ -82,15 +77,25 @@ public class TodoController {
 			return "add-todo";
 		}
 		
-		service.addTodo(GetLoggedInUserName(), 
-				todo.getDesc(), todo.getTargetDate(), false);
+		todoRepository.save(new Todo(userService.GetLoggedinUsername(), 
+				todo.getDesc(), todo.getTargetDate(), todo.isDone()));
 		return "redirect:/list-todos";
 	}
 	
+	
 	@RequestMapping(value = "/update-todo", method = RequestMethod.GET)
-	public String ShowUpdateTodoPage(ModelMap model, @RequestParam int id) {
-		Todo todo = service.getTodoById(id);
+	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id) {
+		model.put("name", userService.GetLoggedinUsername());
+		
+		Todo todo = todoRepository.getOne(id);
 		model.put("todo", todo);
+		
+		//the value will be auto-selected by spring
+		Map<String,String> isDoneValues = new LinkedHashMap<String,String>();
+		isDoneValues.put("true", "Yes");
+		isDoneValues.put("false", "No");
+	    model.put("isDoneValues", isDoneValues);
+	    
 		return "update-todo";
 	}
 	
@@ -101,8 +106,9 @@ public class TodoController {
 			return "update-todo";
 		}
 		
-		todo.setUser(GetLoggedInUserName());
-		service.updateTodo(todo);
+		todo.setUser(userService.GetLoggedinUsername());
+		todoRepository.save(todo);
+		
 		return "redirect:/list-todos";
 	}
 }

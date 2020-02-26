@@ -2,41 +2,50 @@ package com.jalizadeh.springboot.web.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
+
+@Entity
 public class Todo {
-    private int id;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+	
     private String user;
     
     @Size(min=10, message="Enter at least 10 characters")
     private String desc;
     
+    @Column(name="targetdate")
     private Date targetDate;
+    
+    @Column(name="isdone")
     private boolean isDone;
 
     public Todo() {
     	super();
     }
     
-    public Todo(int id, String user, String desc, Date targetDate,
-            boolean isDone) {
-        super();
-        this.id = id;
-        this.user = user;
-        this.desc = desc;
-        this.targetDate = targetDate;
-        this.isDone = isDone;
-    }
 
-    public int getId() {
-        return id;
-    }
+    public Todo(String user, @Size(min = 10, message = "Enter at least 10 characters") String desc,
+			Date targetDate, boolean isDone) {
+		super();
+		this.user = user;
+		this.desc = desc;
+		this.targetDate = targetDate;
+		this.isDone = isDone;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public String getUser() {
+
+
+	public String getUser() {
         return user;
     }
 
@@ -72,7 +81,7 @@ public class Todo {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + id;
+        result = (int) (prime * result + id);
         return result;
     }
 
@@ -100,5 +109,19 @@ public class Todo {
                 "Todo [id=%s, user=%s, desc=%s, targetDate=%s, isDone=%s]", id,
                 user, desc, targetDate, isDone);
     }
+
+
+
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 }
