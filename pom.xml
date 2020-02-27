@@ -65,6 +65,22 @@
 		    <version>4.3.1</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/org.webjars/font-awesome -->
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>font-awesome</artifactId>
+		    <version>5.12.0</version>
+		</dependency>
+		
+		 <!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator -->
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>webjars-locator</artifactId>
+		    <version>0.38</version>
+		</dependency>
+
+
+		
 		<!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
 		<dependency>
 		    <groupId>org.webjars</groupId>

@@ -1,5 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" 
+	contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -7,10 +8,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Todo Manager | ${PageTitle}</title>
 
-<link href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-
+	<meta charset="UTF-8">
+	<title>Todo Manager | ${PageTitle}</title>
+	
+	<link href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="webjars/font-awesome/5.12.0/css/all.min.css" rel="stylesheet" />
 </head>
 <body>

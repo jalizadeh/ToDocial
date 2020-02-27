@@ -1,8 +1,10 @@
 package com.jalizadeh.springboot.web.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -113,5 +115,32 @@ public class TodoController {
 		todoRepository.save(todo);
 		
 		return "redirect:/list-todos";
+	}
+	
+	
+	@RequestMapping(value = "/todo-finished", method = RequestMethod.GET)
+	public String SetAsFinished(ModelMap model, @RequestParam Long id) {
+		Todo todo = todoRepository.getOne(id);
+		todo.setDone(true);
+		todoRepository.save(todo);
+		return "redirect:/list-todos";
+	}
+	
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public String SearchTodo(ModelMap model, @RequestParam(defaultValue="") String q) {
+		model.put("name", userService.GetLoggedinUsername());
+		model.put("PageTitle", "Search for: " + q);
+		
+		List<Todo> todos = new ArrayList<Todo>();
+		for (Todo todo : todoRepository.findAll()) {
+			if(todo.getDesc().toLowerCase().contains(q))
+				todos.add(todo);
+		}
+		
+		model.put("todos", todos);
+		model.put("result", todos.size() + " results found for <mark>" + q + "</mark>");
+		
+		return "search";
 	}
 }

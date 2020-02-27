@@ -3,8 +3,8 @@
 
 
 	<div class="container mt-5 mb-5">
-		
-		<table class="table table-striped table-hover">
+		<h4 class="display-4">${result}</h4>
+		<table class="table table-striped table-hover mt-3">
 			<thead>
 				<tr>
 					<th>Description</th>
@@ -28,8 +28,6 @@
 			<tbody>
 			</tbody>
 		</table>
-		
-		<div><a class="btn btn-primary" href="/add-todo" role="button">Add a Todo</a></div>
 	</div>
 
 <%@ include file="common/footer.jspf" %>
