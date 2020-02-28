@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
 
@@ -16,8 +18,6 @@ public class Todo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-	
-    private String user;
     
     @Size(min=10, message="Enter at least 10 characters")
     private String desc;
@@ -25,35 +25,32 @@ public class Todo {
     @Column(name="targetdate")
     private Date targetDate;
     
-    @Column(name="isdone")
+    @Column(name="isdone", nullable=false)
     private boolean isDone;
 
-    public Todo() {
-    	super();
-    }
+	@ManyToOne
+	@JoinColumn(name="user_id")
+    private User user;
+    
+    public Todo() {}
+    
     
 
-    public Todo(String user, @Size(min = 10, message = "Enter at least 10 characters") String desc,
-			Date targetDate, boolean isDone) {
+    public Todo(@Size(min = 10, message = "Enter at least 10 characters") String desc, Date targetDate,
+			boolean isDone, User user) {
 		super();
-		this.user = user;
 		this.desc = desc;
 		this.targetDate = targetDate;
 		this.isDone = isDone;
+		this.user = user;
 	}
 
 
 
 
-	public String getUser() {
-        return user;
-    }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
 
-    public String getDesc() {
+	public String getDesc() {
         return desc;
     }
 
@@ -111,17 +108,20 @@ public class Todo {
     }
 
 
-
-
 	public Long getId() {
 		return id;
 	}
 
-
-
-
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

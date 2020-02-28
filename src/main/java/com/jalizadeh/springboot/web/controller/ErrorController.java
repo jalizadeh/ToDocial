@@ -1,5 +1,7 @@
 package com.jalizadeh.springboot.web.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,13 +22,13 @@ public class ErrorController {
 	@ExceptionHandler(Exception.class)
 	public ModelAndView HandleException
 		(HttpServletRequest request, HttpServletResponse response,
-				Exception ex, ModelMap model) {
+				Exception ex, ModelMap model, Principal principal) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("exception", ex.getStackTrace());
 		mv.addObject("url", request.getRequestURL());
 		
 		model.put("url", request.getRequestURL());
-		model.put("name", userService.GetLoggedinUsername());
+		model.put("name", userService.GetUserByPrincipal(principal).getUsername());
 		
 		mv.setViewName("error");
 		return mv;

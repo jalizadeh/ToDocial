@@ -1,5 +1,6 @@
 package com.jalizadeh.springboot.web.controller;
 
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jalizadeh.springboot.web.model.Todo;
+import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.repository.TodoRepository;
 import com.jalizadeh.springboot.web.service.UserService;
 
@@ -42,10 +45,10 @@ public class TodoController {
 	
 	
 	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
-	public String ShowTodosList(ModelMap model) {
+	public String ShowTodosList(ModelMap model, Principal principal) {
 		model.put("todos", todoRepository.findAll());
 		model.put("todo_count", todoRepository.count());
-		model.put("name", userService.GetLoggedinUsername());
+		model.put("name", userService.GetUserByPrincipal(principal).getUsername());
 		model.put("PageTitle", "Todo Lists");
 		return "list-todos";
 	}
@@ -60,8 +63,8 @@ public class TodoController {
 	
 	
 	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
-	public String ShowAddTodo(ModelMap model) {
-		model.put("name", userService.GetLoggedinUsername());
+	public String ShowAddTodo(ModelMap model, Principal principal) {
+		model.put("name", userService.GetUserByPrincipal(principal).getUsername());
 		model.put("PageTitle", "Add new Todo");
 		
 		model.addAttribute("todo",new Todo());
@@ -76,21 +79,25 @@ public class TodoController {
 	}
 	
 	@RequestMapping(value = "/add-todo", method = RequestMethod.POST)
-	public String AddTodo(ModelMap model, @Valid Todo todo, BindingResult result) {
+	public String AddTodo(ModelMap model, @Valid Todo todo,
+			BindingResult result, Principal principal) {
+		
+		User user = userService.GetUserByPrincipal(principal);
+    	todo.setUser(user);
+    	
 		if(result.hasErrors()) {
 			model.put("error", "Enter at least 10");
 			return "add-todo";
 		}
 		
-		todoRepository.save(new Todo(userService.GetLoggedinUsername(), 
-				todo.getDesc(), todo.getTargetDate(), todo.isDone()));
+		todoRepository.save(todo);
 		return "redirect:/list-todos";
 	}
 	
 	
 	@RequestMapping(value = "/update-todo", method = RequestMethod.GET)
-	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id) {
-		model.put("name", userService.GetLoggedinUsername());
+	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id, Principal principal) {
+		model.put("name", userService.GetUserByPrincipal(principal).getUsername());
 		model.put("PageTitle", "Update Todo");
 		Todo todo = todoRepository.getOne(id);
 		model.put("todo", todo);
@@ -105,13 +112,19 @@ public class TodoController {
 	}
 	
 	@RequestMapping(value = "/update-todo", method = RequestMethod.POST)
-	public String UpdateTodo(ModelMap model, @Valid Todo todo, BindingResult result) {
+	public String UpdateTodo(ModelMap model, @Valid Todo todo,
+			BindingResult result, Principal principal) {
+		
+		User user = (User)(((UsernamePasswordAuthenticationToken)principal).getPrincipal());
+    	
 		if(result.hasErrors()) {
 			model.put("error", "Enter at least 10");
 			return "update-todo";
 		}
 		
-		todo.setUser(userService.GetLoggedinUsername());
+		//todo.setUser(userService.GetLoggedinUsername());
+		todo.setUser(user);
+		
 		todoRepository.save(todo);
 		
 		return "redirect:/list-todos";
@@ -128,8 +141,9 @@ public class TodoController {
 	
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public String SearchTodo(ModelMap model, @RequestParam(defaultValue="") String q) {
-		model.put("name", userService.GetLoggedinUsername());
+	public String SearchTodo(ModelMap model, @RequestParam(defaultValue="") String q,
+			Principal principal) {
+		model.put("name", userService.GetUserByPrincipal(principal).getUsername());
 		model.put("PageTitle", "Search for: " + q);
 		
 		List<Todo> todos = new ArrayList<Todo>();
