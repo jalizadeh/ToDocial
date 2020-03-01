@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.repository.TodoRepository;
 import com.jalizadeh.springboot.web.service.UserService;
 
@@ -22,7 +23,7 @@ public class WelcomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String ShowWelcomePage(ModelMap model, Principal principal) {
-        model.put("name", userService.GetUserByPrincipal(principal).getUsername());
+        model.put("user", userService.GetUserByPrincipal(principal));
 		model.put("todoCount", todoRepository.findAll().size());
 		model.put("PageTitle", "Welcome");
 		return "welcome";

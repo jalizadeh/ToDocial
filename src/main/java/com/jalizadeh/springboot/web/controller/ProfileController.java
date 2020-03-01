@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.service.UserService;
 
 @Controller
@@ -17,7 +18,7 @@ public class ProfileController {
 	
 	@RequestMapping("/profile")
 	public String ShowProfile(ModelMap model, Principal principal) {
-		model.put("name", userService.GetUserByPrincipal(principal).getUsername());
+		model.put("user", userService.GetUserByPrincipal(principal));
 		model.put("PageTitle", "Your Profile");
 		return "profile";
 	}

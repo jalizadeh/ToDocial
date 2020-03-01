@@ -18,14 +18,14 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.jalizadeh.springboot.web.model.FlashMessage;
-import com.jalizadeh.springboot.web.service.UserServiceInterface;
+import com.jalizadeh.springboot.web.service.IUserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	private UserServiceInterface userServiceInterface;
+	private IUserService userServiceInterface;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
@@ -71,6 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     public AuthenticationFailureHandler loginFailureHandler() {
         return (request, response, exception) -> {
+        	System.err.println("SecurityConfiguration > loginFailureHandler > " + exception.getMessage());
             request.getSession().setAttribute("flash",
             		new FlashMessage("Incorrect username and/or password. Please try again.", FlashMessage.Status.FAILURE));
             response.sendRedirect("/login");

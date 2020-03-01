@@ -19,7 +19,7 @@
 						<th><fmt:formatDate value="${todo.targetDate}" pattern="dd/MM/yyyy"/></th>
 						<th>${todo.done}</th>
 						<th>
-						<a type="button" class="btn btn-success" href="/todo-finished?id=${todo.id}"><i class="fas fa-check-circle"></i></a>
+						<a type="button" class="btn btn-success" href="/todo-state?id=${todo.id}"><i class="fas fa-sync-alt"></i></a>
 						<a type="button" class="btn btn-info" href="/update-todo?id=${todo.id}"><i class="fas fa-edit"></i></a>
 						<a type="button" class="btn btn-warning" href="/delete-todo?id=${todo.id}"><i class="fas fa-trash-alt"></i></a>
 						</th>

@@ -13,7 +13,8 @@ import com.jalizadeh.springboot.web.model.User;
 public class LoginController {
 	
 	@RequestMapping(path = "/login", method = RequestMethod.GET)
-    public String loginForm(Model model, HttpServletRequest request) {
+    public String LoginForm(Model model,
+    		HttpServletRequest request) {
         model.addAttribute("user", new User());
         try {
             Object flash = request.getSession().getAttribute("flash");
@@ -23,10 +24,9 @@ public class LoginController {
             // "flash" session attribute must not exist...do nothing and proceed normally
         }
         
-        
-        
         return "login";
     }
+	
 
     @RequestMapping("/access_denied")
     public String accessDenied() {
