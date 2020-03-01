@@ -34,7 +34,7 @@ public class SignupController {
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
 	public String SignupMessage(ModelMap model ) {
 		model.addAttribute("user", new User());
-		model.put("PageTitle", "Signup");
+		model.put("PageTitle", "Sign up");
 		return "signup";
 	}
 	

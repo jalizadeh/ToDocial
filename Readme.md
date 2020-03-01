@@ -12,7 +12,7 @@ A To-Do manager with Spring and SQLite
 - [x] Login / Logout
 	- Spring Security 
 	- There are two roles `USER` and `ADMIN`
-	- Everyone can access `Login` or `Signup`, but for accessing the todos, the user must log in or sign up first.
+	- Everyone can access `Log in` or `Sign up`, but for accessing the todos, the user must log in or sign up first.
 	- [ ] Field validation
 - [x] Header/Navigation/Footer fragments
 - [x] List of all todos
@@ -33,7 +33,8 @@ A To-Do manager with Spring and SQLite
 	- [ ] Email verification
 - [x] Unseccessfull sign up
 	- [x] Show error
+- [x] Handle exceptions with exact error reason
+	- All exceptions will be redirected to `/error` showing the reason and what happened.
 - [ ] I forgot my password
-- [ ] Handle exceptions with exact error reason
 - [ ] Admin panel
 	- If user has `ROLE_ADMIN`, she can access the dashboard
