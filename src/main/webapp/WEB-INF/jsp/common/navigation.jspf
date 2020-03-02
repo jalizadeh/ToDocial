@@ -6,10 +6,10 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <c:choose>
-      	<c:when test="${user.enabled == true }">
+      
+      	<c:if test="${user.enabled == true }">
 	      	<li class="nav-item active">
-	        	<a class="nav-link" href="/list-todos">Todos<span class="sr-only">(current)</span></a>
+	        	<a class="nav-link" href="/list-todos">Todos</a>
 	      	</li>
       		<li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -21,8 +21,22 @@
 		          <a class="dropdown-item" href="/logout">Log out</a>
 		        </div>
 		    </li>
-      	</c:when>
-      	<c:otherwise>
+      	</c:if >
+      	<c:if  test="${user.role.id == 1 }">
+			<li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="Dashboard" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		        Dashboard
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" href="/admin/panel">Admin Panel</a>
+		          <a class="dropdown-item" href="/admin/users">Users</a>
+		          <a class="dropdown-item" href="/admin/todos">Todos</a>
+		          <div class="dropdown-divider"></div>
+		          <a class="dropdown-item" href="#">Setting</a>
+		        </div>
+		    </li>
+		</c:if >
+      	<c:if  test="${user.enabled == false }">
       		<li class="nav-item">
 		       <a class="nav-link" href="/login">Log in</a>
 		    </li>
@@ -32,8 +46,8 @@
 		    <li class="nav-item">
 		       <a class="nav-link" href="/signup">Sign up</a>
 		    </li>
-      	</c:otherwise>
-      </c:choose>
+      	</c:if >
+     
       
     </ul>
     

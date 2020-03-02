@@ -1,5 +1,11 @@
 # Spring TO-DO Web Application
-A To-Do manager with Spring and SQLite
+A To-Do manager with Spring and SQLite. I am trying to make it as much as possible complete, as an industry product, at the same time, a project to learn stuff.
+
+### Features:
+- Login / Sign up (multi-user)
+- Todo management
+- User profile
+- Administrator dashboard
 
 
 ### Todos:

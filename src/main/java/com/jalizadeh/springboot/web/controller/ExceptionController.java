@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jalizadeh.springboot.web.service.UserService;
 
 @Controller 
-//@ControllerAdvice
 public class ExceptionController implements ErrorController {
     private static final String ERROR_PATH = "/error";
 
@@ -37,6 +36,7 @@ public class ExceptionController implements ErrorController {
     public ModelAndView handleError(HttpServletRequest request, 
     		HttpServletResponse response,
     		Principal principal) throws IOException {
+    	
     	Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         ModelAndView mv = new ModelAndView();
         
