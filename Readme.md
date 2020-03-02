@@ -44,3 +44,12 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 - [ ] I forgot my password
 - [ ] Admin panel
 	- If user has `ROLE_ADMIN`, she can access the dashboard
+	- [x] List of all users
+		- [x] 1-click users's state change
+		- [ ] Modify user
+		- [ ] Add new user
+	- [ ] List of all todos
+		- [ ] Add new todo for any user
+		- [ ] Modify todo
+	- [ ] Setting
+	- [ ] Limit `USER` access
