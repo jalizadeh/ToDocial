@@ -122,9 +122,7 @@ public class TodoController {
 			return "update-todo";
 		}
 		
-		//todo.setUser(userService.GetLoggedinUsername());
 		todo.setUser(user);
-		
 		todoRepository.save(todo);
 		
 		return "redirect:/list-todos";

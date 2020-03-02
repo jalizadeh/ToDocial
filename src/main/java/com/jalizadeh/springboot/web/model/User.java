@@ -79,6 +79,8 @@ public class User implements UserDetails{
 	private Role role;
 
 	public User() {	}
+	
+	
 
 	public Long getId() {
 		return id;

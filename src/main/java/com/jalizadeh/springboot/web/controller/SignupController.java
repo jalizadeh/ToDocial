@@ -42,8 +42,8 @@ public class SignupController {
 	//Register new user and handle all errors
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public ModelAndView registerUserAccount
-	      (@Valid User user, BindingResult result,
-	    		  final HttpServletRequest request, Errors errors) throws EmailExistsException{ 
+	      (@Valid User user, BindingResult result, Errors errors) 
+	    		  throws EmailExistsException{ 
 
 		User registered = null;
 		//System.err.println(errors.toString());

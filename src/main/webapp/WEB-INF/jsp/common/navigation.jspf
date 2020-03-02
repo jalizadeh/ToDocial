@@ -6,23 +6,12 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      
       	<c:if test="${user.enabled == true }">
 	      	<li class="nav-item active">
 	        	<a class="nav-link" href="/list-todos">Todos</a>
 	      	</li>
-      		<li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		        Profile
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="/profile">Logged in as @${user.username}</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="/logout">Log out</a>
-		        </div>
-		    </li>
-      	</c:if >
-      	<c:if  test="${user.role.id == 1 }">
+	      	
+	      	<c:if  test="${user.role.id == 1 }">
 			<li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="Dashboard" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		        Dashboard
@@ -35,7 +24,20 @@
 		          <a class="dropdown-item" href="#">Setting</a>
 		        </div>
 		    </li>
-		</c:if >
+			</c:if >
+			
+      		<li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		        Profile
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" href="/profile">Logged in as @${user.username}</a>
+		          <div class="dropdown-divider"></div>
+		          <a class="dropdown-item" href="/logout">Log out</a>
+		        </div>
+		    </li>
+      	</c:if >
+      	
       	<c:if  test="${user.enabled == false }">
       		<li class="nav-item">
 		       <a class="nav-link" href="/login">Log in</a>

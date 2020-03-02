@@ -35,12 +35,13 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- [x] Password confirmation
 	- [x] Store passwords encrypted (BCrypt 10)
 	- [ ] Verify email address
-- [x] Successful sign up
-	- [ ] Email verification
-- [x] Unseccessfull sign up
-	- [x] Show error
+	- [x] Successful sign up
+		- [ ] Email verification
+	- [x] Unseccessfull sign up
+		- [x] Show errors
 - [x] Handle exceptions with exact error reason
 	- All exceptions will be redirected to `/error` showing the reason and what happened.
+	- [ ] If any error occurs in subdirectories, the page is not shown correctly
 - [ ] I forgot my password
 - [ ] Admin panel
 	- If user has `ROLE_ADMIN`, she can access the dashboard

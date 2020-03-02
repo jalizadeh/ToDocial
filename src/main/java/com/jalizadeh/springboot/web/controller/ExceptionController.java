@@ -52,6 +52,9 @@ public class ExceptionController implements ErrorController {
             } else if(statusCode == HttpStatus.FORBIDDEN.value()) {
             	mv.addObject("exception", "403 : Your request is not valid.<br/>The server understood the request but refuses to authorize it.");
             	mv.addObject("user", userService.GetUserByPrincipal(principal));
+            } else if(statusCode == HttpStatus.BAD_REQUEST.value()) {
+            	mv.addObject("exception", "400 : Your request is not valid.<br/>It seems you entered wrong information that we can't understand.");
+            	mv.addObject("user", userService.GetUserByPrincipal(principal));
             } else {
             	mv.addObject("exception", statusCode + " : That's all we know.");
             	mv.addObject("user", userService.GetUserByPrincipal(principal));

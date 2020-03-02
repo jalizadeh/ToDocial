@@ -35,20 +35,7 @@ public class DashboardController {
 	}
 	
 	
-	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
-	public String ShowAdminPanel_Users(ModelMap model, Principal principal) {
-		User user = userService.GetUserByPrincipal(principal);
-		model.put("user", user);
-		model.put("PageTitle", "Admin > Users");
-		
-		if(user.getRole().getName().equals("ROLE_ADMIN")) {
-			model.put("all_users", userRepository.findAll());
-			model.put("users_count", userRepository.count());
-			return "admin/users";
-		}
-		
-		return "error";
-	}
+	
 	
 	
 	@RequestMapping(value="/admin/todos", method=RequestMethod.GET)

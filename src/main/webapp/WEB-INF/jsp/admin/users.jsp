@@ -9,7 +9,6 @@
 		<table class="table table-striped table-hover">
 			<thead>
 				<tr>
-					<th>ID</th>
 					<th>Firstname</th>
 					<th>Lastname</th>
 					<th>Username</th>
@@ -21,7 +20,6 @@
 			</thead>
 				<c:forEach items="${all_users}" var="user">
 					<tr>
-						<th>${user.id}</th>
 						<th>${user.firstname}</th>
 						<th>${user.lastname}</th>
 						<th>${user.username}</th>
@@ -39,7 +37,7 @@
 			</tbody>
 		</table>
 		
-		<div><a class="btn btn-primary" href="/admin/add_user" role="button">Add a user</a></div>
+		<div><a class="btn btn-primary" href="/admin/add-user" role="button">Add a user</a></div>
 	</div>
 
 <%@ include file="common/footer.jspf" %>
