@@ -11,6 +11,13 @@
 		</div>
 	</c:if>
 	
+	<c:if test="${exception != null}">
+		<div class="alert alert-danger" role="alert">
+			<p>There are some errors:</p>
+  			<li>${exception}</li>
+		</div>
+	</c:if>
+	
 	<form:form method="post" action="/signup" modelAttribute="user">
 		<div class="form-group">
 		    <label for="firstname">Firstname</label>

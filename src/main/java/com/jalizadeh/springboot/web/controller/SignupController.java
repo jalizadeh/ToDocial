@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jalizadeh.springboot.web.error.EmailExistsException;
+import com.jalizadeh.springboot.web.error.UserAlreadyExistException;
 import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.service.IUserService;
@@ -43,7 +44,7 @@ public class SignupController {
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public ModelAndView registerUserAccount
 	      (@Valid User user, BindingResult result, Errors errors) 
-	    		  throws EmailExistsException{ 
+	    		  throws UserAlreadyExistException, EmailExistsException { 
 
 		User registered = null;
 		//System.err.println(errors.toString());
@@ -52,16 +53,18 @@ public class SignupController {
 		ValidationUtils.invokeValidator(new UserValidator(), user, errors);
 	    
 	    if (!result.hasErrors()) {
-	        try {
+	    	try {
 	        	registered = iUserService.registerNewUserAccount(user);
+			} catch (UserAlreadyExistException e) {
+				return new ModelAndView("signup", "exception", e.getMessage());
+			} catch (EmailExistsException e) {
+				return new ModelAndView("signup", "exception", e.getMessage());
 			} catch (Exception e) {
-				return new ModelAndView("signup", "flash", 
-		    			new FlashMessage(e.getMessage(), FlashMessage.Status.FAILURE));
+				return new ModelAndView("signup", "exception", e.getMessage());
 			}
 	    }
 	    
 	    if(result.hasErrors()) {
-	    	//final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 	    	List<String> errorMessages = new ArrayList<String>();
 	    	for (ObjectError obj : errors.getAllErrors()) {
 	    		errorMessages.add(obj.getDefaultMessage());

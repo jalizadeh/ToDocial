@@ -50,7 +50,9 @@ public class UserService implements IUserService {
 	
 	
 	@Override
-    public User registerNewUserAccount(final User user) {
+    public User registerNewUserAccount(final User user) 
+    		throws UserAlreadyExistException {
+		
 		if(usernameExists(user.getUsername())) {
         	throw new UserAlreadyExistException("There is an account with this username: " + user.getUsername() + "\nPlease select a different username.");
         }
@@ -58,6 +60,7 @@ public class UserService implements IUserService {
         if (emailExists(user.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email adress: " + user.getEmail() + "\nPlease enter a different email address.");
         }
+        
         
         User nUser = new User();
 

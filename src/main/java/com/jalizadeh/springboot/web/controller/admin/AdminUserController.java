@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.jalizadeh.springboot.web.error.EmailExistsException;
+import com.jalizadeh.springboot.web.error.UserAlreadyExistException;
 import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.model.Role;
 import com.jalizadeh.springboot.web.model.User;
@@ -112,7 +114,8 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/admin/add-user", method=RequestMethod.POST)
 	public String AddNewUser(@Valid User nUser, Principal principal,
-			ModelMap model, BindingResult result, Errors errors) {
+			ModelMap model, BindingResult result, Errors errors) 
+					throws UserAlreadyExistException, EmailExistsException {
 		User user = userService.GetUserByPrincipal(principal);
 		model.put("user", user);
 		User registered = null;

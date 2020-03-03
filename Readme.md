@@ -15,41 +15,46 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- User
 	- Todo
 	- Role
-- [x] Login / Logout
+	- [ ] Define username & password
+- [ ] General
+	- [x] Header/Navigation/Footer fragments
+	- [x] Set page title
+		- Each page&#39;s title is encapsulated in `model`
+	- [x] Support UTF-8 encoding
+	- [x] Handle exceptions with exact error reason
+		- All exceptions will be redirected to `/error` showing the reason and what happened.
+		- [ ] If any error occurs in subdirectories, the page is not shown correctly
+- [ ] Todos
+	- [x] List of all todos
+	- [x] Add/Update/Delete todos
+	- [x] 1-click Todo's state change
+	- [x] Search among todos
+- [ ] Log in
 	- Spring Security 
-	- There are two roles `USER` and `ADMIN`
+	- There are two roles `ROLE_USER` and `ROLE_ADMIN`
 	- Everyone can access `Log in` or `Sign up`, but for accessing the todos, the user must log in or sign up first.
 	- [ ] Field validation
-- [x] Header/Navigation/Footer fragments
-- [x] List of all todos
-- [x] Add/Update/Delete todos
-- [x] Set page title automatically
-	- Each page&#39;s title is encapsulated in `model`
-- [x] 1-click Todo's state change
-- [x] Support UTF-8 encoding
-- [x] Search among todos
+	- [x] Log out
+	- [ ] I forgot my password
+	- [ ] Remember me
 - [ ] [Signup new user](https://www.baeldung.com/registration-with-spring-mvc-and-spring-security)
 	- All new users are registered as `USER`
 	- [x] Filed validation
 	- [x] Email validation
 	- [x] Password confirmation
 	- [x] Store passwords encrypted (BCrypt 10)
-	- [ ] Verify email address
 	- [x] Successful sign up
 		- [ ] Email verification
 	- [x] Unseccessfull sign up
-		- [x] Show errors
-- [x] Handle exceptions with exact error reason
-	- All exceptions will be redirected to `/error` showing the reason and what happened.
-	- [ ] If any error occurs in subdirectories, the page is not shown correctly
-- [ ] I forgot my password
+		- [x] Show errors & exceptions
 - [ ] Admin panel
 	- If user has `ROLE_ADMIN`, she can access the dashboard
-	- [x] List of all users
+	- [x] Manage users
 		- [x] 1-click users's state change
 		- [ ] Modify user
-		- [ ] Add new user
-	- [ ] List of all todos
+		- [x] Add new user
+			- [ ] Handle mistakes like signing up a new user
+	- [ ] Manage todos
 		- [ ] Add new todo for any user
 		- [ ] Modify todo
 	- [ ] Setting
