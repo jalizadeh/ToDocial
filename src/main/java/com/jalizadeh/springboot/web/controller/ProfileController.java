@@ -18,7 +18,7 @@ public class ProfileController {
 	
 	@RequestMapping("/profile")
 	public String ShowProfile(ModelMap model, Principal principal) {
-		model.put("user", userService.GetUserByPrincipal(principal));
+		model.put("loggedinUser", userService.GetUserByPrincipal(principal));
 		model.put("PageTitle", "Your Profile");
 		return "profile";
 	}

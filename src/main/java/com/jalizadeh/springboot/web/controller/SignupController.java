@@ -33,7 +33,7 @@ public class SignupController {
 	
 
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
-	public String SignupMessage(ModelMap model ) {
+	public String SignupMessage(ModelMap model) {
 		model.addAttribute("user", new User());
 		model.put("PageTitle", "Sign up");
 		return "signup";
@@ -45,8 +45,7 @@ public class SignupController {
 	public ModelAndView registerUserAccount
 	      (@Valid User user, BindingResult result, Errors errors) 
 	    		  throws UserAlreadyExistException, EmailExistsException { 
-
-		User registered = null;
+		
 		//System.err.println(errors.toString());
 		//System.err.println(user.toString());
 		
@@ -54,29 +53,20 @@ public class SignupController {
 	    
 	    if (!result.hasErrors()) {
 	    	try {
-	        	registered = iUserService.registerNewUserAccount(user);
-			} catch (UserAlreadyExistException e) {
-				return new ModelAndView("signup", "exception", e.getMessage());
-			} catch (EmailExistsException e) {
-				return new ModelAndView("signup", "exception", e.getMessage());
-			} catch (Exception e) {
+	    		User registered = iUserService.registerNewUserAccount(user);
+	        	return new ModelAndView("confirm_email", "user", registered);
+			} catch (UserAlreadyExistException | 
+					EmailExistsException | 
+					Exception e) {
 				return new ModelAndView("signup", "exception", e.getMessage());
 			}
 	    }
 	    
-	    if(result.hasErrors()) {
-	    	List<String> errorMessages = new ArrayList<String>();
-	    	for (ObjectError obj : errors.getAllErrors()) {
-	    		errorMessages.add(obj.getDefaultMessage());
-			}
-	    	
-	    	return new ModelAndView("signup", "errorMessages", errorMessages);
-	    }
-	    
-	    if (registered == null)
-	    	return new ModelAndView("signup", "user", user);
-	    
-	    
-	    return new ModelAndView("confirm_email", "user", registered);
+    	List<String> errorMessages = new ArrayList<String>();
+    	for (ObjectError obj : errors.getAllErrors()) {
+    		errorMessages.add(obj.getDefaultMessage());
+		}
+    	
+    	return new ModelAndView("signup", "errorMessages", errorMessages);
 	}
 }

@@ -49,11 +49,11 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
 	public String ShowAdminPanel_Users(ModelMap model, Principal principal) {
-		User user = userService.GetUserByPrincipal(principal);
-		model.put("user", user);
+		User loggedinUser = userService.GetUserByPrincipal(principal);
+		model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin > Users");
 		
-		if(user.getRole().getName().equals("ROLE_ADMIN")) {
+		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN")) {
 			model.put("all_users", userRepository.findAll());
 			model.put("users_count", userRepository.count());
 			return "admin/users";
@@ -67,11 +67,11 @@ public class AdminUserController {
 	public String ActivateUser(ModelMap model
 			, Principal principal
 			, @RequestParam Long id) {
-		User user = userService.GetUserByPrincipal(principal);
-		model.put("user", user);
+		User loggedinUser = userService.GetUserByPrincipal(principal);
+		model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin > Modify User");
 		
-		if(user.getRole().getName().equals("ROLE_ADMIN")) {
+		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN")) {
 			User foundUser = userRepository.findById(id).get();
 			foundUser.setEnabled(!foundUser.isEnabled()); 
 			foundUser.setMp(foundUser.getPassword());
@@ -86,70 +86,86 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/admin/add-user", method=RequestMethod.GET)
 	public String ShowAddNewUser(ModelMap model, Principal principal) {
-		User user = userService.GetUserByPrincipal(principal);
-		model.put("user", user);
-		model.put("PageTitle", "Admin > Add new user");
+		User loggedinUser = userService.GetUserByPrincipal(principal);
 		
-		if(user.getRole().getName().equals("ROLE_ADMIN")) {
-			User nUser = new User();
-			model.put("nUser", nUser);
-			
-			Map<String,String> enabledValues = new LinkedHashMap<String,String>();
-			enabledValues.put("true", "Activated: User can use the account immediately");
-			enabledValues.put("false", "Suspended: User should verify its email to activate the account");
-			model.put("enabledValues", enabledValues);
-			
-			
-			Map<String,String> roleValues = new LinkedHashMap<String,String>();
-			roleValues.put("ROLE_ADMIN", "Admin");
-			roleValues.put("ROLE_USER", "User");
-			model.put("roleValues", roleValues);
-			
+		
+		System.err.println("ShowAddNewUser > loggedinUser: " + loggedinUser);
+		
+		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN")) {
+			model.put("loggedinUser", loggedinUser);
+			model.put("PageTitle", "Admin > Add new user");
+			model.put("user", new User());
+			model.put("enabledValues", enabledValues());
+			model.put("roleValues", roleValues());
 			return "admin/add-user";
 		}
 			
 		return "error";
 	}
-	
-	
+
 	@RequestMapping(value="/admin/add-user", method=RequestMethod.POST)
-	public String AddNewUser(@Valid User nUser, Principal principal,
+	public String AddNewUser(@Valid User user, Principal principal,
 			ModelMap model, BindingResult result, Errors errors) 
 					throws UserAlreadyExistException, EmailExistsException {
-		User user = userService.GetUserByPrincipal(principal);
-		model.put("user", user);
-		User registered = null;
+		User loggedinUser = userService.GetUserByPrincipal(principal);
+		//model.put("loggedinUser", loggedinUser);
 		
-		if(user.getRole().getName().equals("ROLE_ADMIN")) {
+		System.err.println("ShowAddNewUser > loggedinUser: " + loggedinUser);
+		System.err.println("ShowAddNewUser > user: " + user);
+		
+		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN")) {
 			ValidationUtils.invokeValidator(new UserValidator(), user, errors);
-			
-			System.err.println(nUser);
 			
 			if (!result.hasErrors()) {
 				try {
-		        	registered = iUserService.registerNewUserAccount(user);
-				} catch (Exception e) {
-					model.put("errorMessages", new FlashMessage(e.getMessage(), FlashMessage.Status.FAILURE));
+		        	iUserService.registerNewUserAccount(user);
+		        	return "redirect:/admin/users"; 
+				} catch (UserAlreadyExistException | 
+						EmailExistsException | 
+						Exception e) {
+					model.put("exception", e.getMessage());
+					//model.put("loggedinUser", loggedinUser);
+					//model.put("user", user);
+					model.put("enabledValues", enabledValues());
+					model.put("roleValues", roleValues());
 					return "admin/add-user";
 				}
-		    }
-			
-			if(result.hasErrors()) {
+		    } else {
 		    	List<String> errorMessages = new ArrayList<String>();
 		    	for (ObjectError obj : errors.getAllErrors()) {
 		    		errorMessages.add(obj.getDefaultMessage());
 				}
 		    	
 		    	model.put("errorMessages", errorMessages);
+		    	//model.put("loggedinUser", loggedinUser);
+		    	//model.put("user", user);
+				model.put("enabledValues", enabledValues());
+				model.put("roleValues", roleValues());
 		    	return "admin/add-user";
 		    }
-			
-			if (registered == null)
-		    	return "admin/add-user";
 		}
 		
 		
 		return "error";
+	}
+	
+	
+	
+	//==========Methods=============================
+	
+	private Map<String, String> roleValues() {
+		Map<String,String> roleValues = new LinkedHashMap<String,String>();
+		roleValues.put("ROLE_ADMIN", "Admin");
+		roleValues.put("ROLE_USER", "User");
+		return roleValues;
+	}
+
+
+	private Map<String, String> enabledValues() {
+		Map<String,String> enabledValues = new LinkedHashMap<String,String>();
+		enabledValues.put("true", "Activated: User can use the account immediately");
+		enabledValues.put("false", "Suspended: User should verify its email to activate the account");
+		return enabledValues;
 	}
 	
 }

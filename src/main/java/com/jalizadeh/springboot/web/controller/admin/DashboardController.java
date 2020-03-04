@@ -24,11 +24,11 @@ public class DashboardController {
 	
 	@RequestMapping(value="/admin/panel", method=RequestMethod.GET)
 	public String ShowAdminPanel(ModelMap model, Principal principal) {
-		User user = userService.GetUserByPrincipal(principal);
-		model.put("user", user);
+		User loggedinUser = userService.GetUserByPrincipal(principal);
+		model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin Panel");
 		
-		if(user.getRole().getName().equals("ROLE_ADMIN"))
+		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN"))
 			return "admin/panel";
 		
 		return "error";
@@ -40,11 +40,11 @@ public class DashboardController {
 	
 	@RequestMapping(value="/admin/todos", method=RequestMethod.GET)
 	public String ShowAdminPanel_Todos(ModelMap model, Principal principal) {
-		User user = userService.GetUserByPrincipal(principal);
-		model.put("user", user);
+		User loggedinUser = userService.GetUserByPrincipal(principal);
+		model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin > Todos");
 		
-		if(user.getRole().getName().equals("ROLE_ADMIN"))
+		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN"))
 			return "admin/todos";
 		
 		return "error";

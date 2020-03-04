@@ -23,14 +23,9 @@ public class WelcomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String ShowWelcomePage(ModelMap model, Principal principal) {
-        model.put("user", userService.GetUserByPrincipal(principal));
+        model.put("loggedinUser", userService.GetUserByPrincipal(principal));
 		model.put("todoCount", todoRepository.findAll().size());
 		model.put("PageTitle", "Welcome");
 		return "welcome";
 	}
-	
-	
-	
-	
-	
 }

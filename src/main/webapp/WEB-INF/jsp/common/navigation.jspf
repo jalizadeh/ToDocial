@@ -6,12 +6,12 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      	<c:if test="${user.enabled == true }">
+      	<c:if test="${loggedinUser.enabled == true }">
 	      	<li class="nav-item active">
 	        	<a class="nav-link" href="/list-todos">Todos</a>
 	      	</li>
 	      	
-	      	<c:if  test="${user.role.id == 1 }">
+	      	<c:if  test="${loggedinUser.role.id == 1 }">
 			<li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="Dashboard" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		        Dashboard
@@ -31,14 +31,14 @@
 		        Profile
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="/profile">Logged in as @${user.username}</a>
+		          <a class="dropdown-item" href="/profile">Logged in as @${loggedinUser.username}</a>
 		          <div class="dropdown-divider"></div>
 		          <a class="dropdown-item" href="/logout">Log out</a>
 		        </div>
 		    </li>
       	</c:if >
       	
-      	<c:if  test="${user.enabled == false }">
+      	<c:if  test="${loggedinUser == null}">
       		<li class="nav-item">
 		       <a class="nav-link" href="/login">Log in</a>
 		    </li>
@@ -53,13 +53,13 @@
       
     </ul>
     
-    <c:choose>
-      	<c:when test="${user.id != null }">
+
+      	<c:if test="${loggedinUser.id != null }">
 	      	<form class="form-inline my-2 my-lg-0" action="/search">
 		      <input class="form-control mr-sm-2" type="text" placeholder="Search a todo" name="q">
 		      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 		    </form>
-      	</c:when>
-    </c:choose>
+      	</c:if>
+
   </div>
 </nav>

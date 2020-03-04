@@ -49,6 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
+				.antMatchers("/favicon.ico").permitAll() 
 				.anyRequest()
 				.hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 				.and()

@@ -13,59 +13,66 @@
 			</div>
 		</c:if>
 		
+		<c:if test="${exception != null}">
+			<div class="alert alert-danger" role="alert">
+				<p>There are some errors:</p>
+	  			<li>${exception}</li>
+			</div>
+		</c:if>
 		
-		<form:form method="post" modelAttribute="nUser">
+		
+		<form:form method="post" action="/admin/add-user" modelAttribute="user">
 			<form:hidden path="id"/>
 			
-			<fieldset class="form-group">
-				<form:label path="firstname">Firstname</form:label> 
+			<div class="form-group">
+				<label for="firstname">Firstname</label>
 				<form:input path="firstname" type="text" class="form-control" required="required"/>
 				<form:errors path="firstname" cssClass="text-warning"/>
-			</fieldset>
+			</div>
 			
-			<fieldset class="form-group">
-				<form:label path="lastname">Lastname</form:label> 
+			<div class="form-group">
+				<label for="lastname">Lastname</label> 
 				<form:input path="lastname" type="text" class="form-control" required="required"/>
 				<form:errors path="lastname" cssClass="text-warning"/>
-			</fieldset>
+			</div>
 			
-			<fieldset class="form-group">
-				<form:label path="username">Username</form:label> 
+			<div class="form-group">
+				<label path="username">Username</label> 
 				<form:input path="username" type="text" class="form-control" required="required"/>
 				<form:errors path="username" cssClass="text-warning"/>
-			</fieldset>
+			</div>
 			
-			<fieldset class="form-group">
-				<form:label path="email">Email</form:label> 
+			<div class="form-group">
+				<label path="email">Email</label> 
 				<form:input path="email" type="email" class="form-control" required="required"/>
 				<form:errors path="email" cssClass="text-warning"/>
-			</fieldset>
+			</div>
 			
-			<fieldset class="form-group">
-				<form:label path="password">Password</form:label> 
+			<div class="form-group">
+				<label path="password">Password</label> 
 				<form:input path="password" type="password" class="form-control" required="required"/>
 				<form:errors path="password" cssClass="text-warning"/>
-			</fieldset>
+			</div>
 			
-			<fieldset class="form-group">
-				<form:label path="mp">Confirm password</form:label> 
+			<div class="form-group">
+				<label path="mp">Confirm password</label> 
 				<form:input path="mp" type="password" class="form-control" required="required"/>
 				<form:errors path="mp" cssClass="text-warning"/>
-			</fieldset>
+			</div>
 			
-			<fieldset class="form-group">
+			<div class="form-group">
 			    <label for="enabled">Activity status</label>
 			    <form:select class="form-control"  path="enabled">
 				    <form:options items="${enabledValues}" />
 				</form:select>
-			 </fieldset>
+			 </div>
 			 
-			 <fieldset class="form-group">
+			 <div class="form-group">
 			    <label for="role">Role</label>
 			    <form:select class="form-control"  path="role.name">
 				    <form:options items="${roleValues}" />
 				</form:select>
-			 </fieldset>
+			 </div>
 	
 			<button type="submit" class="btn btn-success">Add</button>
 		</form:form>

@@ -17,6 +17,7 @@ public class LoginController {
     public String LoginForm(ModelMap model,
     		HttpServletRequest request) {
 		model.put("PageTitle", "Log in");
+        model.put("loggedinUser", null);
         model.put("user", new User());
         try {
             Object flash = request.getSession().getAttribute("flash");
@@ -27,11 +28,5 @@ public class LoginController {
         }
         
         return "login";
-    }
-	
-
-    @RequestMapping("/access_denied")
-    public String accessDenied() {
-        return "access_denied";
     }
 }
