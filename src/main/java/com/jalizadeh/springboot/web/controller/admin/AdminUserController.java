@@ -18,12 +18,9 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.jalizadeh.springboot.web.error.EmailExistsException;
 import com.jalizadeh.springboot.web.error.UserAlreadyExistException;
-import com.jalizadeh.springboot.web.model.FlashMessage;
-import com.jalizadeh.springboot.web.model.Role;
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.repository.RoleRepository;
 import com.jalizadeh.springboot.web.repository.UserRepository;
@@ -48,8 +45,8 @@ public class AdminUserController {
 	IUserService iUserService;
 	
 	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
-	public String ShowAdminPanel_Users(ModelMap model, Principal principal) {
-		User loggedinUser = userService.GetUserByPrincipal(principal);
+	public String ShowAdminPanel_Users(ModelMap model) {
+		User loggedinUser = userService.GetAuthenticatedUser();
 		model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin > Users");
 		
@@ -64,10 +61,8 @@ public class AdminUserController {
 	
 	
 	@RequestMapping(value="/admin/change_user_state", method=RequestMethod.GET)
-	public String ActivateUser(ModelMap model
-			, Principal principal
-			, @RequestParam Long id) {
-		User loggedinUser = userService.GetUserByPrincipal(principal);
+	public String ActivateUser(ModelMap model , @RequestParam Long id) {
+		User loggedinUser = userService.GetAuthenticatedUser();
 		model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin > Modify User");
 		
@@ -85,9 +80,8 @@ public class AdminUserController {
 	
 	
 	@RequestMapping(value="/admin/add-user", method=RequestMethod.GET)
-	public String ShowAddNewUser(ModelMap model, Principal principal) {
-		User loggedinUser = userService.GetUserByPrincipal(principal);
-		
+	public String ShowAddNewUser(ModelMap model) {
+		User loggedinUser = userService.GetAuthenticatedUser();
 		
 		System.err.println("ShowAddNewUser > loggedinUser: " + loggedinUser);
 		
@@ -104,44 +98,42 @@ public class AdminUserController {
 	}
 
 	@RequestMapping(value="/admin/add-user", method=RequestMethod.POST)
-	public String AddNewUser(@Valid User user, Principal principal,
-			ModelMap model, BindingResult result, Errors errors) 
+	public String AddNewUser(@Valid User user, BindingResult result,
+			Errors errors, ModelMap model) 
 					throws UserAlreadyExistException, EmailExistsException {
-		User loggedinUser = userService.GetUserByPrincipal(principal);
-		//model.put("loggedinUser", loggedinUser);
 		
-		System.err.println("ShowAddNewUser > loggedinUser: " + loggedinUser);
-		System.err.println("ShowAddNewUser > user: " + user);
-		
+		User loggedinUser = userService.GetAuthenticatedUser();
+
 		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN")) {
 			ValidationUtils.invokeValidator(new UserValidator(), user, errors);
 			
-			if (!result.hasErrors()) {
-				try {
-		        	iUserService.registerNewUserAccount(user);
-		        	return "redirect:/admin/users"; 
-				} catch (UserAlreadyExistException | 
-						EmailExistsException | 
-						Exception e) {
-					model.put("exception", e.getMessage());
-					//model.put("loggedinUser", loggedinUser);
-					//model.put("user", user);
-					model.put("enabledValues", enabledValues());
-					model.put("roleValues", roleValues());
-					return "admin/add-user";
-				}
-		    } else {
-		    	List<String> errorMessages = new ArrayList<String>();
+			if (result.hasErrors()) {
+				List<String> errorMessages = new ArrayList<String>();
 		    	for (ObjectError obj : errors.getAllErrors()) {
 		    		errorMessages.add(obj.getDefaultMessage());
 				}
 		    	
 		    	model.put("errorMessages", errorMessages);
-		    	//model.put("loggedinUser", loggedinUser);
-		    	//model.put("user", user);
+		    	model.put("loggedinUser", loggedinUser);
+		    	model.put("user", user);
 				model.put("enabledValues", enabledValues());
 				model.put("roleValues", roleValues());
 		    	return "admin/add-user";
+		    } else {
+		    	try {
+		        	iUserService.registerNewUserAccount(user);
+		        	model.put("loggedinUser", loggedinUser);
+		        	return "redirect:/admin/users"; 
+				} catch (UserAlreadyExistException | 
+						EmailExistsException | 
+						Exception e) {
+					model.put("exception", e.getMessage());
+					model.put("loggedinUser", loggedinUser);
+					model.put("user", user);
+					model.put("enabledValues", enabledValues());
+					model.put("roleValues", roleValues());
+					return "admin/add-user";
+				}
 		    }
 		}
 		

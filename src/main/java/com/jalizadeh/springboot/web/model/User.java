@@ -78,7 +78,10 @@ public class User implements UserDetails{
 	@JoinColumn(name="role_id")
 	private Role role;
 
-	public User() {	}
+	public User() {	
+		//super();
+		//this.enabled = false;
+	}
 	
 	
 

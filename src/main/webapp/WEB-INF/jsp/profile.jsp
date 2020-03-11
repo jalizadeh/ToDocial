@@ -7,19 +7,19 @@
 	<form method="post">
 			<div class="form-group">
 			    <label for="firstname">Firstname</label>
-			    <input type="text" class="form-control" name="firstname" value="${user.firstname}">
+			    <input type="text" class="form-control" name="firstname" value="${loggedinUser.firstname}">
 			</div>
 			<div class="form-group">
 			    <label for="lastname">Lastname</label>
-			    <input type="text" class="form-control" name="lastname" value="${user.lastname}">
+			    <input type="text" class="form-control" name="lastname" value="${loggedinUser.lastname}">
 			</div>
 			<div class="form-group">
 			    <label for="username">Username</label>
-			    <input type="text" class="form-control" name="firstname" value="${user.username}">
+			    <input type="text" class="form-control" name="firstname" value="${loggedinUser.username}">
 			</div>
 			<div class="form-group">
 			    <label for="password">Password</label>
-			    <input type="password" class="form-control" name="password" value="${user.password}">
+			    <input type="password" class="form-control" name="password" value="${loggedinUser.password}">
 			</div>
 			
 			<button type="submit" class="btn btn-primary">Submit</button>

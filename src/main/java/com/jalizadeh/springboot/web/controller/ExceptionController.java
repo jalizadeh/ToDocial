@@ -34,8 +34,7 @@ public class ExceptionController implements ErrorController {
 
     @RequestMapping(value = ERROR_PATH)
     public ModelAndView handleError(HttpServletRequest request, 
-    		HttpServletResponse response,
-    		Principal principal) throws IOException {
+    		HttpServletResponse response) throws IOException {
     	
     	Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         ModelAndView mv = new ModelAndView();
@@ -45,19 +44,19 @@ public class ExceptionController implements ErrorController {
             
             if(statusCode == HttpStatus.NOT_FOUND.value()) {
             	mv.addObject("exception", "404 : NOT FOUND<br/>The web page is not found");
-            	mv.addObject("loggedinUser", userService.GetUserByPrincipal(principal));
+            	mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
             } else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
             	mv.addObject("exception", "500 : INTERNAL SERVER ERROR<br/>There is a problem on server, please try again");
-            	mv.addObject("loggedinUser", userService.GetUserByPrincipal(principal));
+            	mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
             } else if(statusCode == HttpStatus.FORBIDDEN.value()) {
             	mv.addObject("exception", "403 : FORBIDDEN<br/>Your request is not valid.<br/>The server understood the request but refuses to authorize it.");
-            	mv.addObject("loggedinUser", userService.GetUserByPrincipal(principal));
+            	mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
             } else if(statusCode == HttpStatus.BAD_REQUEST.value()) {
             	mv.addObject("exception", "400 : BAD REQUEST<br/>Your request is not valid.<br/>It seems you entered wrong information that we can't understand.");
-            	mv.addObject("loggedinUser", userService.GetUserByPrincipal(principal));
+            	mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
             } else {
             	mv.addObject("exception", statusCode + " : " + status.toString() + "<br/>That's all we know.");
-            	mv.addObject("loggedinUser", userService.GetUserByPrincipal(principal));
+            	mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
             }
         }
         

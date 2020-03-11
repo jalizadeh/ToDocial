@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/favicon.ico").permitAll() 
+				.antMatchers("/favicon.ico", "/registration-confirm").permitAll() 
 				.anyRequest()
 				.hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 				.and()
@@ -72,9 +72,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     public AuthenticationFailureHandler loginFailureHandler() {
         return (request, response, exception) -> {
-        	System.err.println("SecurityConfiguration > loginFailureHandler > " + exception.getMessage());
-            request.getSession().setAttribute("flash",
-            		new FlashMessage("Incorrect username and/or password. Please try again.", FlashMessage.Status.FAILURE));
+        	//System.err.println("SecurityConfiguration > loginFailureHandler > " + exception.getMessage());
+        	
+        	if(exception.getMessage().contains("User is disabled")) {
+        		request.getSession().setAttribute("flash",
+            		new FlashMessage("Please confirm your email to activate your account", 
+            				FlashMessage.Status.danger));
+        	} else if (exception.getMessage().contains("Bad credentials")) {
+        		request.getSession().setAttribute("flash",
+                		new FlashMessage("Username or Password is not correct.", 
+                				FlashMessage.Status.danger));
+        	} else {
+        		request.getSession().setAttribute("flash",
+            		new FlashMessage(exception.getMessage(), FlashMessage.Status.danger));
+        	}
+        	
             response.sendRedirect("/login");
         };
     }

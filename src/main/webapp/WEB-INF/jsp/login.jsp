@@ -3,7 +3,7 @@
 
 	<div class="container mt-5 mb-5">
 		<c:if test="${flash != null}">
-			<div class="alert alert-danger" role="alert">
+			<div class="alert alert-${flash.status}" role="alert">
   				${flash.message}
 			</div>
 		</c:if>

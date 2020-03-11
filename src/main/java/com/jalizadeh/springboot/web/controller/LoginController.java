@@ -14,8 +14,7 @@ import com.jalizadeh.springboot.web.model.User;
 public class LoginController {
 	
 	@RequestMapping(path = "/login", method = RequestMethod.GET)
-    public String LoginForm(ModelMap model,
-    		HttpServletRequest request) {
+    public String LoginForm(ModelMap model, HttpServletRequest request) {
 		model.put("PageTitle", "Log in");
         model.put("loggedinUser", null);
         model.put("user", new User());
