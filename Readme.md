@@ -15,7 +15,7 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- User
 	- Todo
 	- Role
-	- [ ] Define username & password
+	- [ ] Set username & password
 - [ ] General
 	- [x] Header/Navigation/Footer fragments
 	- [x] Set page title
@@ -24,7 +24,8 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- [x] Handle exceptions with exact error reason
 		- All exceptions will be redirected to `/error` showing the reason and what happened.
 		- [ ] If any error occurs in subdirectories, the page is not shown correctly
-- [ ] Todos
+	- [ ] Multi-language
+- [x] Todos
 	- [x] List of all todos
 	- [x] Add/Update/Delete todos
 	- [x] 1-click Todo's state change
@@ -44,9 +45,18 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- [x] Password confirmation
 	- [x] Store passwords encrypted (BCrypt 10)
 	- [x] Successful sign up
-		- [ ] Email verification
+		- [x] Email verification
+			- I used `smtp.gmail.com` as the server. Your email credentials `username` & `password` must be inserted in `application.properties`.
+			- The user has 24 hours to verify his account
+			- [x] Token is valid
+			- [ ] Token is not valid
+			- [ ] Token is expired
+			- [ ] User already activated
 	- [x] Unseccessfull sign up
 		- [x] Show errors & exceptions
+- [ ] User profile
+	- [ ] Manage account
+	- [ ] Delete account
 - [ ] Admin panel
 	- If user has `ROLE_ADMIN`, she can access the dashboard
 	- [x] Manage users
