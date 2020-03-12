@@ -61,11 +61,15 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- If user has `ROLE_ADMIN`, she can access the dashboard
 	- [x] Manage users
 		- [x] 1-click users's state change
+		- [x] 1-click delete user
 		- [ ] Modify user
 		- [x] Add new user
-			- [ ] Handle mistakes like signing up a new user
+			- [x] Handle mistakes like signing up a new user
+			- [x] Email verification if user is suspended
+			- [x] Set specified roles
+				- [ ] Support multiple roles
 	- [ ] Manage todos
 		- [ ] Add new todo for any user
 		- [ ] Modify todo
-	- [ ] Setting
+	- [ ] Settings
 	- [ ] Limit `USER` access

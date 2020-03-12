@@ -12,13 +12,14 @@ import org.springframework.stereotype.Component;
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.springboot.web.service.IUserService;
+import com.jalizadeh.springboot.web.service.TokenService;
 
 @Component
 public class RegistrationListener implements 
 		ApplicationListener<OnRegistrationCompleteEvent>{
 
 	@Autowired
-    private IUserService iUserService;
+	private TokenService tokenService;
   
     @Autowired
     private MessageSource messages;
@@ -36,7 +37,7 @@ public class RegistrationListener implements
 	private void confirmRegistration(OnRegistrationCompleteEvent event) {
 		User user = event.getUser();
 		String token = UUID.randomUUID().toString();
-		iUserService.createVerificationToken(user, token);
+		tokenService.createVerificationToken(user, token);
 		
 		String recipientAddress = user.getEmail();
 		String subject = "Confirm Registratoin";

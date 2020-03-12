@@ -26,6 +26,7 @@ import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.springboot.web.service.IUserService;
+import com.jalizadeh.springboot.web.service.TokenService;
 import com.jalizadeh.springboot.web.service.UserService;
 import com.jalizadeh.springboot.web.validator.UserValidator;
 
@@ -33,10 +34,10 @@ import com.jalizadeh.springboot.web.validator.UserValidator;
 public class SignupController {
 	
 	@Autowired
-	private UserService userService;
+	private IUserService iUserService;
 	
 	@Autowired
-	private IUserService iUserService;
+	private TokenService tokenService;
 	
 	@Autowired
 	ApplicationEventPublisher eventPublisher;
@@ -93,7 +94,7 @@ public class SignupController {
 		Locale locale = request.getLocale();
 		model.put("user", new User());
 		
-		String result = iUserService.validateVerificationToken(token);
+		String result = tokenService.validateVerificationToken(token);
 		if(result.equals("valid")) {
 			model.put("flash", 
 					new FlashMessage("Your email is verified successfully.\nYou can login now.", 
@@ -106,18 +107,4 @@ public class SignupController {
 						FlashMessage.Status.danger));
 		return "login";
 	}
-	
-	
-	
-	//============== METHOD =============================
-	/*
-	public void authWithoutPassword(User user) {
-        List<Privilege> privileges = user.getRoles().stream().map(role -> role.getPrivileges()).flatMap(list -> list.stream()).distinct().collect(Collectors.toList());
-        List<GrantedAuthority> authorities = privileges.stream().map(p -> new SimpleGrantedAuthority(p.getName())).collect(Collectors.toList());
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-    */
 }

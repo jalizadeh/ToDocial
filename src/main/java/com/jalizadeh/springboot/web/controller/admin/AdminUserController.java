@@ -1,14 +1,15 @@
 package com.jalizadeh.springboot.web.controller.admin;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -18,11 +19,15 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.WebRequest;
 
 import com.jalizadeh.springboot.web.error.EmailExistsException;
 import com.jalizadeh.springboot.web.error.UserAlreadyExistException;
 import com.jalizadeh.springboot.web.model.User;
+import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.springboot.web.repository.RoleRepository;
+import com.jalizadeh.springboot.web.repository.TodoRepository;
+import com.jalizadeh.springboot.web.repository.TokenRepository;
 import com.jalizadeh.springboot.web.repository.UserRepository;
 import com.jalizadeh.springboot.web.service.IUserService;
 import com.jalizadeh.springboot.web.service.UserService;
@@ -42,7 +47,16 @@ public class AdminUserController {
 	RoleRepository roleRepository;
 	
 	@Autowired
+	TodoRepository todoRepository;
+	
+	@Autowired
+	TokenRepository tokenRepository;
+	
+	@Autowired
 	IUserService iUserService;
+	
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
 	
 	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
 	public String ShowAdminPanel_Users(ModelMap model) {
@@ -50,7 +64,7 @@ public class AdminUserController {
 		model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin > Users");
 		
-		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN")) {
+		if(isUserAdmin(loggedinUser)) {
 			model.put("all_users", userRepository.findAll());
 			model.put("users_count", userRepository.count());
 			return "admin/users";
@@ -66,7 +80,7 @@ public class AdminUserController {
 		model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin > Modify User");
 		
-		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN")) {
+		if(isUserAdmin(loggedinUser)) {
 			User foundUser = userRepository.findById(id).get();
 			foundUser.setEnabled(!foundUser.isEnabled()); 
 			foundUser.setMp(foundUser.getPassword());
@@ -85,7 +99,7 @@ public class AdminUserController {
 		
 		System.err.println("ShowAddNewUser > loggedinUser: " + loggedinUser);
 		
-		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN")) {
+		if(isUserAdmin(loggedinUser)) {
 			model.put("loggedinUser", loggedinUser);
 			model.put("PageTitle", "Admin > Add new user");
 			model.put("user", new User());
@@ -99,12 +113,12 @@ public class AdminUserController {
 
 	@RequestMapping(value="/admin/add-user", method=RequestMethod.POST)
 	public String AddNewUser(@Valid User user, BindingResult result,
-			Errors errors, ModelMap model) 
-					throws UserAlreadyExistException, EmailExistsException {
+			Errors errors, ModelMap model,  WebRequest request) 
+			throws UserAlreadyExistException, EmailExistsException {
 		
 		User loggedinUser = userService.GetAuthenticatedUser();
 
-		if(loggedinUser.getRole().getName().equals("ROLE_ADMIN")) {
+		if(isUserAdmin(loggedinUser)) {
 			ValidationUtils.invokeValidator(new UserValidator(), user, errors);
 			
 			if (result.hasErrors()) {
@@ -121,10 +135,22 @@ public class AdminUserController {
 		    	return "admin/add-user";
 		    } else {
 		    	try {
-		        	iUserService.registerNewUserAccount(user);
+		    		User registered = null;
+		    		
+		    		//register and send verification email, if...
+		    		if(user.isEnabled()) {
+		    			registered = iUserService.registerNewUserAccount(user);
+		    		} else {
+		    			registered = iUserService.registerNewUserAccount(user);
+			        	String appUrl = request.getContextPath();
+			            eventPublisher.publishEvent(new OnRegistrationCompleteEvent
+			            		(registered, appUrl, request.getLocale()));	
+		    		}
+		        	
 		        	model.put("loggedinUser", loggedinUser);
 		        	return "redirect:/admin/users"; 
-				} catch (UserAlreadyExistException | 
+				
+		    	} catch (UserAlreadyExistException | 
 						EmailExistsException | 
 						Exception e) {
 					model.put("exception", e.getMessage());
@@ -142,8 +168,37 @@ public class AdminUserController {
 	}
 	
 	
+	@RequestMapping(value="/admin/delete_user", method=RequestMethod.GET)
+	public String deleteUser(ModelMap model , @RequestParam Long id) {
+		User loggedinUser = userService.GetAuthenticatedUser();
+		User user = userRepository.findByUserId(id);
+		
+		if(isUserAdmin(loggedinUser)) {
+			if(todoRepository.findAllByUserId(id).size() > 0)
+				todoRepository.deleteById(id);
+			
+			if(tokenRepository.findByUserId(id) != null)
+				tokenRepository.deleteById(id);
+			
+			userRepository.deleteById(id);
+			
+			return "redirect:/admin/users";
+		}
+		
+		return "error";
+	}
+	
+
+	
+	
+	
+	
 	
 	//==========Methods=============================
+
+	private boolean isUserAdmin(User loggedinUser) {
+		return loggedinUser.getRole().getName().equals("ROLE_ADMIN");
+	}
 	
 	private Map<String, String> roleValues() {
 		Map<String,String> roleValues = new LinkedHashMap<String,String>();

@@ -15,6 +15,8 @@ public interface TokenRepository extends JpaRepository<VerificationToken, Long> 
 	VerificationToken findByToken(String token);
 
     VerificationToken findByUser(User user);
+    
+    VerificationToken findByUserId(Long id);
 
     Stream<VerificationToken> findAllByExpiryDateLessThan(Date now);
 

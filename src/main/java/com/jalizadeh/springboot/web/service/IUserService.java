@@ -14,9 +14,9 @@ public interface IUserService extends UserDetailsService {
 	User registerNewUserAccount(User user) 
 			throws UserAlreadyExistException, EmailExistsException;
 
-	void createVerificationToken(User user, String token);
+	//void createVerificationToken(User user, String token);
 
-	VerificationToken getVerificationToken(String token);
+	//VerificationToken getVerificationToken(String token);
 	
-	String validateVerificationToken(String token);
+	//String validateVerificationToken(String token);
 }
