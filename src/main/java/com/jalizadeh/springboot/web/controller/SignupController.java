@@ -40,7 +40,7 @@ public class SignupController {
 	private TokenService tokenService;
 	
 	@Autowired
-	ApplicationEventPublisher eventPublisher;
+	private ApplicationEventPublisher eventPublisher;
 	
 
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
@@ -94,17 +94,30 @@ public class SignupController {
 		Locale locale = request.getLocale();
 		model.put("user", new User());
 		
-		String result = tokenService.validateVerificationToken(token);
-		if(result.equals("valid")) {
-			model.put("flash", 
-					new FlashMessage("Your email is verified successfully.\nYou can login now.", 
-							FlashMessage.Status.success));
-			return "login";
+		String tokenStatus = tokenService.validateVerificationToken(
+				tokenService.TOKEN_TYPE_VERIFICATION,token);
+		
+		switch (tokenStatus) {
+			case "valid":
+				model.put("flash", 
+						new FlashMessage("Your email is verified successfully.\nYou can login now.", 
+								FlashMessage.Status.success));
+				break;
+			case "invalid":
+				model.put("flash", 
+						new FlashMessage("There is something wrong with your token.<br/>Please login and follow the instructions.", 
+								FlashMessage.Status.danger));
+				break;
+			case "expired":
+				model.put("flash", 
+						new FlashMessage("Your email verification token is expired.<br/>Please login and follow the instructions.", 
+								FlashMessage.Status.danger));
+				break;
+	
+			default:
+				break;
 		}
 		
-		model.put("flash", 
-				new FlashMessage("Your email is NOT verified. Please try again.", 
-						FlashMessage.Status.danger));
 		return "login";
 	}
 }

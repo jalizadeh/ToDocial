@@ -14,6 +14,10 @@ public interface IUserService extends UserDetailsService {
 	User registerNewUserAccount(User user) 
 			throws UserAlreadyExistException, EmailExistsException;
 
+	void changePassword(User user, String password);
+
+	User findByEmail(String email);
+	
 	//void createVerificationToken(User user, String token);
 
 	//VerificationToken getVerificationToken(String token);

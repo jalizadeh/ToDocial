@@ -34,9 +34,12 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- Spring Security 
 	- There are two roles `ROLE_USER` and `ROLE_ADMIN`
 	- Everyone can access `Log in` or `Sign up`, but for accessing the todos, the user must log in or sign up first.
-	- [ ] Field validation
+	- [x] After login, user shouldn't be able to login again
+	- [x] Field validation
 	- [x] Log out
-	- [ ] I forgot my password
+	- [ ] Forgot my password
+		- The data is seperately stored in `PasswordResetToken` with 12-hour limit
+		- [ ] Field validation
 	- [ ] Remember me
 - [ ] [Signup new user](https://www.baeldung.com/registration-with-spring-mvc-and-spring-security)
 	- All new users are registered as `USER`

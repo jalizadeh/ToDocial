@@ -3,8 +3,7 @@
 
 
 	<div class="container mt-5 mb-5">
-		<h4 class="display-4">Oops... Something went wrong :(</h4>
-		<h1>${exception}</h1>
+		<h4 class="display-4">${exception}</h4>
 	</div>
 
 <%@ include file="common/footer.jspf" %>

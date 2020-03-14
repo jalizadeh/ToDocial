@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.model.VerificationToken;
 
-public interface TokenRepository extends JpaRepository<VerificationToken, Long> {
+public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
 	
 	VerificationToken findByToken(String token);
 

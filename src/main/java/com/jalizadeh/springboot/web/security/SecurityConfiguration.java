@@ -25,19 +25,13 @@ import com.jalizadeh.springboot.web.service.IUserService;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	private IUserService userServiceInterface;
+	private IUserService iUserService;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-		auth.userDetailsService(userServiceInterface).passwordEncoder(passwordEncoder());
-	}
-	
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring()
-			.antMatchers("/WEB-INF/**")
-			.antMatchers("/webjars/**")
-			.antMatchers("/signup");
+		auth
+			.userDetailsService(iUserService)
+			.passwordEncoder(passwordEncoder());
 	}
 	
 	@Bean
@@ -49,19 +43,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/favicon.ico", "/registration-confirm").permitAll() 
+				.antMatchers(
+						"/favicon.ico", 
+						"/registration-confirm", 
+						"/WEB-INF/**",
+						"/webjars/**",
+						"/signup",
+						"/forgot-password",
+						"/reset-password"
+						).permitAll()
+				.antMatchers("/admin/**").hasRole("ADMIN")
 				.anyRequest()
-				.hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-				.and()
+					.hasAnyRole("USER", "ADMIN")
+			.and()
 			.formLogin()
 				.loginPage("/login")
 				.permitAll()
 				.successHandler(loginSuccessHandler())
 				.failureHandler(loginFailureHandler())
-				.and()
+			.and()
 			.logout()
 				.permitAll()
-				.logoutSuccessUrl("/login");
+				.logoutUrl("/logout");
+				//.logoutSuccessUrl("/login");
 
 	}
 	

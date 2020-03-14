@@ -66,7 +66,8 @@ public class User implements UserDetails{
 	@Column(length=100)
 	private String password;
 	
-	@Transient //do not consider it inside my table 
+	//for now, disabled to support password change
+	//@Transient //do not consider it inside my table 
 	@NotEmpty(message="It must match your entered password")
 	private String mp;
 
@@ -185,7 +186,7 @@ public class User implements UserDetails{
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username
-				+ ", password=" + password + ", matchingPassword=" + mp + ", email=" + email
+				+ ", password=" + password + ", mp=" + mp + ", email=" + email
 				+ ", enabled=" + enabled + ", role=" + role + "]";
 	}
 }

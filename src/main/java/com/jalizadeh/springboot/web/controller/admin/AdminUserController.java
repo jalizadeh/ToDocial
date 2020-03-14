@@ -27,7 +27,7 @@ import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.springboot.web.repository.RoleRepository;
 import com.jalizadeh.springboot.web.repository.TodoRepository;
-import com.jalizadeh.springboot.web.repository.TokenRepository;
+import com.jalizadeh.springboot.web.repository.VerificationTokenRepository;
 import com.jalizadeh.springboot.web.repository.UserRepository;
 import com.jalizadeh.springboot.web.service.IUserService;
 import com.jalizadeh.springboot.web.service.UserService;
@@ -50,7 +50,7 @@ public class AdminUserController {
 	TodoRepository todoRepository;
 	
 	@Autowired
-	TokenRepository tokenRepository;
+	VerificationTokenRepository tokenRepository;
 	
 	@Autowired
 	IUserService iUserService;
@@ -60,17 +60,17 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
 	public String ShowAdminPanel_Users(ModelMap model) {
-		User loggedinUser = userService.GetAuthenticatedUser();
-		model.put("loggedinUser", loggedinUser);
+		//User loggedinUser = userService.GetAuthenticatedUser();
+		//model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin > Users");
 		
-		if(isUserAdmin(loggedinUser)) {
+		//if(isUserAdmin(loggedinUser)) {
 			model.put("all_users", userRepository.findAll());
 			model.put("users_count", userRepository.count());
 			return "admin/users";
-		}
+		//}
 		
-		return "error";
+		//return "error";
 	}
 	
 	

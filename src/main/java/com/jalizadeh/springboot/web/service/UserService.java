@@ -61,6 +61,10 @@ public class UserService implements IUserService {
 		return userRepository.findByUsername(username);
 	}	
 	
+	@Override
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
 	
 	/**
 	 * It is used for both registering a new user from both the User & Admin
@@ -105,6 +109,13 @@ public class UserService implements IUserService {
     }
 
 
+	public void changePassword(User user, String password) {
+		String pass = passwordEncoder.encode(password);
+		user.setPassword(pass);
+		user.setMp(pass);
+		userRepository.save(user);
+	}
+	
 	
 	
 	
@@ -118,4 +129,8 @@ public class UserService implements IUserService {
 	private boolean usernameExists(String username) {
 		return userRepository.findByUsername(username) != null;
 	}
+
+
+	
+
 }
