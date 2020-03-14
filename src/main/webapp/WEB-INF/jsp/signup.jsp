@@ -52,6 +52,20 @@
 		    <small id="mpHelp" class="form-text text-muted">To make sure there is no mistake.</small>
 		    <form:errors path="mp" cssClass="text-warning"/>
 		</div>
+		<div class="form-group">
+			<label for="sq">Security Question</label>
+			  <select class="form-control"  name="sq" aria-describedby="sqHelp" >
+			  	 <c:forEach items="${securityQuestions}" var="q">
+			            <option value="${q.id}">${q.text}</option>
+    			</c:forEach>
+			</select>
+			<small id="sqHelp" class="form-text text-muted">The answer to this question is used for password recovery.</small>
+		</div>
+		
+		<div class="form-group">
+		    <label for="sqa">Answer</label>
+		    <input type="text" class="form-control" name="sqa" id="sqa" required="required"/>
+		</div>
 		
 		<button type="submit" class="btn btn-primary">Sign up</button>
 	</form:form>

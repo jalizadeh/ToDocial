@@ -1,61 +1,45 @@
 package com.jalizadeh.springboot.web.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Role {
-	
+public class SecurityQuestionDefinition {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	public Long id;
 	
-	@Column(nullable=false)
-	private String name;
-
-
-	public Role() {}
-	
-
-	public Role(String name) {
-		this.name = name;
-	}
-
-
-
+	@NotBlank
+	public String text;
 
 	public Long getId() {
 		return id;
 	}
 
-
-	public String getName() {
-		return name;
+	public String getText() {
+		return text;
 	}
-
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-	public void setName(String name) {
-		this.name = name;
+	public void setText(String text) {
+		this.text = text;
 	}
-
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -65,20 +49,19 @@ public class Role {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Role other = (Role) obj;
+		SecurityQuestionDefinition other = (SecurityQuestionDefinition) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (text == null) {
+			if (other.text != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!text.equals(other.text))
 			return false;
 		return true;
 	}
-	
 	
 	
 }

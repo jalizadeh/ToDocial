@@ -22,11 +22,25 @@
 	
 	<form:form method="post" action="/change-password">
 		<div class="form-group">
-		    <label for="password">Password</label>
+			<label for="sq">Security Question</label>
+			  <select class="form-control"  name="sq" aria-describedby="sqHelp" >
+			  	 <c:forEach items="${securityQuestions}" var="q">
+			            <option value="${q.id}">${q.text}</option>
+    			</c:forEach>
+			</select>
+			<small id="sqHelp" class="form-text text-muted">Choose the question you selected when you signed up.</small>
+		</div>
+		<div class="form-group">
+		    <label for="sqa">Answer</label>
+		    <input type="text" class="form-control" name="sqa" id="sqa" required="required"/>
+		</div>
+		
+		<div class="form-group">
+		    <label for="password">New Password</label>
 		    <input type="password" class="form-control" name="password" id="password" required="required"/>
 		</div>
 		<div class="form-group">
-		    <label for="mp">Confirm Password</label>
+		    <label for="mp">Confirm New Password</label>
 		    <input type="password" class="form-control" name="mp" id="mp"  required="required"/>
 		</div>
 		

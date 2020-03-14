@@ -39,11 +39,13 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- [x] Log out
 	- [ ] Forgot my password
 		- The data is seperately stored in `PasswordResetToken` with 12-hour limit
+		- [ ] Security Question
 		- [ ] Field validation
 	- [ ] Remember me
 - [ ] [Signup new user](https://www.baeldung.com/registration-with-spring-mvc-and-spring-security)
 	- All new users are registered as `USER`
 	- [x] Filed validation
+	- [ ] Security Question
 	- [x] Email validation
 	- [x] Password confirmation
 	- [x] Store passwords encrypted (BCrypt 10)
