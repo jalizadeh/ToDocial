@@ -71,8 +71,8 @@
 	</form:form>
 </div>
 
-	<script src="/js/pwstrength.js"></script>
-	<script src="/js/jquery.validate.js"></script>
+	<script src="/static_res/js/pwstrength.js"></script>
+	<script src="/static_res/js/jquery.validate.js"></script>
 
 	<script type="text/javascript">
 		$(document)

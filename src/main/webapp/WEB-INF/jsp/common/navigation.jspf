@@ -6,39 +6,39 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      	<c:if test="${loggedinUser.enabled == true }">
+      	<sec:authorize access="isAuthenticated()"> 
 	      	<li class="nav-item active">
 	        	<a class="nav-link" href="/list-todos">Todos</a>
 	      	</li>
-	      	
-	      	<c:if  test="${loggedinUser.role.id == 1 }">
-			<li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="Dashboard" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		        Dashboard
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="/admin/panel">Admin Panel</a>
-		          <a class="dropdown-item" href="/admin/users">Users</a>
-		          <a class="dropdown-item" href="/admin/todos">Todos</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="#">Setting</a>
-		        </div>
-		    </li>
-			</c:if >
+
+	      	<sec:authorize access="hasRole('ADMIN')">
+				<li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle" href="Dashboard" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			        Dashboard
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          <a class="dropdown-item" href="/admin/panel">Admin Panel</a>
+			          <a class="dropdown-item" href="/admin/users">Users</a>
+			          <a class="dropdown-item" href="/admin/todos">Todos</a>
+			          <div class="dropdown-divider"></div>
+			          <a class="dropdown-item" href="#">Setting</a>
+			        </div>
+			    </li>
+		    </sec:authorize>
 			
       		<li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		        Profile
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="/profile">Logged in as @${loggedinUser.username}</a>
+		          <a class="dropdown-item" href="/profile">Logged in as @<sec:authentication property="principal.username"/></a>
 		          <div class="dropdown-divider"></div>
 		          <a class="dropdown-item" href="/logout">Log out</a>
 		        </div>
 		    </li>
-      	</c:if >
-      	
-      	<c:if  test="${loggedinUser == null}">
+		</sec:authorize>
+
+      	<sec:authorize access="isAnonymous()"> 
       		<li class="nav-item">
 		       <a class="nav-link" href="/login">Log in</a>
 		    </li>
@@ -48,18 +48,17 @@
 		    <li class="nav-item">
 		       <a class="nav-link" href="/signup">Sign up</a>
 		    </li>
-      	</c:if >
-     
-      
+		 </sec:authorize>
+		 
     </ul>
     
 
-      	<c:if test="${loggedinUser.id != null }">
+      	<sec:authorize access="isAuthenticated()"> 
 	      	<form class="form-inline my-2 my-lg-0" action="/search">
 		      <input class="form-control mr-sm-2" type="text" placeholder="Search a todo" name="q">
 		      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 		    </form>
-      	</c:if>
+      	</sec:authorize>
 
   </div>
 </nav>

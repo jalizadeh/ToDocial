@@ -26,8 +26,8 @@
 			    <form:errors path="password" cssClass="text-warning"/>
 			</div>
 			<div class="form-group form-check">
-			    <input type="checkbox" class="form-check-input"  id="exampleCheck1" />
-			    <label class="form-check-label" for="exampleCheck1">Remember me</label>
+			    <input type="checkbox" class="form-check-input"  id="remember" name="remember"/>
+			    <label class="form-check-label" for="remember">Remember me</label>
 			</div>
 			<div class="form-group">
 				<a href="/forgot-password">Forgot my password</a> / <a href="/signup">Register now</a>

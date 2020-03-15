@@ -2,7 +2,7 @@
 <%@ include file="../common/navigation.jspf" %>
 
 
-	<div class="container">
+	<div class="container mt-5 mb-5">
 		<h4 class="display-4">Add a new user:</h4>
 		<c:if test="${errorMessages != null}">
 			<div class="alert alert-danger" role="alert">
@@ -79,8 +79,8 @@
 	</div>
 	
 	
-	<script src="/js/pwstrength.js"></script>
-	<script src="/js/jquery.validate.js"></script>
+	<script src="/static_res/js/pwstrength.js"></script>
+	<script src="/static_res/js/jquery.validate.js"></script>
 
 	<script type="text/javascript">
 		$(document)

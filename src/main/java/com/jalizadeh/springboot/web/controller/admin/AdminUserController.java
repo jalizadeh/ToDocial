@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -27,8 +26,8 @@ import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.springboot.web.repository.RoleRepository;
 import com.jalizadeh.springboot.web.repository.TodoRepository;
-import com.jalizadeh.springboot.web.repository.VerificationTokenRepository;
 import com.jalizadeh.springboot.web.repository.UserRepository;
+import com.jalizadeh.springboot.web.repository.VerificationTokenRepository;
 import com.jalizadeh.springboot.web.service.IUserService;
 import com.jalizadeh.springboot.web.service.UserService;
 import com.jalizadeh.springboot.web.validator.UserValidator;
@@ -60,8 +59,7 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
 	public String ShowAdminPanel_Users(ModelMap model) {
-		//User loggedinUser = userService.GetAuthenticatedUser();
-		//model.put("loggedinUser", loggedinUser);
+		//model.put("loggedinUser", userService.GetAuthenticatedUser());
 		model.put("PageTitle", "Admin > Users");
 		
 		//if(isUserAdmin(loggedinUser)) {
@@ -76,39 +74,24 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/admin/change_user_state", method=RequestMethod.GET)
 	public String ActivateUser(ModelMap model , @RequestParam Long id) {
-		User loggedinUser = userService.GetAuthenticatedUser();
-		model.put("loggedinUser", loggedinUser);
 		model.put("PageTitle", "Admin > Modify User");
-		
-		if(isUserAdmin(loggedinUser)) {
-			User foundUser = userRepository.findById(id).get();
-			foundUser.setEnabled(!foundUser.isEnabled()); 
-			foundUser.setMp(foundUser.getPassword());
-			userRepository.save(foundUser);
-			
-			return "redirect:/admin/users";
-		}
-			
-		return "error";
+
+		User foundUser = userRepository.findById(id).get();
+		foundUser.setEnabled(!foundUser.isEnabled()); 
+		foundUser.setMp(foundUser.getPassword());
+		userRepository.save(foundUser);
+
+		return "redirect:/admin/users";
 	}
 	
 	
 	@RequestMapping(value="/admin/add-user", method=RequestMethod.GET)
 	public String ShowAddNewUser(ModelMap model) {
-		User loggedinUser = userService.GetAuthenticatedUser();
-		
-		System.err.println("ShowAddNewUser > loggedinUser: " + loggedinUser);
-		
-		if(isUserAdmin(loggedinUser)) {
-			model.put("loggedinUser", loggedinUser);
-			model.put("PageTitle", "Admin > Add new user");
-			model.put("user", new User());
-			model.put("enabledValues", enabledValues());
-			model.put("roleValues", roleValues());
-			return "admin/add-user";
-		}
-			
-		return "error";
+		model.put("PageTitle", "Admin > Add new user");
+		model.put("user", new User());
+		model.put("enabledValues", enabledValues());
+		model.put("roleValues", roleValues());
+		return "admin/add-user";
 	}
 
 	@RequestMapping(value="/admin/add-user", method=RequestMethod.POST)
@@ -116,76 +99,60 @@ public class AdminUserController {
 			Errors errors, ModelMap model,  WebRequest request) 
 			throws UserAlreadyExistException, EmailExistsException {
 		
-		User loggedinUser = userService.GetAuthenticatedUser();
+		ValidationUtils.invokeValidator(new UserValidator(), user, errors);
 
-		if(isUserAdmin(loggedinUser)) {
-			ValidationUtils.invokeValidator(new UserValidator(), user, errors);
-			
-			if (result.hasErrors()) {
-				List<String> errorMessages = new ArrayList<String>();
-		    	for (ObjectError obj : errors.getAllErrors()) {
-		    		errorMessages.add(obj.getDefaultMessage());
+		if (result.hasErrors()) {
+			List<String> errorMessages = new ArrayList<String>();
+			for (ObjectError obj : errors.getAllErrors()) {
+				errorMessages.add(obj.getDefaultMessage());
+			}
+
+			model.put("errorMessages", errorMessages);
+			model.put("user", user);
+			model.put("enabledValues", enabledValues());
+			model.put("roleValues", roleValues());
+			return "admin/add-user";
+		} else {
+			try {
+				User registered = null;
+
+				//register and send verification email, if...
+				if(user.isEnabled()) {
+					registered = iUserService.registerNewUserAccount(user);
+				} else {
+					registered = iUserService.registerNewUserAccount(user);
+					String appUrl = request.getContextPath();
+					eventPublisher.publishEvent(new OnRegistrationCompleteEvent
+							(registered, appUrl, request.getLocale()));	
 				}
-		    	
-		    	model.put("errorMessages", errorMessages);
-		    	model.put("loggedinUser", loggedinUser);
-		    	model.put("user", user);
+
+				return "redirect:/admin/users"; 
+
+			} catch (UserAlreadyExistException | 
+					EmailExistsException | 
+					Exception e) {
+				model.put("exception", e.getMessage());
+				model.put("user", user);
 				model.put("enabledValues", enabledValues());
 				model.put("roleValues", roleValues());
-		    	return "admin/add-user";
-		    } else {
-		    	try {
-		    		User registered = null;
-		    		
-		    		//register and send verification email, if...
-		    		if(user.isEnabled()) {
-		    			registered = iUserService.registerNewUserAccount(user);
-		    		} else {
-		    			registered = iUserService.registerNewUserAccount(user);
-			        	String appUrl = request.getContextPath();
-			            eventPublisher.publishEvent(new OnRegistrationCompleteEvent
-			            		(registered, appUrl, request.getLocale()));	
-		    		}
-		        	
-		        	model.put("loggedinUser", loggedinUser);
-		        	return "redirect:/admin/users"; 
-				
-		    	} catch (UserAlreadyExistException | 
-						EmailExistsException | 
-						Exception e) {
-					model.put("exception", e.getMessage());
-					model.put("loggedinUser", loggedinUser);
-					model.put("user", user);
-					model.put("enabledValues", enabledValues());
-					model.put("roleValues", roleValues());
-					return "admin/add-user";
-				}
-		    }
+				return "admin/add-user";
+			}
 		}
-		
-		
-		return "error";
 	}
 	
 	
 	@RequestMapping(value="/admin/delete_user", method=RequestMethod.GET)
 	public String deleteUser(ModelMap model , @RequestParam Long id) {
-		User loggedinUser = userService.GetAuthenticatedUser();
-		User user = userRepository.findByUserId(id);
 		
-		if(isUserAdmin(loggedinUser)) {
-			if(todoRepository.findAllByUserId(id).size() > 0)
-				todoRepository.deleteById(id);
-			
-			if(tokenRepository.findByUserId(id) != null)
-				tokenRepository.deleteById(id);
-			
-			userRepository.deleteById(id);
-			
-			return "redirect:/admin/users";
-		}
-		
-		return "error";
+		if(todoRepository.findAllByUserId(id).size() > 0)
+			todoRepository.deleteById(id);
+
+		if(tokenRepository.findByUserId(id) != null)
+			tokenRepository.deleteById(id);
+
+		userRepository.deleteById(id);
+
+		return "redirect:/admin/users";
 	}
 	
 
@@ -195,10 +162,6 @@ public class AdminUserController {
 	
 	
 	//==========Methods=============================
-
-	private boolean isUserAdmin(User loggedinUser) {
-		return loggedinUser.getRole().getName().equals("ROLE_ADMIN");
-	}
 	
 	private Map<String, String> roleValues() {
 		Map<String,String> roleValues = new LinkedHashMap<String,String>();

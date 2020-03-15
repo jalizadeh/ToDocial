@@ -2,7 +2,7 @@
 <%@ include file="common/navigation.jspf" %>
 
 
-	<div class="container">
+	<div class="container mt-5 mb-5">
 		<h4 class="display-4">Add a new Todo:</h4>
 		<c:if test="${error != null}">
 			<div class="alert alert-danger" role="alert">

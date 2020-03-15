@@ -1,5 +1,7 @@
 package com.jalizadeh.springboot.web.security;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.jalizadeh.springboot.web.model.FlashMessage;
@@ -27,6 +31,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private IUserService iUserService;
+	
+	@Autowired
+	private DataSource dataSource;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
@@ -46,8 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		http
 			.authorizeRequests()
 				.antMatchers(
-						"/favicon.ico",
-						"/js/**",
+						"/static_res/**", //it is easier to permit all files in this folder
 						"/WEB-INF/**",
 						"/webjars/**",
 						"/registration-confirm",
@@ -55,9 +61,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 						"/forgot-password",
 						"/reset-password"
 						).permitAll()
-				.antMatchers("/admin/**").hasRole("ADMIN")
-				.anyRequest()
-					.hasAnyRole("USER", "ADMIN")
+				.antMatchers("/admin/**").hasRole("ADMIN") //no more need to check logged in user in controllers
+				.anyRequest().hasAnyRole("USER", "ADMIN")
 			.and()
 			.formLogin()
 				.loginPage("/login")
@@ -67,10 +72,39 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 			.and()
 			.logout()
 				.permitAll()
-				.logoutUrl("/logout");
-				//.logoutSuccessUrl("/login");
+				.logoutUrl("/logout")
+			.and()
+			.rememberMe()
+				/*
+				 * Cookie-based
+				 */ 
+				.tokenValiditySeconds(604800) //one week
+				.key("lssApplicationKey") //my own key to be used while hashing
+				//.useSecureCookie(true) //enable cookie only in secured connection = https
+				.rememberMeParameter("remember") //the element's name in login form
+				
+				
+				
+				/*
+				 * Persistence-based
+				 * The token is stored in DB
+				 */
+				//.tokenRepository(persistentTokenRepository())
+			
+			.and()
+			.csrf()
+				.disable();
 
 	}
+	
+	
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+		jdbcTokenRepository.setDataSource(dataSource);
+		return jdbcTokenRepository;
+	}
+	
 	
 	public AuthenticationSuccessHandler loginSuccessHandler() {
         return (request, response, authentication) ->

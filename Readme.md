@@ -18,6 +18,7 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- [ ] Set username & password
 - [ ] General
 	- [x] Header/Navigation/Footer fragments
+		- Spring Security JSP Taglib is added for easier contorll of authenticated users
 	- [x] Set page title
 		- Each page&#39;s title is encapsulated in `model`
 	- [x] Support UTF-8 encoding
@@ -41,7 +42,13 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- The data is seperately stored in `PasswordResetToken` with 12-hour limit
 		- [ ] Security Question
 		- [ ] Field validation
-	- [ ] Remember me
+	- [x] Remember me
+		- Note that the check-box should be `... name="remember-me" ...`
+		- [x] Client-side (cookie)
+		- [ ] Server-side (persistence)
+			- ❌ it seems db is not populated
+	- [x] Logged in user, should not be able to reach pages like "Login", "Signup", ...
+		- Managed in `SecurityConfiguration`, by defining the rules
 - [ ] Signup new user
 	- All new users are registered as `USER`
 	- [x] Filed validation

@@ -97,7 +97,7 @@ public class LoginSignupController {
 	        return "login";
 		}
 		
-		return "welcome";
+		return "redirect:/";
     }
 	
 	
@@ -235,10 +235,14 @@ public class LoginSignupController {
 	
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
 	public String SignupMessage(ModelMap model) {
-		model.addAttribute("user", new User());
-		model.put("PageTitle", "Sign up");
-		model.put("securityQuestions", sqdRepo.findAll());
-		return "signup";
+		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+			model.addAttribute("user", new User());
+			model.put("PageTitle", "Sign up");
+			model.put("securityQuestions", sqdRepo.findAll());
+			return "signup";
+		}
+		
+		return "redirect:/";
 	}
 	
 	

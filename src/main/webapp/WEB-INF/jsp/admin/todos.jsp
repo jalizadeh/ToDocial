@@ -2,7 +2,7 @@
 <%@ include file="../common/navigation.jspf" %>
 
 
-	<div class="container">
+	<div class="container mt-5 mb-5">
 		<h2 class="display-2">Admin Panel > todos</h2>
 	</div>
 
