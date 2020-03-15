@@ -77,5 +77,35 @@
 			<button type="submit" class="btn btn-success">Add</button>
 		</form:form>
 	</div>
+	
+	
+	<script src="/js/pwstrength.js"></script>
+	<script src="/js/jquery.validate.js"></script>
+
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+							options = {
+								common : {
+									minChar : 8
+								},
+								ui : {
+									showVerdictsInsideProgressBar : true,
+									showErrors : true,
+									errorMessages : {
+										wordLength : 'Your password is too short',
+										wordNotEmail : 'Do not use your email as your password',
+										wordSequences : 'Your password contains sequences',
+										wordLowercase : 'Use lower case characters',
+										wordUppercase : 'Use upper case characters',
+										wordOneNumber : 'Use numbers',
+										wordOneSpecialChar : 'Use special characters: [~!@#$%^&amp;*,_?]'
+									}
+								}
+							};
+							$('#password').pwstrength(options);
+						});
+	</script>
 
 <%@ include file="common/footer.jspf" %>

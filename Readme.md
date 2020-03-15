@@ -42,23 +42,28 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- [ ] Security Question
 		- [ ] Field validation
 	- [ ] Remember me
-- [ ] [Signup new user](https://www.baeldung.com/registration-with-spring-mvc-and-spring-security)
+- [ ] Signup new user
 	- All new users are registered as `USER`
 	- [x] Filed validation
-	- [ ] Security Question
-	- [x] Email validation
-	- [x] Password confirmation
-	- [x] Store passwords encrypted (BCrypt 10)
+	- [x] Security Question
+		- Entity `SecurityQuestionDefinition` stores the questions.
+		- Entity `SecurityQuestion` manages the relationship between the `User` and it&#39;s security `question_id` & `answer`.
+		- It appears while signing up or changing password.
+	- [x] Password
+		- Passwords are encrypted with BCrypt 10
+		- [x] Password strength and validation on front-end & back-end
+			- It is done with `jQuery` & `pwstrength.js`
+		- [x] Password confirmation
 	- [x] Successful sign up
 		- [x] Email verification
-			- I used `smtp.gmail.com` as the server. Your email credentials `username` & `password` must be inserted in `application.properties`.
+			- I used `smtp.gmail.com` as the server. Your email credentials `username` & `password` must be inserted in `application.properties`
 			- The user has 24 hours to verify his account
 			- [x] Token is valid
-			- [ ] Token is not valid
-			- [ ] Token is expired
+			- [x] Token is not valid
+			- [x] Token is expired
 			- [ ] User already activated
 	- [x] Unseccessfull sign up
-		- [x] Show errors & exceptions
+		- [ ] Show errors & exceptions
 - [ ] User profile
 	- [ ] Manage account
 	- [ ] Delete account

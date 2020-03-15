@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.service.IUserService;
@@ -38,16 +39,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(10);
 	}
+
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
 				.antMatchers(
-						"/favicon.ico", 
-						"/registration-confirm", 
+						"/favicon.ico",
+						"/js/**",
 						"/WEB-INF/**",
 						"/webjars/**",
+						"/registration-confirm",
 						"/signup",
 						"/forgot-password",
 						"/reset-password"

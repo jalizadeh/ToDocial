@@ -39,9 +39,12 @@ public class UserService implements IUserService {
 	
 	public User GetAuthenticatedUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		
-		return (User) userDetails;
+		if(authentication.getName().equals("anonymousUser")) {
+			return null;
+		}
+		
+		return (User) authentication.getPrincipal();
 	}
 	
 

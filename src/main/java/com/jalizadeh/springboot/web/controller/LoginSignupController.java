@@ -249,19 +249,25 @@ public class LoginSignupController {
 			BindingResult result, Errors errors, WebRequest request) 
 	    	throws UserAlreadyExistException, EmailExistsException { 
 		
-		
-		ValidationUtils.invokeValidator(new UserValidator(), user, errors);
+		System.err.println("1");
+		//ValidationUtils.invokeValidator(new UserValidator(), user, errors);
 	    
 		if(result.hasErrors()) {
 			List<String> errorMessages = new ArrayList<String>();
 	    	for (ObjectError obj : errors.getAllErrors()) {
 	    		errorMessages.add(obj.getDefaultMessage());
 			}
-	    	return new ModelAndView("signup", "errorMessages", errorMessages);
+	    	ModelAndView mv = new ModelAndView();
+	    	mv.addObject("errorMessages", errorMessages);
+	    	mv.addObject("user", user);
+	    	mv.setViewName("signup");
+	    	System.err.println("2");
+	    	//return new ModelAndView("signup", "errorMessages", errorMessages);
+	    	return mv;
 		}
 		
 		User registered = null;
-		
+		System.err.println("3");
     	try {
     		registered = iUserService.registerNewUserAccount(user);
     		SecurityQuestionDefinition sqd = sqdRepo.getOne(sq);
@@ -274,11 +280,19 @@ public class LoginSignupController {
     		String appUrl = request.getContextPath();
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent
             		(registered, appUrl, request.getLocale()));
-            
+            System.err.println("4");
     	} catch (UserAlreadyExistException | EmailExistsException | 
 				Exception e) {
-			return new ModelAndView("signup", "exception", e.getMessage());
+			
+    		ModelAndView mv = new ModelAndView();
+	    	mv.addObject("exception", e.getMessage());
+	    	mv.addObject("user", user);
+	    	mv.setViewName("signup");
+	    	System.err.println("51");
+	    	return mv;
+    		//return new ModelAndView("signup", "exception", e.getMessage());
 		}
+    	System.err.println("6");
     	
     	return new ModelAndView("confirm_email", "registeredUser", registered);
 	}

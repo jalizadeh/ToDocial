@@ -21,34 +21,34 @@
 	<form:form method="post" action="/signup" modelAttribute="user">
 		<div class="form-group">
 		    <label for="firstname">Firstname</label>
-		    <form:input path="firstname" type="text" class="form-control" name="firstname" id="firstname" required="required"/>
+		    <form:input path="firstname" type="text" class="form-control" id="firstname" required="required"/>
 		    <form:errors path="firstname" cssClass="text-warning"/>
 		</div>
 		<div class="form-group">
 		    <label for="lastname">Lastname</label>
-		    <form:input path="lastname" type="text" class="form-control" name="lastname" id="lastname" required="required"/>
+		    <form:input path="lastname" type="text" class="form-control" id="lastname" required="required"/>
 		    <form:errors path="lastname" cssClass="text-warning"/>
 		</div>
 		<div class="form-group">
 		    <label for="username">Username</label>
-		    <form:input path="username" type="text" class="form-control" name="username" id="username" required="required"/>
+		    <form:input path="username" type="text" class="form-control" id="username" required="required"/>
 		    <form:errors path="username" cssClass="text-warning"/>
 		</div>
 		<div class="form-group">
 		    <label for="email">Email</label>
-		    <form:input path="email" type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" required="required"/>
+		    <form:input path="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" required="required"/>
 		    <small id="emailHelp" class="form-text text-muted">We don't like spams, too.</small>
 		    <form:errors path="email" cssClass="text-warning"/>
 		</div>
 		<div class="form-group">
 		    <label for="password">Password</label>
-		    <form:input path="password" type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelp" required="required"/>
+		    <form:input path="password" type="password" class="form-control" id="password" aria-describedby="passwordHelp" required="required"/>
 		    <small id="passwordHelp" class="form-text text-muted">We don't store plain passwords, they are all encrypted.</small>
 		    <form:errors path="password" cssClass="text-warning"/>
 		</div>
 		<div class="form-group">
 		    <label for="mp">Confirm Password</label>
-		    <input path="mp" type="password" class="form-control" name="mp" id="mp" aria-describedby="mpHelp" required="required"/>
+		    <input path="mp" type="password" class="form-control" id="mp" aria-describedby="mpHelp" required="required"/>
 		    <small id="mpHelp" class="form-text text-muted">To make sure there is no mistake.</small>
 		    <form:errors path="mp" cssClass="text-warning"/>
 		</div>
@@ -71,5 +71,33 @@
 	</form:form>
 </div>
 
+	<script src="/js/pwstrength.js"></script>
+	<script src="/js/jquery.validate.js"></script>
+
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+							options = {
+								common : {
+									minChar : 8
+								},
+								ui : {
+									showVerdictsInsideProgressBar : true,
+									showErrors : true,
+									errorMessages : {
+										wordLength : 'Your password is too short',
+										wordNotEmail : 'Do not use your email as your password',
+										wordSequences : 'Your password contains sequences',
+										wordLowercase : 'Use lower case characters',
+										wordUppercase : 'Use upper case characters',
+										wordOneNumber : 'Use numbers',
+										wordOneSpecialChar : 'Use special characters: [~!@#$%^&amp;*,_?]'
+									}
+								}
+							};
+							$('#password').pwstrength(options);
+						});
+	</script>
 
 <%@ include file="common/footer.jspf" %>
