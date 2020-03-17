@@ -24,7 +24,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,7 +46,6 @@ import com.jalizadeh.springboot.web.service.IUserService;
 import com.jalizadeh.springboot.web.service.PasswordResetTokenService;
 import com.jalizadeh.springboot.web.service.TokenService;
 import com.jalizadeh.springboot.web.service.UserService;
-import com.jalizadeh.springboot.web.validator.UserValidator;
 
 @Controller
 public class LoginSignupController {

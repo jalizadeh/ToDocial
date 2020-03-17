@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -33,6 +34,8 @@ import com.jalizadeh.springboot.web.service.UserService;
 import com.jalizadeh.springboot.web.validator.UserValidator;
 
 @Controller
+//@PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
+@Secured("ROLE_ADMIN") 
 public class AdminUserController {
 
 	
@@ -59,16 +62,12 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
 	public String ShowAdminPanel_Users(ModelMap model) {
-		//model.put("loggedinUser", userService.GetAuthenticatedUser());
 		model.put("PageTitle", "Admin > Users");
-		
-		//if(isUserAdmin(loggedinUser)) {
-			model.put("all_users", userRepository.findAll());
-			model.put("users_count", userRepository.count());
-			return "admin/users";
-		//}
-		
-		//return "error";
+
+		model.put("listOfLoggedinUsers", userService.getAllLoggedinUsers());
+		model.put("all_users", userRepository.findAll());
+		model.put("users_count", userRepository.count());
+		return "admin/users";
 	}
 	
 	

@@ -35,6 +35,7 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- Spring Security 
 	- There are two roles `ROLE_USER` and `ROLE_ADMIN`
 	- Everyone can access `Log in` or `Sign up`, but for accessing the todos, the user must log in or sign up first.
+	- User can not login on multiple clients at the same time
 	- [x] After login, user shouldn't be able to login again
 	- [x] Field validation
 	- [x] Log out
@@ -77,6 +78,7 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 - [ ] Admin panel
 	- If user has `ROLE_ADMIN`, she can access the dashboard
 	- [x] Manage users
+		- [x] List of online users
 		- [x] 1-click users's state change
 		- [x] 1-click delete user
 		- [ ] Modify user

@@ -8,25 +8,27 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.spel.spi.EvaluationContextExtension;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.service.IUserService;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
@@ -61,8 +63,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 						"/forgot-password",
 						"/reset-password"
 						).permitAll()
-				.antMatchers("/admin/**").hasRole("ADMIN") //no more need to check logged in user in controllers
-				.anyRequest().hasAnyRole("USER", "ADMIN")
+				
+				/*
+				 * Testing security expressions
+				 * these expressions can be also used directly in JSPs
+				 *
+				.antMatchers("/secured")
+					.access("hasRole('ADMIN')")
+					.access("hasAuthority('ROLE_ADMIN')")
+					.access("hasRole('ADMIN')")
+					.hasIpAddress("192.168.1.0/24")
+					.access("hasIpAddress('192.168.1.0/24')")
+					.access("hasIpAddress('::1')")
+					.access("isAnonymous()")
+					.access("isAuthenticated()")
+					.access("request.method == 'GET'")
+					.access("request.method != 'PUT'")
+					.not().access("hasIpAddress('::1')")
+					.access("hasRole('ADMIN') and principal.username == 'user'")
+				*/
+				
+				//.antMatchers("/admin/**").hasRole("ADMIN") //no more need to check logged in user in controllers
+				.anyRequest().authenticated()
 			.and()
 			.formLogin()
 				.loginPage("/login")
@@ -92,9 +114,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				//.tokenRepository(persistentTokenRepository())
 			
 			.and()
+			.sessionManagement()
+				.maximumSessions(1)
+				.sessionRegistry(sessionRegistry())
+				.and()
+				.sessionFixation().none()
+			
+			.and()
 			.csrf()
 				.disable();
 
+	}
+	
+	@Bean
+	public SessionRegistry sessionRegistry() {
+		return new SessionRegistryImpl();
 	}
 	
 	
@@ -153,14 +187,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
     
 	
-    /*
+    
 	@Autowired
 	public void configureGloablSecurity(AuthenticationManagerBuilder auth) throws Exception{
-		//auth.inMemoryAuthentication().withUser("javad").password("12345").roles("USER", "ADMIN");
-		
 		auth.inMemoryAuthentication()
-        	.withUser("javad").password("{noop}12345").roles("USER", "ADMIN");
+        	.withUser("javad").password("{noop}12345").roles("ADMIN")
+        	.and()
+        	.withUser("user").password("{noop}pass").roles("USER");
 	}
-	*/
-	
+
 }

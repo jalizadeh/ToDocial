@@ -1,11 +1,15 @@
 package com.jalizadeh.springboot.web.service;
 
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +34,9 @@ public class UserService implements IUserService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private SessionRegistry sessionRegistry;
 	
 	
 	public User GetUserByPrincipal(Principal principal) {
@@ -120,10 +127,21 @@ public class UserService implements IUserService {
 	}
 	
 	
+	public List<String> getAllLoggedinUsers(){
+		List<Object> principals = sessionRegistry.getAllPrincipals();
+		
+		User[] users = principals.toArray(new User[principals.size()]);
+		return Arrays.stream(users)
+				.filter(u -> !sessionRegistry.getAllSessions(u, false).isEmpty())
+				.map(u -> u.getFirstname() + " " + u.getLastname() + " [" + u.getUsername() + "]")
+				.collect(Collectors.toList());
+	}
 	
 	
 	
-	//=======================================
+	
+	// ~ Methods
+	// =======================================
 	
 	private boolean emailExists(final String email) {
         return userRepository.findByEmail(email) != null;

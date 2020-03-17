@@ -1,7 +1,6 @@
 package com.jalizadeh.springboot.web.controller;
 
 import java.io.IOException;
-import java.security.Principal;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;

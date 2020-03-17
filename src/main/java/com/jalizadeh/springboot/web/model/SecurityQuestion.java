@@ -1,7 +1,5 @@
 package com.jalizadeh.springboot.web.model;
 
-import java.util.Optional;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
