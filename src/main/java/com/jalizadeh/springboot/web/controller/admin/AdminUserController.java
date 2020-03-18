@@ -9,7 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -29,13 +29,12 @@ import com.jalizadeh.springboot.web.repository.RoleRepository;
 import com.jalizadeh.springboot.web.repository.TodoRepository;
 import com.jalizadeh.springboot.web.repository.UserRepository;
 import com.jalizadeh.springboot.web.repository.VerificationTokenRepository;
-import com.jalizadeh.springboot.web.service.IUserService;
 import com.jalizadeh.springboot.web.service.UserService;
 import com.jalizadeh.springboot.web.validator.UserValidator;
 
 @Controller
-//@PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
-@Secured("ROLE_ADMIN") 
+//@PreAuthorize("hasAuthority('PRIVILEGE_WRITE')")
+//@Secured("ROLE_ADMIN") 
 public class AdminUserController {
 
 	
@@ -43,22 +42,19 @@ public class AdminUserController {
 	UserService userService;
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
-	RoleRepository roleRepository;
+	private RoleRepository roleRepository;
 	
 	@Autowired
-	TodoRepository todoRepository;
+	private TodoRepository todoRepository;
 	
 	@Autowired
-	VerificationTokenRepository tokenRepository;
+	private VerificationTokenRepository tokenRepository;
 	
 	@Autowired
-	IUserService iUserService;
-	
-	@Autowired
-	ApplicationEventPublisher eventPublisher;
+	private ApplicationEventPublisher eventPublisher;
 	
 	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
 	public String ShowAdminPanel_Users(ModelMap model) {
@@ -117,9 +113,9 @@ public class AdminUserController {
 
 				//register and send verification email, if...
 				if(user.isEnabled()) {
-					registered = iUserService.registerNewUserAccount(user);
+					registered = userService.registerNewUserAccount(user);
 				} else {
-					registered = iUserService.registerNewUserAccount(user);
+					registered = userService.registerNewUserAccount(user);
 					String appUrl = request.getContextPath();
 					eventPublisher.publishEvent(new OnRegistrationCompleteEvent
 							(registered, appUrl, request.getLocale()));	

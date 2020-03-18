@@ -1,17 +1,17 @@
 package com.jalizadeh.springboot.web.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -73,16 +73,41 @@ public class User implements UserDetails{
 	@Column(nullable = false)
 	private boolean enabled;
 	
+	/*
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="role_id")
 	private Role role;
-
+*/
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name="users_roles",
+			joinColumns = @JoinColumn(name="user_id", referencedColumnName="id"),
+			inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id"))
+	private Collection<Role> roles;
+	
 	public User() {	
-		//super();
+		super();
 		//this.enabled = false;
 	}
 	
 	
+	
+	public User(String firstname, String lastname,
+			@Size(min = 5, max = 20, message = "Username must be between 5-20 characters") String username,
+			@NotNull @NotEmpty String email, String password,
+			@NotEmpty(message = "It must match your entered password") String mp, boolean enabled,
+			Collection<Role> roles) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.mp = mp;
+		this.enabled = enabled;
+		this.roles = roles;
+	}
+
+
 
 	public Long getId() {
 		return id;
@@ -112,8 +137,6 @@ public class User implements UserDetails{
 		return password;
 	}
 
-	
-
 	public String getMp() {
 		return mp;
 	}
@@ -124,10 +147,6 @@ public class User implements UserDetails{
 
 	public boolean isEnabled() {
 		return enabled;
-	}
-
-	public Role getRole() {
-		return role;
 	}
 
 	public void setId(Long id) {
@@ -146,11 +165,6 @@ public class User implements UserDetails{
 		this.enabled = enabled;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
-	}
-	
-
 	public String getEmail() {
 		return email;
 	}
@@ -159,108 +173,41 @@ public class User implements UserDetails{
 		this.email = email;
 	}
 
+	public Collection<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Collection<Role> roles) {
+		this.roles = roles;
+	}
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority(role.getName()));
-		return authorities;
+		return this.roles.stream()
+			.flatMap(role -> role.getPrivileges().stream())
+			.map(p -> new SimpleGrantedAuthority(p.getName()))
+			.collect(Collectors.toList());
 	}
+
+
 
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
+
+
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
+
+
 
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username
-				+ ", password=" + password + ", mp=" + mp + ", email=" + email
-				+ ", enabled=" + enabled + ", role=" + role + "]";
-	}
-
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + (enabled ? 1231 : 1237);
-		result = prime * result + ((firstname == null) ? 0 : firstname.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
-		result = prime * result + ((mp == null) ? 0 : mp.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		return result;
-	}
-
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (enabled != other.enabled)
-			return false;
-		if (firstname == null) {
-			if (other.firstname != null)
-				return false;
-		} else if (!firstname.equals(other.firstname))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (lastname == null) {
-			if (other.lastname != null)
-				return false;
-		} else if (!lastname.equals(other.lastname))
-			return false;
-		if (mp == null) {
-			if (other.mp != null)
-				return false;
-		} else if (!mp.equals(other.mp))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		return true;
-	}
-	
-	
 }

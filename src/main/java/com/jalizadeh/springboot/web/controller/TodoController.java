@@ -46,7 +46,7 @@ public class TodoController {
 	public String ShowTodosList(ModelMap model) {
 		model.put("todos", todoRepository.findAll());
 		model.put("todo_count", todoRepository.count());
-		model.put("loggedinUser", userService.GetAuthenticatedUser());
+		//model.put("loggedinUser", userService.GetAuthenticatedUser());
 		model.put("PageTitle", "Todo Lists");
 		return "list-todos";
 	}
@@ -62,7 +62,7 @@ public class TodoController {
 	
 	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
 	public String ShowAddTodo(ModelMap model) {
-		model.put("loggedinUser", userService.GetAuthenticatedUser());
+		//model.put("loggedinUser", userService.GetAuthenticatedUser());
 		model.put("PageTitle", "Add new Todo");
 		
 		model.addAttribute("todo",new Todo());
@@ -95,7 +95,7 @@ public class TodoController {
 	
 	@RequestMapping(value = "/update-todo", method = RequestMethod.GET)
 	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id) {
-		model.put("loggedinUser", userService.GetAuthenticatedUser());
+		//model.put("loggedinUser", userService.GetAuthenticatedUser());
 		model.put("PageTitle", "Update Todo");
 		Todo todo = todoRepository.getOne(id);
 		model.put("todo", todo);
@@ -139,7 +139,7 @@ public class TodoController {
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String SearchTodo(ModelMap model, 
 			@RequestParam(defaultValue="") String q) {
-		model.put("loggedinUser", userService.GetAuthenticatedUser());
+		//model.put("loggedinUser", userService.GetAuthenticatedUser());
 		model.put("PageTitle", "Search for: " + q);
 		
 		List<Todo> todos = new ArrayList<Todo>();

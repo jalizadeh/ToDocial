@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
-import com.jalizadeh.springboot.web.service.IUserService;
 import com.jalizadeh.springboot.web.service.TokenService;
 
 @Component

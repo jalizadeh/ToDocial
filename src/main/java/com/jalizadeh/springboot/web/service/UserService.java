@@ -11,20 +11,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.jalizadeh.springboot.web.error.EmailExistsException;
 import com.jalizadeh.springboot.web.error.UserAlreadyExistException;
-import com.jalizadeh.springboot.web.model.Role;
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.repository.RoleRepository;
 import com.jalizadeh.springboot.web.repository.UserRepository;
 
 @Service
 //@Transactional
-public class UserService implements IUserService {
+public class UserService implements UserDetailsService {
 	
 	@Autowired 
 	private UserRepository userRepository;
@@ -39,11 +39,16 @@ public class UserService implements IUserService {
 	private SessionRegistry sessionRegistry;
 	
 	
+	public UserService() {
+		super();
+	}
+
+
 	public User GetUserByPrincipal(Principal principal) {
 		return (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
 	}
 	
-	
+
 	public User GetAuthenticatedUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -53,25 +58,37 @@ public class UserService implements IUserService {
 		
 		return (User) authentication.getPrincipal();
 	}
+
 	
 
-	@Override
+	
 	public UserDetails loadUserByUsername(String username) 
 			throws UsernameNotFoundException {
 		
 		User user = userRepository.findByUsername(username);
+		
 		if(user == null)
 			throw new UsernameNotFoundException("User not found");
 		
+		/*
+		return new org.springframework.security.core.userdetails.User(
+				user.getUsername(),
+				user.getPassword(),
+				user.isEnabled(),
+				true,
+				true,
+				true,
+				user.getAuthorities()
+				);
+			*/
 		return user;
 	}
 
-	@Override
+
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}	
 	
-	@Override
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
@@ -82,8 +99,7 @@ public class UserService implements IUserService {
 	 * If later more roles are added, it supports them, the role's name comes
 	 * from the registering form
 	 */
-	@Override
-    public User registerNewUserAccount(final User user) 
+	public User registerNewUserAccount(final User user) 
     		throws UserAlreadyExistException, EmailExistsException {
 		
 		if(usernameExists(user.getUsername())) {
@@ -105,7 +121,7 @@ public class UserService implements IUserService {
         //nUser.setUsing2FA(user.isUsing2FA());
         //nUser.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
         
-        
+        /*
         Role role = new Role();
         if(user.getRole() != null)
         	role = roleRepository.findByName(user.getRole().getName()); //must use existing roles
@@ -113,6 +129,7 @@ public class UserService implements IUserService {
         	role = roleRepository.findByName("ROLE_USER"); //must use existing roles
         
         nUser.setRole(role);
+        */
         nUser.setEnabled(user.isEnabled());
         
         return userRepository.save(nUser);
@@ -150,8 +167,4 @@ public class UserService implements IUserService {
 	private boolean usernameExists(String username) {
 		return userRepository.findByUsername(username) != null;
 	}
-
-
-	
-
 }

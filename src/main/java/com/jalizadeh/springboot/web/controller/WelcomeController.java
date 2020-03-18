@@ -7,20 +7,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.jalizadeh.springboot.web.repository.TodoRepository;
-import com.jalizadeh.springboot.web.service.UserService;
 
 @Controller
 public class WelcomeController {	
 	
+	/*
 	@Autowired
 	UserService userService;
-	
+	*/
 	@Autowired
 	TodoRepository todoRepository;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String ShowWelcomePage(ModelMap model) {
-        model.put("loggedinUser", userService.GetAuthenticatedUser());
 		model.put("todoCount", todoRepository.findAll().size());
 		model.put("PageTitle", "Welcome");
 		return "welcome";

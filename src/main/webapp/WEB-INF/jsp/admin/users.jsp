@@ -26,6 +26,7 @@
 						<th>Email</th>
 						<th>Activated</th>
 						<th>Role</th>
+						<th>Privileges</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -36,7 +37,20 @@
 						<th>${user.username}</th>
 						<th>${user.email}</th>
 						<th>${user.enabled}</th>
-						<th>${user.role.name}</th>
+						<th>
+							<c:forEach items="${user.roles}" var="role">
+								${role.name}
+								<br/>
+							</c:forEach>
+						</th>
+						<th>
+							<c:forEach items="${user.roles}" var="role">
+								<c:forEach items="${role.privileges}" var="privilege">
+									${privilege.name}
+									<br/>
+								</c:forEach>
+							</c:forEach>
+						</th>
 						<th><a type="button" class="btn btn-success"
 							href="/admin/change_user_state?id=${user.id}"><i
 								class="fas fa-sync-alt"></i></a> <a type="button"

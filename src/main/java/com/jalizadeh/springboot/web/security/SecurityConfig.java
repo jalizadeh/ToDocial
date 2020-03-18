@@ -24,15 +24,14 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import com.jalizadeh.springboot.web.model.FlashMessage;
-import com.jalizadeh.springboot.web.service.IUserService;
+import com.jalizadeh.springboot.web.service.UserService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	private IUserService iUserService;
+	private UserService userService;
 	
 	@Autowired
 	private DataSource dataSource;
@@ -40,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
 		auth
-			.userDetailsService(iUserService)
+			.userDetailsService(userService)
 			.passwordEncoder(passwordEncoder());
 	}
 	
@@ -83,7 +82,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 					.access("hasRole('ADMIN') and principal.username == 'user'")
 				*/
 				
-				//.antMatchers("/admin/**").hasRole("ADMIN") //no more need to check logged in user in controllers
+				.antMatchers("/admin/**").hasAuthority("PRIVILEGE_WRITE") //no more need to check logged in user in controllers
 				.anyRequest().authenticated()
 			.and()
 			.formLogin()

@@ -13,8 +13,9 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 - [x] Initialize Spring project
 - [x] Implement SQLite database
 	- User
+		- Role
+			- Privilege
 	- Todo
-	- Role
 	- [ ] Set username & password
 - [ ] General
 	- [x] Header/Navigation/Footer fragments

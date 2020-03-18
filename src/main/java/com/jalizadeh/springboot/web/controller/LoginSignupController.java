@@ -42,7 +42,6 @@ import com.jalizadeh.springboot.web.registration.OnPasswordResetEvent;
 import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.springboot.web.repository.SecurityQuestionDefinitionRepository;
 import com.jalizadeh.springboot.web.repository.SecurityQuestionRepository;
-import com.jalizadeh.springboot.web.service.IUserService;
 import com.jalizadeh.springboot.web.service.PasswordResetTokenService;
 import com.jalizadeh.springboot.web.service.TokenService;
 import com.jalizadeh.springboot.web.service.UserService;
@@ -52,9 +51,6 @@ public class LoginSignupController {
 
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private IUserService iUserService;
 	
 	@Autowired
 	private TokenService tokenService;
@@ -271,7 +267,7 @@ public class LoginSignupController {
 		User registered = null;
 		System.err.println("3");
     	try {
-    		registered = iUserService.registerNewUserAccount(user);
+    		registered = userService.registerNewUserAccount(user);
     		SecurityQuestionDefinition sqd = sqdRepo.getOne(sq);
     		sqRepo.save(new SecurityQuestion(registered,
     				sqd, 
