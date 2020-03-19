@@ -13,9 +13,17 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 - [x] Initialize Spring project
 - [x] Implement SQLite database
 	- User
-		- Role
-			- Privilege
+		- users_roles (many-to-many)
+		- Role (high-level roles)
+			- roles_privileges (many-to-many)
+			- Privilege (low-level permissions)
+		- verification_token
+		- persistent_logins
+		- password_reset_token
+		- security_question
+		- security_question_definition
 	- Todo
+	- hibernate_sequence
 	- [ ] Set username & password
 - [ ] General
 	- [x] Header/Navigation/Footer fragments
@@ -25,13 +33,14 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- [x] Support UTF-8 encoding
 	- [x] Handle exceptions with exact error reason
 		- All exceptions will be redirected to `/error` showing the reason and what happened.
-		- [ ] If any error occurs in subdirectories, the page is not shown correctly
+		- [x] If any error occurs in subdirectories, the page is not shown correctly
 	- [ ] Multi-language
 - [x] Todos
 	- [x] List of all todos
 	- [x] Add/Update/Delete todos
 	- [x] 1-click Todo's state change
 	- [x] Search among todos
+	- [ ] Commenting on todos
 - [ ] Log in
 	- Spring Security 
 	- There are two roles `ROLE_USER` and `ROLE_ADMIN`
@@ -73,9 +82,12 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 			- [ ] User already activated
 	- [x] Unseccessfull sign up
 		- [ ] Show errors & exceptions
-- [ ] User profile
-	- [ ] Manage account
+- [ ] User profile	
+	- [ ] Account details
+	- [ ] Add photo
+	- [ ] Change password
 	- [ ] Delete account
+- [ ] User Public Page
 - [ ] Admin panel
 	- If user has `ROLE_ADMIN`, she can access the dashboard
 	- [x] Manage users
@@ -92,4 +104,6 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- [ ] Add new todo for any user
 		- [ ] Modify todo
 	- [ ] Settings
+		- [ ] Define new security questions
 	- [ ] Limit `USER` access
+- [ ] Logger

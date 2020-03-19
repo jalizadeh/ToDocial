@@ -16,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,11 +43,11 @@ public class TodoController {
 	}
 	
 	
-	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
-	public String ShowTodosList(ModelMap model) {
-		model.put("todos", todoRepository.findAll());
-		model.put("todo_count", todoRepository.count());
-		//model.put("loggedinUser", userService.GetAuthenticatedUser());
+	@RequestMapping(value = "/@{username}", method = RequestMethod.GET)
+	public String ShowTodosList(ModelMap model, @PathVariable String username) {
+		List<Todo> allTodos = todoRepository.findAll();
+		model.put("todos", allTodos);
+		model.put("todoCount", allTodos.size());
 		model.put("PageTitle", "Todo Lists");
 		return "list-todos";
 	}
@@ -54,24 +55,22 @@ public class TodoController {
 	
 	@RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
 	public String DeleteTodo(ModelMap model, @RequestParam Long id) {
+		User user = userService.GetAuthenticatedUser();
 		todoRepository.deleteById(id);
-		return "redirect:/list-todos";
+		return "redirect:/@" + user.getUsername();
 	}
 	
 	
 	
 	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
 	public String ShowAddTodo(ModelMap model) {
-		//model.put("loggedinUser", userService.GetAuthenticatedUser());
 		model.put("PageTitle", "Add new Todo");
-		
 		model.addAttribute("todo",new Todo());
 	
 		Map<String,String> isDoneValues = new LinkedHashMap<String,String>();
 		isDoneValues.put("true", "Yes");
 		isDoneValues.put("false", "No");
 		model.put("isDoneValues", isDoneValues);
-			    
 			    
 		return "add-todo";
 	}
@@ -89,13 +88,12 @@ public class TodoController {
 		}
 		
 		todoRepository.save(todo);
-		return "redirect:/list-todos";
+		return "redirect:/@" + user.getUsername();
 	}
 	
 	
 	@RequestMapping(value = "/update-todo", method = RequestMethod.GET)
 	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id) {
-		//model.put("loggedinUser", userService.GetAuthenticatedUser());
 		model.put("PageTitle", "Update Todo");
 		Todo todo = todoRepository.getOne(id);
 		model.put("todo", todo);
@@ -123,16 +121,17 @@ public class TodoController {
 		todo.setUser(user);
 		todoRepository.save(todo);
 		
-		return "redirect:/list-todos";
+		return "redirect:/@" + user.getUsername();
 	}
 	
 	
 	@RequestMapping(value = "/todo-state", method = RequestMethod.GET)
-	public String SetAsFinished(ModelMap model, @RequestParam Long id) {
+	public String changeState(ModelMap model, @RequestParam Long id) {
+		User user = userService.GetAuthenticatedUser();
 		Todo todo = todoRepository.getOne(id);
 		todo.setDone(!todo.isDone());
 		todoRepository.save(todo);
-		return "redirect:/list-todos";
+		return "redirect:/@" + user.getUsername();
 	}
 	
 	

@@ -1,12 +1,19 @@
 package com.jalizadeh.springboot.web.security;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.spel.spi.EvaluationContextExtension;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,11 +25,13 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import com.google.common.collect.Lists;
 import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.service.UserService;
 
@@ -83,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				*/
 				
 				.antMatchers("/admin/**").hasAuthority("PRIVILEGE_WRITE") //no more need to check logged in user in controllers
-				.anyRequest().authenticated()
+				.anyRequest().authenticated()//.accessDecisionManager(unanimous())
 			.and()
 			.formLogin()
 				.loginPage("/login")
@@ -146,8 +155,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     public AuthenticationFailureHandler loginFailureHandler() {
         return (request, response, exception) -> {
-        	//System.err.println("SecurityConfiguration > loginFailureHandler > " + exception.getMessage());
-        	
+
         	if(exception.getMessage().contains("User is disabled")) {
         		request.getSession().setAttribute("flash",
             		new FlashMessage("Please confirm your email to activate your account", 
@@ -185,8 +193,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
     
-	
+    /**
+     * Custom decision voters
+     * You can define your own voter logic and use it as a rule
+     * Like: A realtime user-lock
+     * 		 which can store the locked user, and only let the users
+     * 		 that are not locked [module 9 - L4]   
+     */
+    @Bean
+    public AccessDecisionManager unanimous() {
+    	List<AccessDecisionVoter<? extends Object>> decisionVoters = 
+    			Lists.newArrayList(new RoleVoter(), new AuthenticatedVoter(), 
+    					new WebExpressionVoter());
+    	
+    	return new UnanimousBased(decisionVoters); 
+    }
     
+	
+    /*
 	@Autowired
 	public void configureGloablSecurity(AuthenticationManagerBuilder auth) throws Exception{
 		auth.inMemoryAuthentication()
@@ -194,5 +218,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         	.and()
         	.withUser("user").password("{noop}pass").roles("USER");
 	}
+	*/
 
 }

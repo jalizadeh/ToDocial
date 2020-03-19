@@ -50,7 +50,7 @@ public class ExceptionController implements ErrorController {
             	mv.addObject("PageTitle", "500 : INTERNAL SERVER ERROR");
             	//mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
             } else if(statusCode == HttpStatus.FORBIDDEN.value()) {
-            	mv.addObject("exception", "403 : FORBIDDEN<br/>Your request is not valid. The server understood the request but refuses to authorize it.");
+            	mv.addObject("exception", "403 : FORBIDDEN<br/>You are not authorized to access.");
             	mv.addObject("PageTitle", "403 : FORBIDDEN");
             	//mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
             } else if(statusCode == HttpStatus.BAD_REQUEST.value()) {

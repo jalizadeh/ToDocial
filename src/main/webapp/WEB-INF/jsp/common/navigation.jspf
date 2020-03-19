@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">Todo Manager</a>
+  <a class="navbar-brand" href="/">Home</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -8,13 +8,13 @@
     <ul class="navbar-nav mr-auto">
       	<sec:authorize access="isAuthenticated()"> 
 	      	<li class="nav-item active">
-	        	<a class="nav-link" href="/list-todos">Todos</a>
+	        	<a class="nav-link" href="/@<sec:authentication property='principal.username'/>">Todos <i class="fas fa-list-alt"></i></a>
 	      	</li>
 
 	      	<sec:authorize access="hasAuthority('PRIVILEGE_WRITE')">
 				<li class="nav-item dropdown">
 			        <a class="nav-link dropdown-toggle" href="Dashboard" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			        Dashboard
+			        Dashboard <i class="fas fa-tachometer-alt"></i>
 			        </a>
 			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 			          <a class="dropdown-item" href="/admin/panel">Admin Panel</a>
@@ -28,10 +28,10 @@
 			
       		<li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		        Profile
+		        Profile <i class="fas fa-user-circle"></i>
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="/profile">Logged in as @<sec:authentication property="principal.username"/></a>
+		          <a class="dropdown-item" href="/user/profile">Logged in as @<sec:authentication property="principal.username"/></a>
 		          <div class="dropdown-divider"></div>
 		          <a class="dropdown-item" href="/logout">Log out</a>
 		        </div>

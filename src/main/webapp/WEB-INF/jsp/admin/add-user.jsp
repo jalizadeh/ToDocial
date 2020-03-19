@@ -1,4 +1,4 @@
-<%@ include file="common/header.jspf" %>
+<%@ include file="../common/header.jspf" %>
 <%@ include file="../common/navigation.jspf" %>
 
 
@@ -108,4 +108,4 @@
 						});
 	</script>
 
-<%@ include file="common/footer.jspf" %>
+<%@ include file="../common/footer.jspf" %>

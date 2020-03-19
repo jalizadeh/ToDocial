@@ -1,0 +1,16 @@
+/* .sticky-right-todo-list {
+	margin-top:50px;
+	 padding-top: 70px; 
+} */
+
+.badge {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+.badge:before, .badge:after {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}

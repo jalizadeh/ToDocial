@@ -73,11 +73,7 @@ public class User implements UserDetails{
 	@Column(nullable = false)
 	private boolean enabled;
 	
-	/*
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="role_id")
-	private Role role;
-*/
+
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="users_roles",
 			joinColumns = @JoinColumn(name="user_id", referencedColumnName="id"),
@@ -189,7 +185,7 @@ public class User implements UserDetails{
 			.collect(Collectors.toList());
 	}
 
-
+	
 
 	@Override
 	public boolean isAccountNonExpired() {
