@@ -23,6 +23,8 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- security_question
 		- security_question_definition
 	- Todo
+		- todo-log
+		- todos_logs
 	- hibernate_sequence
 	- [ ] Set username & password
 - [ ] General
@@ -36,11 +38,16 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- [x] If any error occurs in subdirectories, the page is not shown correctly
 	- [ ] Multi-language
 - [x] Todos
-	- [x] List of all todos
+	- [x] All user&#39;s todos
+	- [ ] Public / Private
+	- [ ] Photo
 	- [x] Add/Update/Delete todos
-	- [x] 1-click Todo's state change
-	- [x] Search among todos
-	- [ ] Commenting on todos
+	- [x] 1-click state change
+	- [x] Basic Search
+	- [x] Log
+		- During working on the todo, user might need to comment some thoughts
+		- Not editable
+	- [ ] Archive
 - [ ] Log in
 	- Spring Security 
 	- There are two roles `ROLE_USER` and `ROLE_ADMIN`
@@ -87,7 +94,7 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- [ ] Add photo
 	- [ ] Change password
 	- [ ] Delete account
-- [ ] User Public Page
+- [x] User Public Page
 - [ ] Admin panel
 	- If user has `ROLE_ADMIN`, she can access the dashboard
 	- [x] Manage users

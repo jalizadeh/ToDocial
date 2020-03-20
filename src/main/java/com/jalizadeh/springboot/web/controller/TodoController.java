@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jalizadeh.springboot.web.model.Todo;
+import com.jalizadeh.springboot.web.model.TodoLog;
 import com.jalizadeh.springboot.web.model.User;
+import com.jalizadeh.springboot.web.repository.TodoLogRepository;
 import com.jalizadeh.springboot.web.repository.TodoRepository;
 import com.jalizadeh.springboot.web.service.UserService;
 
@@ -30,10 +32,13 @@ import com.jalizadeh.springboot.web.service.UserService;
 public class TodoController {
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	
 	@Autowired
-	TodoRepository todoRepository;
+	private TodoRepository todoRepository;
+	
+	@Autowired
+	private TodoLogRepository todoLogRepository;
 	
 	@InitBinder
 	protected void InitBinder(WebDataBinder binder) {
@@ -53,10 +58,39 @@ public class TodoController {
 	}
 	
 	
+	@RequestMapping(value = "/@{username}", method = RequestMethod.POST)
+	public String AddNewTodoLog(ModelMap model, 
+			@RequestParam Long todoId, 
+			@RequestParam String log) {
+
+		User user = userService.GetAuthenticatedUser();
+
+		//TODO: check for security+null
+		
+		TodoLog todoLog = new TodoLog(new Date(), log);
+		Todo todo = todoRepository.findOneById(todoId);
+		
+		todoLog.getTodos().add(todo);
+		todo.getLogs().add(todoLog);
+		
+		todoRepository.save(todo);
+		
+		return "redirect:/@" + user.getUsername();
+	}
+	
+	
 	@RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
 	public String DeleteTodo(ModelMap model, @RequestParam Long id) {
 		User user = userService.GetAuthenticatedUser();
 		todoRepository.deleteById(id);
+		return "redirect:/@" + user.getUsername();
+	}
+	
+	
+	@RequestMapping(value = "/delete-todo-log", method = RequestMethod.GET)
+	public String DeleteTodoLog(ModelMap model, @RequestParam Long id) {
+		User user = userService.GetAuthenticatedUser();
+		todoLogRepository.deleteById(id);
 		return "redirect:/@" + user.getUsername();
 	}
 	
@@ -119,6 +153,7 @@ public class TodoController {
 		}
 		
 		todo.setUser(user);
+		todo.setLogs(todoRepository.findOneById(todo.getId()).getLogs());
 		todoRepository.save(todo);
 		
 		return "redirect:/@" + user.getUsername();

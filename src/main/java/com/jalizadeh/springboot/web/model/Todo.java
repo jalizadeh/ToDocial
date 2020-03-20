@@ -1,13 +1,18 @@
 package com.jalizadeh.springboot.web.model;
 
+import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
@@ -32,6 +37,13 @@ public class Todo {
 	@JoinColumn(name="user_id")
     private User user;
     
+	@ManyToMany(fetch = FetchType.LAZY,
+            	cascade = CascadeType.ALL)
+	@JoinTable(name="todos_logs", 
+		joinColumns = @JoinColumn(name="todo_id", referencedColumnName="id"),
+		inverseJoinColumns = @JoinColumn(name="log_id", referencedColumnName="id"))
+	private Collection<TodoLog> logs;
+	
     public Todo() {}
     
     
@@ -44,10 +56,6 @@ public class Todo {
 		this.isDone = isDone;
 		this.user = user;
 	}
-
-
-
-
 
 
 	public String getDesc() {
@@ -124,4 +132,18 @@ public class Todo {
 		this.user = user;
 	}
 
+
+
+	public Collection<TodoLog> getLogs() {
+		return logs;
+	}
+
+
+
+	public void setLogs(Collection<TodoLog> logs) {
+		this.logs = logs;
+	}
+
+	
+	
 }

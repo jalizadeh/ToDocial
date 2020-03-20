@@ -8,7 +8,7 @@
 			<div class="sticky-top">
 				<div class="row border-bottom">
 					<div class="col-7">
-						<p>Your todos</p>
+						<p>Jump to</p>
 					</div>
 					<div class="col">
 						<a href="#" class="badge badge-pill badge-primary">${todoCount}</a>
@@ -22,20 +22,23 @@
 						<c:when test="${todo.done == true}">
 							<p>
 								<i class="fas fa-clipboard-check text-success"></i> <a
-									href="/update-todo?id=${todo.id}">${todo.desc}</a>
+									href="#${todo.id}">${todo.desc}</a>
 							</p>
 
 						</c:when>
 						<c:otherwise>
 							<p>
 								<i class="fas fa-clipboard text-warning"></i> <a
-									href="/update-todo?id=${todo.id}">${todo.desc}</a>
+									href="#${todo.id}">${todo.desc}</a>
 							</p>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
 			</div>
 		</div>
+
+		<!-- todos -->
+		<!-- ///// -->
 		<div class="col-6 ml-2 mr-2">
 			<c:forEach items="${todos}" var="todo">
 				<div class="card mb-3">
@@ -45,18 +48,59 @@
 								<div class="row">
 									<div class="col-8">
 										<h5 class="card-title">
-											<i class="fas fa-clipboard text-success"></i> <a
+											<a id="${todo.id}"><i
+												class="fas fa-clipboard text-success"></i></a> <a
 												href="/update-todo?id=${todo.id}">${todo.desc}</a>
 										</h5>
 									</div>
-									<div class="col">
-										<p>
-											<i class="fas fa-calendar-alt"></i>
-											<fmt:formatDate value="${todo.targetDate}"
-												pattern="dd/MM/yyyy" />
-										</p>
+									<div class="col text-secondary">
+										<i class="fas fa-calendar-alt"></i>
+										<fmt:formatDate value="${todo.targetDate}"
+											pattern="yyyy/MM/dd" />
 									</div>
 								</div>
+							</div>
+
+							<div class="card-body">
+								<h5 class="card-title"></h5>
+								<c:forEach items="${todo.logs}" var="log">
+									<p>
+										<a href="/delete-todo-log?id=${log.id}"><i class="fas fa-times btn-delete-todo"></i></a>
+										${log.log}
+									</p>
+								</c:forEach>
+
+								<form method="post" autocomplete="off">
+									<div class="input-group">
+										<input type="hidden" id="todoId" name="todoId"
+											value="${todo.id}"> 
+											<input type="text"
+											class="form-control"
+											aria-label="Text input with segmented dropdown button"
+											name="log" id="log">
+										<div class="input-group-append">
+											<button type="submit" class="btn btn-outline-secondary">Post</button>
+											<button type="button"
+												class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<span class="sr-only">Toggle Dropdown</span>
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="/todo-state?id=${todo.id}"><i
+													class="fas fa-sync-alt"></i> Change State</a> <a
+													class="dropdown-item" href="/update-todo?id=${todo.id}"><i
+													class="fas fa-edit"></i> Modify</a> <a class="dropdown-item"
+													href="#"><i class="fas fa-archive"></i> Complete &
+													Archive</a>
+												<div role="separator" class="dropdown-divider"></div>
+												<a class="dropdown-item text-danger"
+													href="/delete-todo?id=${todo.id}"><i
+													class="fas fa-trash-alt"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</form>
 							</div>
 						</c:when>
 						<c:otherwise>
@@ -64,51 +108,61 @@
 								<div class="row">
 									<div class="col-8">
 										<h5 class="card-title">
-											<i class="fas fa-clipboard text-warning"></i> <a
+											<a id="${todo.id}"> <i
+												class="fas fa-clipboard text-warning"></i></a> <a
 												href="/update-todo?id=${todo.id}">${todo.desc}</a>
 										</h5>
 									</div>
-									<div class="col">
-										<p>
-											<i class="fas fa-calendar-alt"></i>
-											<fmt:formatDate value="${todo.targetDate}"
-												pattern="dd/MM/yyyy" />
-										</p>
+									<div class="col text-secondary">
+										<i class="fas fa-calendar-alt"></i>
+										<fmt:formatDate value="${todo.targetDate}"
+											pattern="yyyy/MM/dd" />
 									</div>
 								</div>
 							</div>
+
+							<div class="card-body">
+								<h5 class="card-title"></h5>
+								<c:forEach items="${todo.logs}" var="log">
+									<p>
+										<a href="/delete-todo-log?id=${log.id}"><i class="fas fa-times btn-delete-todo"></i></a>
+										${log.log}
+									</p>
+								</c:forEach>
+
+								<form method="post" autocomplete="off">
+									<div class="input-group">
+										<input type="hidden" id="todoId" name="todoId"
+											value="${todo.id}"> <input type="text"
+											class="form-control"
+											aria-label="Text input with segmented dropdown button"
+											name="log" id="log">
+										<div class="input-group-append">
+											<button type="submit" class="btn btn-outline-secondary">Post</button>
+											<button type="button"
+												class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<span class="sr-only">Toggle Dropdown</span>
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="/todo-state?id=${todo.id}"><i
+													class="fas fa-sync-alt"></i> Change State</a> <a
+													class="dropdown-item" href="/update-todo?id=${todo.id}"><i
+													class="fas fa-edit"></i> Modify</a> <a class="dropdown-item"
+													href="#"><i class="fas fa-archive"></i> Complete &
+													Archive</a>
+												<div role="separator" class="dropdown-divider"></div>
+												<a class="dropdown-item text-danger"
+													href="/delete-todo?id=${todo.id}"><i
+													class="fas fa-trash-alt"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
 						</c:otherwise>
 					</c:choose>
-
-					<div class="card-body">
-						<h5 class="card-title"></h5>
-						<p class="card-text"></p>
-
-						<div class="input-group">
-							<input type="text" class="form-control"
-								aria-label="Text input with segmented dropdown button">
-							<div class="input-group-append">
-								<button type="button" class="btn btn-outline-secondary">Post</button>
-								<button type="button"
-									class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">
-									<span class="sr-only">Toggle Dropdown</span>
-								</button>
-								<div class="dropdown-menu">
-									<a class="dropdown-item" href="/todo-state?id=${todo.id}"><i
-										class="fas fa-sync-alt"></i> Change State</a> <a
-										class="dropdown-item" href="/update-todo?id=${todo.id}"><i
-										class="fas fa-edit"></i> Modify</a> <a class="dropdown-item"
-										href="#"><i class="fas fa-archive"></i> Complete & Archive</a>
-									<div role="separator" class="dropdown-divider"></div>
-									<a class="dropdown-item text-danger"
-										href="/delete-todo?id=${todo.id}"><i
-										class="fas fa-trash-alt"></i> Delete</a>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
 			</c:forEach>
 		</div>
