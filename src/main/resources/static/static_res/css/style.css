@@ -47,3 +47,10 @@
 .btn-delete-todo:hover{
 	color: #a71d2a;
 }
+
+footer {
+    position: fixed;
+    height: 100px;
+    bottom: 0;
+    width: 100%;
+}

@@ -1,7 +1,7 @@
 <%@ include file="common/header.jspf" %>
 <%@ include file="common/navigation.jspf" %>
 
-<div class="container mt-5 mb-5">
+<div class="container mt-5 mb-5 ">
 	<h4 class="display-4">Change Password:</h4>
 	
 	<c:if test="${errorMessages != null}">

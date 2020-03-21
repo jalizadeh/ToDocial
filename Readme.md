@@ -39,7 +39,7 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 	- [ ] Multi-language
 - [x] Todos
 	- [x] All user&#39;s todos
-	- [ ] Public / Private
+	- [x] Public / Private
 	- [ ] Photo
 	- [x] Add/Update/Delete todos
 	- [x] 1-click state change

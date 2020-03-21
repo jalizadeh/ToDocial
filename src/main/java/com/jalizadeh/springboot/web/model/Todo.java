@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -27,15 +26,20 @@ public class Todo {
     @Size(min=10, message="Enter at least 10 characters")
     private String desc;
     
-    @Column(name="targetdate")
-    private Date targetDate;
+    private Date creation_date;
     
-    @Column(name="isdone", nullable=false)
-    private boolean isDone;
+    private Date due_date;
+    
+    private boolean completed;
+    
+    private boolean publicc;
+    
+    private Long like;
 
-	@ManyToOne
+    @ManyToOne
 	@JoinColumn(name="user_id")
     private User user;
+	
     
 	@ManyToMany(fetch = FetchType.LAZY,
             	cascade = CascadeType.ALL)
@@ -43,95 +47,65 @@ public class Todo {
 		joinColumns = @JoinColumn(name="todo_id", referencedColumnName="id"),
 		inverseJoinColumns = @JoinColumn(name="log_id", referencedColumnName="id"))
 	private Collection<TodoLog> logs;
-	
-    public Todo() {}
-    
-    
 
-    public Todo(@Size(min = 10, message = "Enter at least 10 characters") String desc, Date targetDate,
-			boolean isDone, User user) {
+
+	public Todo() {
 		super();
-		this.desc = desc;
-		this.targetDate = targetDate;
-		this.isDone = isDone;
-		this.user = user;
 	}
 
 
-	public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public Date getTargetDate() {
-        return targetDate;
-    }
-
-    public void setTargetDate(Date targetDate) {
-        this.targetDate = targetDate;
-    }
-
-    public boolean isDone() {
-        return isDone;
-    }
-
-    public void setDone(boolean isDone) {
-        this.isDone = isDone;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = (int) (prime * result + id);
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Todo other = (Todo) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Todo [id=%s, user=%s, desc=%s, targetDate=%s, isDone=%s]", id,
-                user, desc, targetDate, isDone);
-    }
+	public Todo(@Size(min = 10, message = "Enter at least 10 characters") String desc, Date creation_date,
+			Date due_date, boolean completed, boolean publicc, Long like, User user, Collection<TodoLog> logs) {
+		super();
+		this.desc = desc;
+		this.creation_date = creation_date;
+		this.due_date = due_date;
+		this.completed = completed;
+		this.publicc = publicc;
+		this.like = like;
+		this.user = user;
+		this.logs = logs;
+	}
 
 
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+
+	public String getDesc() {
+		return desc;
 	}
+
+
+	public Date getCreation_date() {
+		return creation_date;
+	}
+
+
+	public Date getDue_date() {
+		return due_date;
+	}
+
+
+	public boolean isCompleted() {
+		return completed;
+	}
+
+
+	public boolean isPublicc() {
+		return publicc;
+	}
+
+
+	public Long getLike() {
+		return like;
+	}
+
 
 	public User getUser() {
 		return user;
 	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 
 
 	public Collection<TodoLog> getLogs() {
@@ -139,11 +113,51 @@ public class Todo {
 	}
 
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+
+	public void setCreation_date(Date creation_date) {
+		this.creation_date = creation_date;
+	}
+
+
+	public void setDue_date(Date due_date) {
+		this.due_date = due_date;
+	}
+
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+
+
+	public void setPublicc(boolean publicc) {
+		this.publicc = publicc;
+	}
+
+
+	public void setLike(Long like) {
+		this.like = like;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 
 	public void setLogs(Collection<TodoLog> logs) {
 		this.logs = logs;
 	}
 
+
 	
-	
+
 }

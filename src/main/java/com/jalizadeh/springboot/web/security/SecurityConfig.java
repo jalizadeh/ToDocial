@@ -58,6 +58,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 
 	
+	/*
+	 * AntPathMatcher
+	 * --------------------------
+     * ? matches one character
+     * * matches zero or more characters
+     * ** matches zero or more 'directories' in a path
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -69,8 +76,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 						"/registration-confirm",
 						"/signup",
 						"/forgot-password",
-						"/reset-password"
+						"/reset-password",
+						"/",
+						"/*"
 						).permitAll()
+				
+
 				
 				/*
 				 * Testing security expressions

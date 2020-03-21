@@ -2,9 +2,23 @@
 <%@ include file="common/navigation.jspf"%>
 
 
-<div class="container mt-5 mb-5">
+<div class="container my-5" >
+
 	<div class="row">
 		<div class="col">
+
+			<c:if test="${flash != null}">
+				<div class="alert alert-${flash.status} alert-dismissible fade show"
+					role="alert">
+					${flash.message}
+					<button type="button" class="close" data-dismiss="alert"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			</c:if>
+
+
 			<div class="sticky-top">
 				<div class="row border-bottom">
 					<div class="col-7">
@@ -19,7 +33,7 @@
 
 				<c:forEach items="${todos}" var="todo">
 					<c:choose>
-						<c:when test="${todo.done == true}">
+						<c:when test="${todo.completed == true}">
 							<p>
 								<i class="fas fa-clipboard-check text-success"></i> <a
 									href="#${todo.id}">${todo.desc}</a>
@@ -39,23 +53,23 @@
 
 		<!-- todos -->
 		<!-- ///// -->
-		<div class="col-6 ml-2 mr-2">
+		<div class="col-6 mx-2">
 			<c:forEach items="${todos}" var="todo">
 				<div class="card mb-3">
 					<c:choose>
-						<c:when test="${todo.done == true}">
+						<c:when test="${todo.completed == true}">
 							<div class="card-header">
 								<div class="row">
 									<div class="col-8">
 										<h5 class="card-title">
 											<a id="${todo.id}"><i
-												class="fas fa-clipboard text-success"></i></a> <a
+												class="fas fa-clipboard-check text-success"></i></a> <a
 												href="/update-todo?id=${todo.id}">${todo.desc}</a>
 										</h5>
 									</div>
 									<div class="col text-secondary">
 										<i class="fas fa-calendar-alt"></i>
-										<fmt:formatDate value="${todo.targetDate}"
+										<fmt:formatDate value="${todo.due_date}"
 											pattern="yyyy/MM/dd" />
 									</div>
 								</div>
@@ -65,16 +79,15 @@
 								<h5 class="card-title"></h5>
 								<c:forEach items="${todo.logs}" var="log">
 									<p>
-										<a href="/delete-todo-log?id=${log.id}"><i class="fas fa-times btn-delete-todo"></i></a>
-										${log.log}
+										<a href="/delete-todo-log?id=${log.id}"><i
+											class="fas fa-times btn-delete-todo"></i></a> ${log.log}
 									</p>
 								</c:forEach>
 
 								<form method="post" autocomplete="off">
 									<div class="input-group">
 										<input type="hidden" id="todoId" name="todoId"
-											value="${todo.id}"> 
-											<input type="text"
+											value="${todo.id}"> <input type="text"
 											class="form-control"
 											aria-label="Text input with segmented dropdown button"
 											name="log" id="log">
@@ -115,7 +128,7 @@
 									</div>
 									<div class="col text-secondary">
 										<i class="fas fa-calendar-alt"></i>
-										<fmt:formatDate value="${todo.targetDate}"
+										<fmt:formatDate value="${todo.due_date}"
 											pattern="yyyy/MM/dd" />
 									</div>
 								</div>
@@ -125,8 +138,8 @@
 								<h5 class="card-title"></h5>
 								<c:forEach items="${todo.logs}" var="log">
 									<p>
-										<a href="/delete-todo-log?id=${log.id}"><i class="fas fa-times btn-delete-todo"></i></a>
-										${log.log}
+										<a href="/delete-todo-log?id=${log.id}"><i
+											class="fas fa-times btn-delete-todo"></i></a> ${log.log}
 									</p>
 								</c:forEach>
 

@@ -17,8 +17,10 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String ShowWelcomePage(ModelMap model) {
+		/*
 		model.put("todos", todoRepository.findAll());
 		model.put("todoCount", todoRepository.findAll().size());
+		*/
 		model.put("PageTitle", "Home");
 		return "home";
 	}

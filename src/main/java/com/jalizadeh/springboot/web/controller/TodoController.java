@@ -8,9 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern.Flag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -20,12 +24,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.model.Todo;
 import com.jalizadeh.springboot.web.model.TodoLog;
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.repository.TodoLogRepository;
 import com.jalizadeh.springboot.web.repository.TodoRepository;
+import com.jalizadeh.springboot.web.repository.UserRepository;
 import com.jalizadeh.springboot.web.service.UserService;
 
 @Controller
@@ -33,6 +40,9 @@ public class TodoController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Autowired
 	private TodoRepository todoRepository;
@@ -46,10 +56,35 @@ public class TodoController {
 		binder.registerCustomEditor(Date.class, 
 				new CustomDateEditor(dateFormat, false));
 	}
+
 	
-	
+	/**
+	 * If user is authenticated, he will be redirected to his personal page,
+	 * but if it is an anonymous user, can access the public area of
+	 * a registered user's page
+	 */
 	@RequestMapping(value = "/@{username}", method = RequestMethod.GET)
-	public String ShowTodosList(ModelMap model, @PathVariable String username) {
+	public String ShowTodosList(ModelMap model, @PathVariable String username,
+			RedirectAttributes redirectAttributes) {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication instanceof AnonymousAuthenticationToken) {
+			User user = userRepository.findByUsername(username);
+			
+			if (user == null) {
+				redirectAttributes.addFlashAttribute("exception", 
+						"There is no account matching '" + username + "'");
+				return "redirect:/error";
+			}
+			
+			List<Todo> publicTodos = todoRepository.findPublicByUsername(user.getId());
+			
+			model.put("user", user);
+			model.put("todos", publicTodos);
+			model.put("PageTitle", username);
+			return "public-page";
+		}
+		
 		List<Todo> allTodos = todoRepository.findAll();
 		model.put("todos", allTodos);
 		model.put("todoCount", allTodos.size());
@@ -100,28 +135,25 @@ public class TodoController {
 	public String ShowAddTodo(ModelMap model) {
 		model.put("PageTitle", "Add new Todo");
 		model.addAttribute("todo",new Todo());
-	
-		Map<String,String> isDoneValues = new LinkedHashMap<String,String>();
-		isDoneValues.put("true", "Yes");
-		isDoneValues.put("false", "No");
-		model.put("isDoneValues", isDoneValues);
-			    
-		return "add-todo";
+		return "todo";
 	}
 	
 	@RequestMapping(value = "/add-todo", method = RequestMethod.POST)
-	public String AddTodo(ModelMap model, @Valid Todo todo,
-			BindingResult result) {
+	public String AddTodo(@Valid Todo todo, BindingResult result,
+			RedirectAttributes redirectAttributes, ModelMap model) {
 		
-		User user = userService.GetAuthenticatedUser();
-    	todo.setUser(user);
-    	
 		if(result.hasErrors()) {
 			model.put("error", "Enter at least 10");
 			return "add-todo";
 		}
 		
+		User user = userService.GetAuthenticatedUser();
+    	todo.setUser(user);
+    	todo.setCreation_date(new Date());
 		todoRepository.save(todo);
+		
+		redirectAttributes.addFlashAttribute("flash", 
+				new FlashMessage("Todo created successfully", FlashMessage.Status.success));
 		return "redirect:/@" + user.getUsername();
 	}
 	
@@ -129,33 +161,30 @@ public class TodoController {
 	@RequestMapping(value = "/update-todo", method = RequestMethod.GET)
 	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id) {
 		model.put("PageTitle", "Update Todo");
-		Todo todo = todoRepository.getOne(id);
-		model.put("todo", todo);
-		
-		//the value will be auto-selected by spring
-		Map<String,String> isDoneValues = new LinkedHashMap<String,String>();
-		isDoneValues.put("true", "Yes");
-		isDoneValues.put("false", "No");
-	    model.put("isDoneValues", isDoneValues);
-	    
-		return "update-todo";
+		model.put("todo", todoRepository.getOne(id));
+		return "todo";
 	}
 	
 	@RequestMapping(value = "/update-todo", method = RequestMethod.POST)
-	public String UpdateTodo(ModelMap model, @Valid Todo todo,
-			BindingResult result) {
+	public String UpdateTodo(@Valid Todo todo, BindingResult result,
+			RedirectAttributes redirectAttributes, ModelMap model) {
 		
-		User user = userService.GetAuthenticatedUser();
-    	
 		if(result.hasErrors()) {
 			model.put("error", "Enter at least 10");
 			return "update-todo";
 		}
+
+		User user = userService.GetAuthenticatedUser();
+		Todo ref = todoRepository.findOneById(todo.getId());
 		
 		todo.setUser(user);
-		todo.setLogs(todoRepository.findOneById(todo.getId()).getLogs());
+		todo.setLike(ref.getLike());
+		todo.setCreation_date(ref.getCreation_date());
+		todo.setLogs(ref.getLogs());
 		todoRepository.save(todo);
 		
+		redirectAttributes.addFlashAttribute("flash", 
+				new FlashMessage("Todo updated successfully", FlashMessage.Status.success));
 		return "redirect:/@" + user.getUsername();
 	}
 	
@@ -164,7 +193,7 @@ public class TodoController {
 	public String changeState(ModelMap model, @RequestParam Long id) {
 		User user = userService.GetAuthenticatedUser();
 		Todo todo = todoRepository.getOne(id);
-		todo.setDone(!todo.isDone());
+		todo.setCompleted(!todo.isCompleted());
 		todoRepository.save(todo);
 		return "redirect:/@" + user.getUsername();
 	}

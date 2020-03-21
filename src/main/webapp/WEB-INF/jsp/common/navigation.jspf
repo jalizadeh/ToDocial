@@ -13,7 +13,7 @@
 		<ul class="navbar-nav mr-auto">
 			<sec:authorize access="isAuthenticated()">
 				<li class="nav-item active"><a class="nav-link"
-					href="/@<sec:authentication property='principal.username'/>">Todos
+					href="/@<sec:authentication property='principal.username'/>">My Todos
 						<i class="fas fa-list-alt"></i>
 				</a></li>
 
@@ -76,7 +76,7 @@
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="/logout">Log out</a>
 						</div>
-						</li>
+					</li>
 				</ul>
 			</div>
 		</sec:authorize>

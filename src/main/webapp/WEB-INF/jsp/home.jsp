@@ -18,7 +18,7 @@
 
 			<c:forEach items="${todos}" var="todo">
 				<c:choose>
-					<c:when test="${todo.done == true}">
+					<c:when test="${todo.completed == true}">
 						<p>
 							<i class="fas fa-clipboard-check text-success"></i> <a
 								href="/update-todo?id=${todo.id}">${todo.desc}</a>
