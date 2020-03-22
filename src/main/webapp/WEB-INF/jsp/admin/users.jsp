@@ -1,7 +1,5 @@
 <%@ include file="../common/header.jspf"%>
-<%@ include file="../common/navigation.jspf"%>
 
-<div class="container mt-5 mb-5">
 	<div class="card">
 		<div class="card-body">
 			<div class="row">
@@ -76,6 +74,5 @@
 			</c:forEach>
 		</div>
 	</div>
-</div>
 
 <%@ include file="../common/footer.jspf"%>

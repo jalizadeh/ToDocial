@@ -1,8 +1,5 @@
 <%@ include file="common/header.jspf"%>
-<%@ include file="common/navigation.jspf"%>
 
-
-<div class="container mt-5 mb-5">
 	<h4 class="display-4">${PageTitle}</h4>
 
 	<c:if test="${error != null}">
@@ -47,9 +44,7 @@
 
 		<button type="submit" class="btn btn-success">Submit</button>
 	</form:form>
-</div>
 
-<div id="calendar"></div>
 
 <script type="text/javascript">
 	$('#due_date').datepicker({

@@ -89,7 +89,7 @@ public class TodoController {
 		model.put("todos", allTodos);
 		model.put("todoCount", allTodos.size());
 		model.put("PageTitle", "Todo Lists");
-		return "list-todos";
+		return "my-todos";
 	}
 	
 	
@@ -171,7 +171,7 @@ public class TodoController {
 		
 		if(result.hasErrors()) {
 			model.put("error", "Enter at least 10");
-			return "update-todo";
+			return "todo";
 		}
 
 		User user = userService.GetAuthenticatedUser();

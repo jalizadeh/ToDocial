@@ -1,7 +1,5 @@
 <%@ include file="common/header.jspf" %>
-<%@ include file="common/navigation.jspf" %>
 
-<div class="container mt-5 mb-5">
 	<c:if test="${errorMessages != null}">
 		<div class="alert alert-danger" role="alert">
 			<p>There are some errors:</p>
@@ -69,7 +67,6 @@
 		
 		<button type="submit" class="btn btn-primary">Sign up</button>
 	</form:form>
-</div>
 
 	<script src="/static_res/js/pwstrength.js"></script>
 	<script src="/static_res/js/jquery.validate.js"></script>

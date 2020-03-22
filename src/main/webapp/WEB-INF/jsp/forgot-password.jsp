@@ -1,7 +1,5 @@
 <%@ include file="common/header.jspf" %>
-<%@ include file="common/navigation.jspf" %>
 
-	<div class="container mt-5 mb-5">
 		<c:if test="${flash != null}">
 			<div class="alert alert-${flash.status}" role="alert">
   				${flash.message}
@@ -15,6 +13,5 @@
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form:form>
-	</div>
 
 <%@ include file="common/footer.jspf" %>

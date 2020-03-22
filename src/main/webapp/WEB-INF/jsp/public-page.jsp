@@ -1,8 +1,5 @@
 <%@ include file="common/header.jspf"%>
-<%@ include file="common/navigation.jspf"%>
 
-
-<div class="container my-5">
 <div class="alert alert-light alert-dismissible fade show my-2" role="alert">
   <card class="card text-center">
 	<div class="card-body">
@@ -66,7 +63,7 @@
 										<div class="card-body">
 											<c:choose>
 												<c:when test="${todos[j.index].completed == true}">
-													<i class="fas fa-clipboard text-success"></i>
+													<i class="fas fa-clipboard-check text-success"></i>
 													<a href="#"> ${todos[j.index].desc}</a>
 
 													<div class="row mt-3">
@@ -114,7 +111,7 @@
 										<div class="card-body">
 											<c:choose>
 												<c:when test="${todos[j.index].completed == true}">
-													<i class="fas fa-clipboard text-success"></i>
+													<i class="fas fa-clipboard-check text-success"></i>
 													<a href="#"> ${todos[j.index].desc}</a>
 
 													<div class="row mt-3">
@@ -156,14 +153,13 @@
 					</div>
 				</div>
 				<div class="tab-pane fade" id="likes" role="tabpanel"
-					aria-labelledby="followers-tab">...</div>
+					aria-labelledby="followers-tab"></div>
 				<div class="tab-pane fade" id="followers" role="tabpanel"
-					aria-labelledby="followers-tab">...</div>
+					aria-labelledby="followers-tab"></div>
 				<div class="tab-pane fade" id="following" role="tabpanel"
-					aria-labelledby="following-tab">...</div>
+					aria-labelledby="following-tab"></div>
 			</div>
 		</div>
 	</div>
-</div>
 
 <%@ include file="common/footer.jspf"%>

@@ -1,7 +1,4 @@
 <%@ include file="../common/header.jspf"%>
-<%@ include file="../common/navigation.jspf"%>
-
-<div class="container mt-5 mb-5">
 
 	<div class="row">
 
@@ -41,7 +38,5 @@
 			</form>
 		</div>
 	</div>
-
-</div>
 
 <%@ include file="../common/footer.jspf"%>

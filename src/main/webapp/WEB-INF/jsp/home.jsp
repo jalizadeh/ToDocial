@@ -1,8 +1,4 @@
 <%@ include file="common/header.jspf"%>
-<%@ include file="common/navigation.jspf"%>
-
-
-<div class="container mt-5 mb-5">
 
 	<div class="row">
 		<div class="col">
@@ -37,6 +33,5 @@
 		<div class="col-6 ml-2 mr-2 bg-light">Recent activities</div>
 		<div class="col bg-light">...</div>
 	</div>
-</div>
 
 <%@ include file="common/footer.jspf"%>

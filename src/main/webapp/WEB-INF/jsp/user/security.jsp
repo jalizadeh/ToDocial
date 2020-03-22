@@ -1,7 +1,4 @@
 <%@ include file="../common/header.jspf"%>
-<%@ include file="../common/navigation.jspf"%>
-
-<div class="container mt-5 mb-5">
 
 	<div class="row">
 		<div class="col-3">
@@ -62,8 +59,6 @@
 
 		</div>
 	</div>
-
-</div>
 
 <script src="/static_res/js/pwstrength.js"></script>
 <script src="/static_res/js/jquery.validate.js"></script>

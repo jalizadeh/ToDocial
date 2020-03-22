@@ -1,8 +1,5 @@
 <%@ include file="../common/header.jspf" %>
-<%@ include file="../common/navigation.jspf" %>
 
-
-	<div class="container mt-5 mb-5">
 		<h4 class="display-4">Add a new user:</h4>
 		<c:if test="${errorMessages != null}">
 			<div class="alert alert-danger" role="alert">
@@ -76,7 +73,6 @@
 	
 			<button type="submit" class="btn btn-success">Add</button>
 		</form:form>
-	</div>
 	
 	
 	<script src="/static_res/js/pwstrength.js"></script>

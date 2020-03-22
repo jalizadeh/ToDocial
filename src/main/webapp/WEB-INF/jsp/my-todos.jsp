@@ -1,12 +1,8 @@
 <%@ include file="common/header.jspf"%>
-<%@ include file="common/navigation.jspf"%>
 
-
-<div class="container my-5" >
 
 	<div class="row">
 		<div class="col">
-
 			<c:if test="${flash != null}">
 				<div class="alert alert-${flash.status} alert-dismissible fade show"
 					role="alert">
@@ -17,7 +13,6 @@
 					</button>
 				</div>
 			</c:if>
-
 
 			<div class="sticky-top">
 				<div class="row border-bottom">
@@ -182,6 +177,6 @@
 
 		<div class="col ml-2 mr-2 bg-light">...</div>
 	</div>
-</div>
+
 
 <%@ include file="common/footer.jspf"%>

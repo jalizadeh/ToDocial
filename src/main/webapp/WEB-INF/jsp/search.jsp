@@ -1,8 +1,5 @@
 <%@ include file="common/header.jspf" %>
-<%@ include file="common/navigation.jspf" %>
 
-
-	<div class="container mt-5 mb-5">
 		<h4 class="display-4">${result}</h4>
 		<table class="table table-striped table-hover mt-3">
 			<thead>
@@ -28,6 +25,5 @@
 			<tbody>
 			</tbody>
 		</table>
-	</div>
 
 <%@ include file="common/footer.jspf" %>
