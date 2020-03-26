@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.model.VerificationToken;
@@ -22,6 +23,7 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
 
     void deleteByExpiryDateLessThan(Date now);
 
+    @Transactional
     @Modifying
     @Query("delete from VerificationToken t where t.expiryDate <= ?1")
     void deleteAllExpiredSince(Date now);

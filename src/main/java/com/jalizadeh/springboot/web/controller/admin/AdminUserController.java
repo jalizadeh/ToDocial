@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -33,8 +32,6 @@ import com.jalizadeh.springboot.web.service.UserService;
 import com.jalizadeh.springboot.web.validator.UserValidator;
 
 @Controller
-//@PreAuthorize("hasAuthority('PRIVILEGE_WRITE')")
-//@Secured("ROLE_ADMIN") 
 public class AdminUserController {
 
 	
@@ -60,7 +57,7 @@ public class AdminUserController {
 	public String ShowAdminPanel_Users(ModelMap model) {
 		model.put("PageTitle", "Admin > Users");
 
-		model.put("listOfLoggedinUsers", userService.getAllLoggedinUsers());
+		model.put("listOfLoggedinUsers", userService.getAllLoggedinUsersAsString());
 		model.put("all_users", userRepository.findAll());
 		model.put("users_count", userRepository.count());
 		return "admin/users";

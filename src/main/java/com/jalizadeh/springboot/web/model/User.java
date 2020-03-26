@@ -3,6 +3,7 @@ package com.jalizadeh.springboot.web.model;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,7 +43,7 @@ public class User implements UserDetails{
 	/**
 	 * validation is done in {@link UserValidator}
 	 */
-	private String lastname;
+	private String lastname;	
 	
 	/**
 	 * Uniqueness is checked in {@link UserService}
@@ -68,30 +69,42 @@ public class User implements UserDetails{
 	//@Transient //do not consider it inside my table 
 	@NotEmpty(message="It must match your entered password")
 	private String mp;
-
 	
 	@Column(nullable = false)
 	private boolean enabled;
 	
 
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.EAGER, //when the object is created , I need the roles
+			cascade=CascadeType.ALL)
 	@JoinTable(name="users_roles",
 			joinColumns = @JoinColumn(name="user_id", referencedColumnName="id"),
 			inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id"))
 	private Collection<Role> roles;
 	
+	@ManyToMany(cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created 
+	@JoinTable(name="users_follows",
+			joinColumns = @JoinColumn(name="followed"),
+			inverseJoinColumns = @JoinColumn(name="follower", referencedColumnName="id"))
+	private Collection<User> followers;
+	
+	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created
+	@JoinTable(name="users_follows",
+			joinColumns = @JoinColumn(name="follower"),
+			inverseJoinColumns = @JoinColumn(name="followed", referencedColumnName="id"))
+	private Collection<User> followings;
+	
+	
 	public User() {	
 		super();
-		//this.enabled = false;
 	}
 	
 	
-	
+
 	public User(String firstname, String lastname,
 			@Size(min = 5, max = 20, message = "Username must be between 5-20 characters") String username,
 			@NotNull @NotEmpty String email, String password,
 			@NotEmpty(message = "It must match your entered password") String mp, boolean enabled,
-			Collection<Role> roles) {
+			Collection<Role> roles, Collection<User> followers, Collection<User> followings) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -101,82 +114,146 @@ public class User implements UserDetails{
 		this.mp = mp;
 		this.enabled = enabled;
 		this.roles = roles;
+		this.followers = followers;
+		this.followings = followings;
 	}
 
 
 
+	
+	
 	public Long getId() {
 		return id;
 	}
-	
+
+
+
 	public String getFirstname() {
 		return firstname;
 	}
+
+
 
 	public String getLastname() {
 		return lastname;
 	}
 
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public String getPassword() {
-		return password;
-	}
 
-	public String getMp() {
-		return mp;
-	}
-
-	public void setMp(String mp) {
-		this.mp = mp;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+
+
+	public String getPassword() {
+		return password;
 	}
+
+
+
+	public String getMp() {
+		return mp;
+	}
+
+
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+
 
 	public Collection<Role> getRoles() {
 		return roles;
 	}
 
+
+
+	public Collection<User> getFollowers() {
+		return followers;
+	}
+
+
+
+	public Collection<User> getFollowings() {
+		return followings;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+
+	public void setMp(String mp) {
+		this.mp = mp;
+	}
+
+
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+
+
 	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
 	}
-	
+
+
+
+	public void setFollowers(Collection<User> followers) {
+		this.followers = followers;
+	}
+
+
+
+	public void setFollowings(Collection<User> followings) {
+		this.followings = followings;
+	}
+
+
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.roles.stream()

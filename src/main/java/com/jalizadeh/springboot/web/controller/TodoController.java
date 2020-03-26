@@ -3,18 +3,14 @@ package com.jalizadeh.springboot.web.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern.Flag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -33,6 +29,7 @@ import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.repository.TodoLogRepository;
 import com.jalizadeh.springboot.web.repository.TodoRepository;
 import com.jalizadeh.springboot.web.repository.UserRepository;
+import com.jalizadeh.springboot.web.service.CommonServices;
 import com.jalizadeh.springboot.web.service.UserService;
 
 @Controller
@@ -49,6 +46,9 @@ public class TodoController {
 	
 	@Autowired
 	private TodoLogRepository todoLogRepository;
+	
+	@Autowired
+	private CommonServices utilites;
 	
 	@InitBinder
 	protected void InitBinder(WebDataBinder binder) {
@@ -67,28 +67,55 @@ public class TodoController {
 	public String ShowTodosList(ModelMap model, @PathVariable String username,
 			RedirectAttributes redirectAttributes) {
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication instanceof AnonymousAuthenticationToken) {
-			User user = userRepository.findByUsername(username);
-			
-			if (user == null) {
-				redirectAttributes.addFlashAttribute("exception", 
-						"There is no account matching '" + username + "'");
-				return "redirect:/error";
-			}
-			
-			List<Todo> publicTodos = todoRepository.findPublicByUsername(user.getId());
-			
-			model.put("user", user);
-			model.put("todos", publicTodos);
-			model.put("PageTitle", username);
+		User currentUser = userService.GetAuthenticatedUser();
+		User targetUser = userRepository.findByUsername(username);
+		
+		//if there is no mathcing account
+		if (targetUser == null) {
+			redirectAttributes.addFlashAttribute("exception", 
+					"There is no account matching '" + username + "'");
+			return "redirect:/error";
+		}
+
+		if (utilites.isUserAnonymous()) {
+			model.put("user", targetUser); 
+			model.put("todos", todoRepository.findAllByUserIdAndPubliccTrue(targetUser.getId()));
+			String pageTitle = targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + 
+					targetUser.getUsername() + ")";
+			model.put("PageTitle", pageTitle);
 			return "public-page";
 		}
 		
-		List<Todo> allTodos = todoRepository.findAll();
-		model.put("todos", allTodos);
-		model.put("todoCount", allTodos.size());
-		model.put("PageTitle", "Todo Lists");
+		
+		if(!currentUser.getUsername().equals(username)) {
+			
+			List<String> listOfFollowings = new ArrayList<>();
+			for (User user : currentUser.getFollowings()) {
+				listOfFollowings.add(user.getUsername());
+			}
+			
+			for (String following : listOfFollowings) {
+				if(following.equals(targetUser.getUsername())) {
+					model.put("isfollowing", true);
+					break;
+				}else {
+					model.put("isfollowing", false);
+				}
+			}
+			
+			model.put("user", targetUser); 
+			model.put("todos", todoRepository.findAllByUserIdAndPubliccTrue(targetUser.getId()));
+			String pageTitle = targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + 
+					targetUser.getUsername() + ")";
+			model.put("PageTitle", pageTitle);
+			return "public-page";
+		}
+		
+
+		model.put("LoggedinUsers", userService.getAllLoggedinUsers());
+		model.put("user", targetUser);
+		model.put("todos", todoRepository.findAll());
+		model.put("PageTitle", "My Todos");
 		return "my-todos";
 	}
 	

@@ -10,7 +10,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Todo Manager | ${PageTitle}</title>
+	<title>ToDocial - ${PageTitle}</title>
 	<link rel="icon" type="image/x-icon" href="/static_res/favicon.ico" />
 
 	<link href="/static_res/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
@@ -40,6 +40,17 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<sec:authorize access="isAuthenticated()">
+				<form class="form-inline" action="/search">
+					<div class="input-group">
+						<input class="form-control"
+							aria-label="Text input with segmented dropdown button" type="text"
+							placeholder="Search a todo" name="q">
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary" type="submit"><i class="fas fa-search"></i></button>
+						</div>
+					</div>
+				</form>
+				
 					<li class="nav-item active"><a class="nav-link"
 						href="/@<sec:authentication property='principal.username'/>">My Todos
 							<i class="fas fa-list-alt"></i>
@@ -74,20 +85,6 @@
 	
 			</ul>
 	
-	
-			<sec:authorize access="isAuthenticated()">
-				<form class="form-inline" action="/search">
-					<div class="input-group">
-						<input class="form-control"
-							aria-label="Text input with segmented dropdown button" type="text"
-							placeholder="Search a todo" name="q">
-						<div class="input-group-append">
-							<button class="btn btn-outline-secondary" type="submit">Search</button>
-						</div>
-					</div>
-				</form>
-			</sec:authorize>
-	
 			<sec:authorize access="isAuthenticated()">
 				<div>
 					<ul class="navbar-nav ml-auto nav-flex-icons">
@@ -99,9 +96,15 @@
 							<div
 								class="dropdown-menu dropdown-menu-lg-right dropdown-secondary"
 								aria-labelledby="navbarDropdownMenuLink-55">
-								<a class="dropdown-item" href="/user/profile"> Logged in as @<sec:authentication
-										property="principal.username" /></a>
+								<a class="dropdown-item" href="/@<sec:authentication property="principal.username"/>"> Logged in as 
+								<strong><sec:authentication property="principal.username" /></strong></a>
 								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="/@<sec:authentication property="principal.username"/>">Your Profile</a>
+								<a class="dropdown-item" href="/dashboard">Your Todos</a>
+								<a class="dropdown-item" href="#">Your Followers</a>
+								<a class="dropdown-item" href="#">Your Followings</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="/user/profile">Settings</a>
 								<a class="dropdown-item" href="/logout">Log out</a>
 							</div>
 						</li>

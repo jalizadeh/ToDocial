@@ -142,13 +142,23 @@ public class UserService implements UserDetailsService {
 	}
 	
 	
-	public List<String> getAllLoggedinUsers(){
+	public List<String> getAllLoggedinUsersAsString(){
 		List<Object> principals = sessionRegistry.getAllPrincipals();
 		
 		User[] users = principals.toArray(new User[principals.size()]);
 		return Arrays.stream(users)
 				.filter(u -> !sessionRegistry.getAllSessions(u, false).isEmpty())
 				.map(u -> u.getFirstname() + " " + u.getLastname() + " [" + u.getUsername() + "]")
+				.collect(Collectors.toList());
+	}
+	
+	public List<User> getAllLoggedinUsers(){
+		List<Object> principals = sessionRegistry.getAllPrincipals();
+		
+		User[] users = principals.toArray(new User[principals.size()]);
+		return Arrays.stream(users)
+				.filter(u -> !sessionRegistry.getAllSessions(u, false).isEmpty())
+				//.map(u -> u.getFirstname() + " " + u.getLastname() + " [" + u.getUsername() + "]")
 				.collect(Collectors.toList());
 	}
 	

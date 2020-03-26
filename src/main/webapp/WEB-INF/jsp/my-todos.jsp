@@ -15,17 +15,18 @@
 			</c:if>
 
 			<div class="sticky-top">
-				<div class="row border-bottom">
+				<div class="row">
 					<div class="col-7">
 						<p>Jump to</p>
 					</div>
 					<div class="col">
-						<a href="#" class="badge badge-pill badge-primary">${todoCount}</a>
-						<a href="/add-todo" class="badge badge-success"><i
+						<a class="badge badge-pill badge-primary text-white">${todos.size()}</a>
+						<a href="#" class="badge badge-success"><i
 							class="fas fa-plus"></i> New</a>
 					</div>
+					
 				</div>
-
+<hr>
 				<c:forEach items="${todos}" var="todo">
 					<c:choose>
 						<c:when test="${todo.completed == true}">
@@ -175,7 +176,24 @@
 			</c:forEach>
 		</div>
 
-		<div class="col ml-2 mr-2 bg-light">...</div>
+		<div class="col mx-2">
+				<div class="row">
+					<div class="col-7">
+						<p>Friends</p>
+					</div>
+					<div class="col">
+						<a class="badge badge-pill badge-primary text-white">${user.followings.size()}</a>
+						<a href="#" class="badge badge-success"> Explore</a>
+					</div>
+					
+				</div>
+				<hr>
+			<c:forEach items="${user.followings}" var="following">
+				<a href="/@${following.username}"><i class="fas fa-user-circle fa-3x text-light"></i></a>
+				<a href="/@${following.username}">${following.firstname} ${following.lastname}</a>
+				<hr>
+			</c:forEach>
+		</div>
 	</div>
 
 

@@ -15,12 +15,12 @@
 		<form:form method="post" action="/login" modelAttribute="user">
 			<div class="form-group">
 			    <label for="username">Username</label>
-			    <form:input path="username" type="text" class="form-control" name="username" id="username"/>
+			    <form:input path="username" type="text" class="form-control" name="username" id="username" required="required"/>
 			    <form:errors path="username" cssClass="text-warning"/>
 			</div>
 			<div class="form-group">
 			    <label for="password">Password</label>
-			    <form:input path="password" type="password" class="form-control" name="password" id="password" />
+			    <form:input path="password" type="password" class="form-control" name="password" id="password" required="required"/>
 			    <form:errors path="password" cssClass="text-warning"/>
 			</div>
 			<div class="form-group form-check">

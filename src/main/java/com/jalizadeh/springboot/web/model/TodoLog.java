@@ -22,7 +22,7 @@ public class TodoLog {
 	
 	private String log;
 	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy="logs")
+	@ManyToMany(mappedBy="logs")
 	private Collection<Todo> todos;
 
 	public TodoLog() {

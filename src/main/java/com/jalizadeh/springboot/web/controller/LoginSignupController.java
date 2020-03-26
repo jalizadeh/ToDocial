@@ -42,6 +42,7 @@ import com.jalizadeh.springboot.web.registration.OnPasswordResetEvent;
 import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.springboot.web.repository.SecurityQuestionDefinitionRepository;
 import com.jalizadeh.springboot.web.repository.SecurityQuestionRepository;
+import com.jalizadeh.springboot.web.service.CommonServices;
 import com.jalizadeh.springboot.web.service.PasswordResetTokenService;
 import com.jalizadeh.springboot.web.service.TokenService;
 import com.jalizadeh.springboot.web.service.UserService;
@@ -71,12 +72,15 @@ public class LoginSignupController {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	ApplicationEventPublisher eventPublisher;
+	private ApplicationEventPublisher eventPublisher;
+	
+	@Autowired
+	private CommonServices utilites;
 	
 	
 	@RequestMapping("/login")
     public String LoginForm(ModelMap model, HttpServletRequest request) {
-		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+		if(utilites.isUserAnonymous()) {
 			model.put("PageTitle", "Log in");
 	        model.put("user", new User());
 	        
@@ -229,7 +233,7 @@ public class LoginSignupController {
 	
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
 	public String SignupMessage(ModelMap model) {
-		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+		if(utilites.isUserAnonymous()) {
 			model.addAttribute("user", new User());
 			model.put("PageTitle", "Sign up");
 			model.put("securityQuestions", sqdRepo.findAll());

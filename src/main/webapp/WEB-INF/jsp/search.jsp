@@ -13,7 +13,7 @@
 				<c:forEach items="${todos}" var="todo">
 					<tr>
 						<th>${todo.desc}</th>
-						<th><fmt:formatDate value="${todo.targetDate}" pattern="dd/MM/yyyy"/></th>
+						<th><fmt:formatDate value="${todo.due_date}" pattern="dd/MM/yyyy"/></th>
 						<th>${todo.done}</th>
 						<th>
 						<a type="button" class="btn btn-success" href="/todo-finished?id=${todo.id}"><i class="fas fa-check-circle"></i></a>

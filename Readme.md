@@ -22,6 +22,7 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- password_reset_token
 		- security_question
 		- security_question_definition
+		- users_follows(`follower` is following the `followed` user)
 	- Todo
 		- todo-log
 		- todos_logs
@@ -37,16 +38,16 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- All exceptions will be redirected to `/error` showing the reason and what happened.
 		- [x] If any error occurs in subdirectories, the page is not shown correctly
 	- [ ] Multi-language
+- [x] Basic Search
 - [x] Todos
 	- [x] All user&#39;s todos
 	- [x] Public / Private
 	- [ ] Photo
 	- [x] Add/Update/Delete todos
 	- [x] 1-click state change
-	- [x] Basic Search
 	- [x] Log
 		- During working on the todo, user might need to comment some thoughts
-		- Not editable
+		- Not editable, only removable
 	- [ ] Archive
 - [ ] Log in
 	- Spring Security 
@@ -89,12 +90,19 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 			- [ ] User already activated
 	- [x] Unseccessfull sign up
 		- [ ] Show errors & exceptions
-- [ ] User profile	
-	- [ ] Account details
-	- [ ] Add photo
-	- [ ] Change password
-	- [ ] Delete account
-- [x] User Public Page
+- [ ] User
+	- [ ] Profile
+		- [ ] Account details
+			- Name, Bio, Location
+		- [ ] Photo
+		- [ ] Change password
+		- [ ] Delete account
+		- [ ] Security
+			- [ ] Who can see me?
+	- [x] User&#39;s Public Page
+	- [x] Follower / Following
+		- [ ] Follow / Unfollow
+			- 🟡 a user can follow any user, mutlitple times
 - [ ] Admin panel
 	- If user has `ROLE_ADMIN`, she can access the dashboard
 	- [x] Manage users
@@ -114,3 +122,4 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- [ ] Define new security questions
 	- [ ] Limit `USER` access
 - [ ] Logger
+- [ ] Query Optimization

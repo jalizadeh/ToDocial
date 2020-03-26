@@ -2,6 +2,7 @@ package com.jalizadeh.springboot.web.model;
 
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +23,8 @@ public class Role {
 	@Column(nullable=false)
 	private String name;
 	
-	@ManyToMany(fetch= FetchType.EAGER)
+	@ManyToMany(fetch= FetchType.EAGER,
+			cascade=CascadeType.ALL)
 	@JoinTable(name="roles_privileges", 
 		joinColumns = @JoinColumn(name="role_id", referencedColumnName="id"),
 		inverseJoinColumns = @JoinColumn(name="privilege_id", referencedColumnName="id"))
@@ -35,9 +37,6 @@ public class Role {
 	public Role(String name) {
 		this.name = name;
 	}
-
-
-
 
 	public Long getId() {
 		return id;
@@ -67,7 +66,4 @@ public class Role {
 	public void setPrivileges(Collection<Privilege> privileges) {
 		this.privileges = privileges;
 	}
-
-
-	
 }

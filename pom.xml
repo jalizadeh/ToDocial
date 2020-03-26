@@ -113,6 +113,11 @@
 		    <!-- <version>2.2.4.RELEASE</version> -->
 		</dependency>
 		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		
 		
 		<!-- Password Validation -->
 		<!-- https://mvnrepository.com/artifact/org.passay/passay -->
