@@ -3,9 +3,7 @@ package com.jalizadeh.springboot.web.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -15,13 +13,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jalizadeh.springboot.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.model.Todo;
 import com.jalizadeh.springboot.web.model.TodoLog;
@@ -50,6 +51,9 @@ public class TodoController {
 	@Autowired
 	private CommonServices utilites;
 	
+	@Autowired
+	private SettingsGeneralConfig settings;
+	
 	@InitBinder
 	protected void InitBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -69,6 +73,7 @@ public class TodoController {
 		
 		User currentUser = userService.GetAuthenticatedUser();
 		User targetUser = userRepository.findByUsername(username);
+		model.put("settings", settings);
 		
 		//if there is no mathcing account
 		if (targetUser == null) {
@@ -114,7 +119,7 @@ public class TodoController {
 
 		model.put("LoggedinUsers", userService.getAllLoggedinUsers());
 		model.put("user", targetUser);
-		model.put("todos", todoRepository.findAll());
+		model.put("todos", todoRepository.findAllByLoggedinUser());
 		model.put("PageTitle", "My Todos");
 		return "my-todos";
 	}
@@ -141,7 +146,7 @@ public class TodoController {
 	}
 	
 	
-	@RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
+	@GetMapping("/delete-todo")
 	public String DeleteTodo(ModelMap model, @RequestParam Long id) {
 		User user = userService.GetAuthenticatedUser();
 		todoRepository.deleteById(id);
@@ -149,7 +154,7 @@ public class TodoController {
 	}
 	
 	
-	@RequestMapping(value = "/delete-todo-log", method = RequestMethod.GET)
+	@GetMapping("/delete-todo-log")
 	public String DeleteTodoLog(ModelMap model, @RequestParam Long id) {
 		User user = userService.GetAuthenticatedUser();
 		todoLogRepository.deleteById(id);
@@ -158,20 +163,22 @@ public class TodoController {
 	
 	
 	
-	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
+	@GetMapping("/add-todo")
 	public String ShowAddTodo(ModelMap model) {
 		model.put("PageTitle", "Add new Todo");
+		model.put("settings", settings);
 		model.addAttribute("todo",new Todo());
 		return "todo";
 	}
 	
-	@RequestMapping(value = "/add-todo", method = RequestMethod.POST)
+	@PostMapping("/add-todo")
 	public String AddTodo(@Valid Todo todo, BindingResult result,
 			RedirectAttributes redirectAttributes, ModelMap model) {
+		model.put("settings", settings);
 		
 		if(result.hasErrors()) {
 			model.put("error", "Enter at least 10");
-			return "add-todo";
+			return "todo";
 		}
 		
 		User user = userService.GetAuthenticatedUser();
@@ -185,16 +192,18 @@ public class TodoController {
 	}
 	
 	
-	@RequestMapping(value = "/update-todo", method = RequestMethod.GET)
+	@GetMapping("/update-todo")
 	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id) {
 		model.put("PageTitle", "Update Todo");
+		model.put("settings", settings);
 		model.put("todo", todoRepository.getOne(id));
 		return "todo";
 	}
 	
-	@RequestMapping(value = "/update-todo", method = RequestMethod.POST)
+	@PostMapping("/update-todo")
 	public String UpdateTodo(@Valid Todo todo, BindingResult result,
 			RedirectAttributes redirectAttributes, ModelMap model) {
+		model.put("settings", settings);
 		
 		if(result.hasErrors()) {
 			model.put("error", "Enter at least 10");
@@ -216,7 +225,7 @@ public class TodoController {
 	}
 	
 	
-	@RequestMapping(value = "/todo-state", method = RequestMethod.GET)
+	@GetMapping("/todo-state")
 	public String changeState(ModelMap model, @RequestParam Long id) {
 		User user = userService.GetAuthenticatedUser();
 		Todo todo = todoRepository.getOne(id);
@@ -226,21 +235,20 @@ public class TodoController {
 	}
 	
 	
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@GetMapping("/search")
 	public String SearchTodo(ModelMap model, 
 			@RequestParam(defaultValue="") String q) {
-		//model.put("loggedinUser", userService.GetAuthenticatedUser());
+		model.put("settings", settings);
 		model.put("PageTitle", "Search for: " + q);
 		
 		List<Todo> todos = new ArrayList<Todo>();
-		for (Todo todo : todoRepository.findAll()) {
+		for (Todo todo : todoRepository.findAllByLoggedinUser()) {
 			if(todo.getDesc().toLowerCase().contains(q))
 				todos.add(todo);
 		}
 		
 		model.put("todos", todos);
 		model.put("result", todos.size() + " results found for <mark>" + q + "</mark>");
-		
 		return "search";
 	}
 }

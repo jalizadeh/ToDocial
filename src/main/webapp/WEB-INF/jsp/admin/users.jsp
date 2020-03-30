@@ -6,13 +6,13 @@
 				<div class="col-8">
 					<h4 class="display-4">Admin Panel > Users</h4>
 				</div>
-				<div class="col-4">
+				<div class="col-4 text-center">
 					<a class="btn btn-primary" href="/admin/add-user" role="button">Add
 						a user</a>
 				</div>
 			</div>
 
-			<p>Total number of users: ${users_count}</p>
+			<p>Total number of users: ${all_users.size()}</p>
 
 			<table class="table table-striped table-hover">
 				<thead>

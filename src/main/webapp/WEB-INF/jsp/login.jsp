@@ -27,9 +27,13 @@
 			    <input type="checkbox" class="form-check-input"  id="remember" name="remember"/>
 			    <label class="form-check-label" for="remember">Remember me</label>
 			</div>
-			<div class="form-group">
-				<a href="/forgot-password">Forgot my password</a> / <a href="/signup">Register now</a>
-			</div>
+			
+			<c:if test="${settings.anyoneCanRegister == true}">
+				<div class="form-group">
+					<a href="/forgot-password">Forgot my password</a> / <a href="/signup">Register now</a>
+				</div>
+			</c:if>
+			
 			<button type="submit" class="btn btn-primary">Log in</button>
 		</form:form>
 

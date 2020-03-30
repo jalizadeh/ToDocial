@@ -129,6 +129,7 @@ public class UserService implements UserDetailsService {
         nUser.setRole(role);
         */
         nUser.setEnabled(user.isEnabled());
+        nUser.setPhoto(user.getPhoto());
         
         return userRepository.save(nUser);
     }

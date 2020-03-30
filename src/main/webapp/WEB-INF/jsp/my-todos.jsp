@@ -21,7 +21,7 @@
 					</div>
 					<div class="col">
 						<a class="badge badge-pill badge-primary text-white">${todos.size()}</a>
-						<a href="#" class="badge badge-success"><i
+						<a href="/add-todo" class="badge badge-success"><i
 							class="fas fa-plus"></i> New</a>
 					</div>
 					
@@ -65,8 +65,20 @@
 									</div>
 									<div class="col text-secondary">
 										<i class="fas fa-calendar-alt"></i>
-										<fmt:formatDate value="${todo.due_date}"
-											pattern="yyyy/MM/dd" />
+										<c:choose>
+											<c:when test="${settings.dateStructure == 'pattern'}">
+												<fmt:formatDate value="${todo.due_date}" pattern="yyyy/MM/dd" />
+											</c:when>
+											<c:when test="${settings.dateStructure == 'short'}">
+												<fmt:formatDate type="date" dateStyle="short" value="${todo.due_date}" />
+											</c:when>
+											<c:when test="${settings.dateStructure == 'medium'}">
+												<fmt:formatDate type="date" dateStyle="medium" value="${todo.due_date}" />
+											</c:when>
+											<c:when test="${settings.dateStructure == 'long'}">
+												<fmt:formatDate type="date" dateStyle="long" value="${todo.due_date}" />
+											</c:when>
+										</c:choose>
 									</div>
 								</div>
 							</div>
@@ -124,8 +136,20 @@
 									</div>
 									<div class="col text-secondary">
 										<i class="fas fa-calendar-alt"></i>
-										<fmt:formatDate value="${todo.due_date}"
-											pattern="yyyy/MM/dd" />
+										<c:choose>
+											<c:when test="${settings.dateStructure == 'pattern'}">
+												<fmt:formatDate value="${todo.due_date}" pattern="yyyy/MM/dd" />
+											</c:when>
+											<c:when test="${settings.dateStructure == 'short'}">
+												<fmt:formatDate type="date" dateStyle="short" value="${todo.due_date}" />
+											</c:when>
+											<c:when test="${settings.dateStructure == 'medium'}">
+												<fmt:formatDate type="date" dateStyle="medium" value="${todo.due_date}" />
+											</c:when>
+											<c:when test="${settings.dateStructure == 'long'}">
+												<fmt:formatDate type="date" dateStyle="long" value="${todo.due_date}" />
+											</c:when>
+										</c:choose>
 									</div>
 								</div>
 							</div>
@@ -189,7 +213,7 @@
 				</div>
 				<hr>
 			<c:forEach items="${user.followings}" var="following">
-				<a href="/@${following.username}"><i class="fas fa-user-circle fa-3x text-light"></i></a>
+				<a href="/@${following.username}"><img class="img-profile rounded-circle" width="32px" height="32px" src="/user-avatar/${following.photo}"></a>
 				<a href="/@${following.username}">${following.firstname} ${following.lastname}</a>
 				<hr>
 			</c:forEach>

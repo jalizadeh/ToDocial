@@ -15,8 +15,8 @@
   			<li>${exception}</li>
 		</div>
 	</c:if>
-	
-	<form:form method="post" action="/signup" modelAttribute="user">
+
+	<form:form method="post" action="/signup" modelAttribute="user" enctype="multipart/form-data">
 		<div class="form-group">
 		    <label for="firstname">Firstname</label>
 		    <form:input path="firstname" type="text" class="form-control" id="firstname" required="required"/>
@@ -46,7 +46,7 @@
 		</div>
 		<div class="form-group">
 		    <label for="mp">Confirm Password</label>
-		    <input path="mp" type="password" class="form-control" id="mp" aria-describedby="mpHelp" required="required"/>
+		    <form:input path="mp" type="password" class="form-control" id="mp" aria-describedby="mpHelp" required="required"/>
 		    <small id="mpHelp" class="form-text text-muted">To make sure there is no mistake.</small>
 		    <form:errors path="mp" cssClass="text-warning"/>
 		</div>
@@ -64,6 +64,11 @@
 		    <label for="sqa">Answer</label>
 		    <input type="text" class="form-control" name="sqa" id="sqa" required="required"/>
 		</div>
+		
+		<div class="form-group">
+		    <label for="photo">Profile photo</label>
+		    <input type="file" name="file" class="form-control-file" id="photo">
+		  </div>
 		
 		<button type="submit" class="btn btn-primary">Sign up</button>
 	</form:form>

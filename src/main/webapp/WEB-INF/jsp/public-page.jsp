@@ -1,6 +1,8 @@
 <%@ include file="common/header.jspf"%>
 
-<sec:authentication property="principal.username" var="loggedinUsername"/>
+<sec:authorize access="isAuthenticated()">
+	<sec:authentication property="principal.username" var="loggedinUsername"/>
+</sec:authorize>
 
 <sec:authorize access="isAnonymous()">
 	<div class="alert alert-light alert-dismissible fade show my-2"
@@ -26,8 +28,8 @@
 <div class="row my-5">
 	<div class="col">
 		<div class="border-dark">
-			<i class="fas fa-user-circle fa-10x text-light"></i>
-			<h3 class="mt-2">${user.firstname}${user.lastname}</h3>
+			<img class="img-profile rounded-circle" width="200px" height="200px" src="/user-avatar/${user.photo}">
+			<h3 class="mt-2">${user.firstname} ${user.lastname}</h3>
 			<h4 class="text-secondary">${user.username}</h4>
 			<sec:authorize access="isAuthenticated()">
 				<c:if test="${isfollowing eq false}">
@@ -177,8 +179,9 @@
 						<div class="card-body">
 							<div class="row">
 								<div class="col">
-									<a href="/@${follower.username}"><i
-										class="fas fa-user-circle fa-3x text-light"></i></a> <a
+									<a href="/@${follower.username}">
+									<img class="img-profile rounded-circle" width="32px" height="32px" src="/user-avatar/${follower.photo}">
+									</a> <a
 										href="/@${follower.username}">${follower.firstname}
 										${follower.lastname}</a>
 								</div>
@@ -204,8 +207,9 @@
 						<div class="card-body">
 							<div class="row">
 								<div class="col">
-									<a href="/@${following.username}"><i
-										class="fas fa-user-circle fa-3x text-light"></i></a> <a
+									<a href="/@${following.username}">
+									<img class="img-profile rounded-circle" width="32px" height="32px" src="/user-avatar/${following.photo}">
+									</a> <a
 										href="/@${following.username}">${following.firstname} 
 										${following.lastname}</a>
 								</div>

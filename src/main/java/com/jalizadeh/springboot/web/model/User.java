@@ -73,6 +73,8 @@ public class User implements UserDetails{
 	@Column(nullable = false)
 	private boolean enabled;
 	
+	private String photo;
+	
 
 	@ManyToMany(fetch=FetchType.EAGER, //when the object is created , I need the roles
 			cascade=CascadeType.ALL)
@@ -98,34 +100,9 @@ public class User implements UserDetails{
 		super();
 	}
 	
-	
-
-	public User(String firstname, String lastname,
-			@Size(min = 5, max = 20, message = "Username must be between 5-20 characters") String username,
-			@NotNull @NotEmpty String email, String password,
-			@NotEmpty(message = "It must match your entered password") String mp, boolean enabled,
-			Collection<Role> roles, Collection<User> followers, Collection<User> followings) {
-		super();
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.mp = mp;
-		this.enabled = enabled;
-		this.roles = roles;
-		this.followers = followers;
-		this.followings = followings;
-	}
-
-
-
-	
-	
 	public Long getId() {
 		return id;
 	}
-
 
 
 	public String getFirstname() {
@@ -247,12 +224,18 @@ public class User implements UserDetails{
 	}
 
 
-
 	public void setFollowings(Collection<User> followings) {
 		this.followings = followings;
 	}
+	
 
+	public String getPhoto() {
+		return photo;
+	}
 
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

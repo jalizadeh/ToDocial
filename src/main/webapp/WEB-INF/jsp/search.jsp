@@ -5,16 +5,18 @@
 			<thead>
 				<tr>
 					<th>Description</th>
-					<th>Date</th>
-					<th>Finished?</th>
+					<th>Creation Date</th>
+					<th>Due Date</th>
+					<th>Completed?</th>
 					<th></th>
 				</tr>
 			</thead>
 				<c:forEach items="${todos}" var="todo">
 					<tr>
 						<th>${todo.desc}</th>
+						<th><fmt:formatDate value="${todo.creation_date}" pattern="dd/MM/yyyy"/></th>
 						<th><fmt:formatDate value="${todo.due_date}" pattern="dd/MM/yyyy"/></th>
-						<th>${todo.done}</th>
+						<th>${todo.completed}</th>
 						<th>
 						<a type="button" class="btn btn-success" href="/todo-finished?id=${todo.id}"><i class="fas fa-check-circle"></i></a>
 						<a type="button" class="btn btn-info" href="/update-todo?id=${todo.id}"><i class="fas fa-edit"></i></a>

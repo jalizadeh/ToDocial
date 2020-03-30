@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 
@@ -23,7 +24,7 @@ public class Todo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @Size(min=10, message="Enter at least 10 characters")
+    @NotEmpty(message="Description can not be empty")
     private String desc;
     
     private Date creation_date;

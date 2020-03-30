@@ -31,12 +31,16 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import com.google.common.collect.Lists;
+import com.jalizadeh.springboot.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.service.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	@Autowired
+	private SettingsGeneralConfig settings;
 	
 	@Autowired
 	private UserService userService;
@@ -69,12 +73,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http
 			.authorizeRequests()
 				.antMatchers(
-						"/static_res/**", //it is easier to permit all files in this folder
+						"/resources/**", //it is easier to permit all files in this folder
 						"/WEB-INF/**",
-						"/webjars/**",
+						"/user-avatar/*",
 						"/registration-confirm",
 						"/login",
-						"/signup",
+						//"/signup",
 						"/forgot-password",
 						"/reset-password",
 						"/error",
@@ -104,7 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				*/
 				
 				.antMatchers("/admin/**").hasAuthority("PRIVILEGE_WRITE") //no more need to check logged in user in controllers
-				.anyRequest().authenticated()//.accessDecisionManager(unanimous())
+				.anyRequest().authenticated()
 			.and()
 			.formLogin()
 				.loginPage("/login")
@@ -143,7 +147,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.and()
 			.csrf()
 				.disable();
-
 	}
 	
 	@Bean

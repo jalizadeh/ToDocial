@@ -27,14 +27,17 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 	@Override
 	public boolean isValid(final String password, final ConstraintValidatorContext context) {
 		final PasswordValidator validator = new PasswordValidator(Arrays.asList(
-				new LengthRule(8, 300),
+				new LengthRule(8, 300)
+				/*
+				 * ,
 				new UppercaseCharacterRule(1), 
 				new DigitCharacterRule(1), 
 				new SpecialCharacterRule(1), 
 				new NumericalSequenceRule(3,false),
 				new AlphabeticalSequenceRule(3,false),
 				new QwertySequenceRule(3,false),
-				new WhitespaceRule()));
+				new WhitespaceRule()
+				*/));
 
 		//check for validation result
 		final RuleResult result = validator.validate(new PasswordData(password));

@@ -1,6 +1,11 @@
 # Spring TO-DO Web Application
 A To-Do manager with Spring and SQLite. I am trying to make it as much as possible complete, as an industry product, at the same time, a project to learn stuff.
 
+### Inspirations:
+This project is a combination of the features in Github and Wordpress that I could merge into one single project.
+- Todo management & sociality (Github)
+- Content management (Wordpress)
+
 ### Features:
 - Login / Sign up (multi-user)
 - Todo management
@@ -8,8 +13,7 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 - Administrator dashboard
 
 
-### Todos:
-
+### WIP:
 - [x] Initialize Spring project
 - [x] Implement SQLite database
 	- User
@@ -80,6 +84,10 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- [x] Password strength and validation on front-end & back-end
 			- It is done with `jQuery` & `pwstrength.js`
 		- [x] Password confirmation
+	- [x] Profile Photo
+		- It is optional, so user can add/update it later from his profile page
+		- Photo&#39;s name is changed to `username + .jpg`
+		- It uses `Storage Service` to handle file upload. This interface can be extended for any other file types or customizations
 	- [x] Successful sign up
 		- [x] Email verification
 			- I used `smtp.gmail.com` as the server. Your email credentials `username` & `password` must be inserted in `application.properties`
@@ -104,8 +112,19 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 		- [ ] Follow / Unfollow
 			- 🟡 a user can follow any user, mutlitple times
 - [ ] Admin panel
-	- If user has `ROLE_ADMIN`, she can access the dashboard
-	- [x] Manage users
+	- [ ] General
+		- [x] Site name & description
+		- [x] Footer copyright
+		- [ ] Anyone can register?
+			- [x] Shows/Hids the links in pages
+			- [ ] Changes security policy for accessing `signup` page
+		- [x] Default role for registered user
+		- [ ] Server Local time
+		- [x] Date Structure
+		- [x] Time structure
+		- [x] Language
+	- [ ] Users
+		- If user has `ROLE_ADMIN`, she can access the dashboard
 		- [x] List of online users
 		- [x] 1-click users's state change
 		- [x] 1-click delete user
@@ -115,11 +134,22 @@ A To-Do manager with Spring and SQLite. I am trying to make it as much as possib
 			- [x] Email verification if user is suspended
 			- [x] Set specified roles
 				- [ ] Support multiple roles
-	- [ ] Manage todos
-		- [ ] Add new todo for any user
-		- [ ] Modify todo
-	- [ ] Settings
+		- [ ] Define new roles
+	- [ ] Todos
+		- [x] Delete (admin needs only delete todos, nothing more is needed)
+		- [ ] Page size
+		- [ ] Allow search engines to fetch public todos
+		- [ ] Users must be registered to access a public page
+		- [ ] Users must be registered to access a public todo
+	- [ ] Email
+		- [ ] Admin email
+		- [ ] Configurations
+		- [ ] Formats
+	- [ ] Security
+		- [ ] How long last verification email
+		- [ ] How long last reset password email
+		- [ ] Newly registered users must be verified for furthur access
 		- [ ] Define new security questions
-	- [ ] Limit `USER` access
+		- [ ] Password combination
 - [ ] Logger
 - [ ] Query Optimization

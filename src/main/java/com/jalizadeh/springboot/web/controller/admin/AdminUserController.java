@@ -53,14 +53,12 @@ public class AdminUserController {
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
 	
-	@RequestMapping(value="/admin/users", method=RequestMethod.GET)
+	@RequestMapping(value="/admin/settings/users", method=RequestMethod.GET)
 	public String ShowAdminPanel_Users(ModelMap model) {
 		model.put("PageTitle", "Admin > Users");
-
 		model.put("listOfLoggedinUsers", userService.getAllLoggedinUsersAsString());
 		model.put("all_users", userRepository.findAll());
-		model.put("users_count", userRepository.count());
-		return "admin/users";
+		return "admin/settings-users";
 	}
 	
 	
@@ -135,13 +133,14 @@ public class AdminUserController {
 	
 	@RequestMapping(value="/admin/delete_user", method=RequestMethod.GET)
 	public String deleteUser(ModelMap model , @RequestParam Long id) {
-		
+		/*
 		if(todoRepository.findAllByUserId(id).size() > 0)
 			todoRepository.deleteById(id);
 
 		if(tokenRepository.findByUserId(id) != null)
 			tokenRepository.deleteById(id);
-
+		*/
+		
 		userRepository.deleteById(id);
 
 		return "redirect:/admin/users";

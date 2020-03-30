@@ -13,14 +13,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jalizadeh.springboot.web.service.UserService;
+import com.jalizadeh.springboot.web.controller.admin.model.SettingsGeneralConfig;
 
 @Controller 
 public class ExceptionController implements ErrorController {
     private static final String ERROR_PATH = "/error";
 
     @Autowired
-	UserService userService;
+	private SettingsGeneralConfig settings;
     
     /**
      * implement ErrorController to handle 404
@@ -40,30 +40,27 @@ public class ExceptionController implements ErrorController {
         
         if(status != null) {
         	Integer statusCode = Integer.valueOf(status.toString());
-            
+        	mv.addObject("PageTitle", statusCode + " : " + status.toString());
+        	
             if(statusCode == HttpStatus.NOT_FOUND.value()) {
-            	mv.addObject("exception", "404 : NOT FOUND<br/>The web page is not found");
-            	mv.addObject("PageTitle", "404 : NOT FOUND");
-            	//mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
+            	mv.addObject("exception", 
+            			"404 : NOT FOUND<br/>The web page is not found");
             } else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-            	mv.addObject("exception", "500 : INTERNAL SERVER ERROR<br/>There is a problem on server, please try again");
-            	mv.addObject("PageTitle", "500 : INTERNAL SERVER ERROR");
-            	//mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
+            	mv.addObject("exception", 
+            			"500 : INTERNAL SERVER ERROR<br/>There is a problem on server, please try again");
             } else if(statusCode == HttpStatus.FORBIDDEN.value()) {
-            	mv.addObject("exception", "403 : FORBIDDEN<br/>You are not authorized to access.");
-            	mv.addObject("PageTitle", "403 : FORBIDDEN");
-            	//mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
+            	mv.addObject("exception", 
+            			"403 : FORBIDDEN<br/>You are not authorized to access.");
             } else if(statusCode == HttpStatus.BAD_REQUEST.value()) {
-            	mv.addObject("exception", "400 : BAD REQUEST<br/>Your request is not valid. It seems you entered wrong information that we can't understand.");
-            	mv.addObject("PageTitle", "400 : BAD REQUEST");
-            	//mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
+            	mv.addObject("exception", 
+            			"400 : BAD REQUEST<br/>Your request is not valid. It seems you entered wrong information that we can't understand.");
             } else {
-            	mv.addObject("exception", statusCode + " : " + status.toString() + "<br/>That's all we know.");
-            	mv.addObject("PageTitle", statusCode + " : " + status.toString());
-            	//mv.addObject("loggedinUser", userService.GetAuthenticatedUser());
+            	mv.addObject("exception", 
+            			statusCode + " : " + status.toString() + "<br/>That's all we know.");
             }
         }
         
+        mv.addObject("settings", settings);
     	mv.setViewName("error");
     	return mv;
     }

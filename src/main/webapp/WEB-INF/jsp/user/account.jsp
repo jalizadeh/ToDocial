@@ -21,13 +21,11 @@
 		</div>
 		<div class="col-9">
 			<form method="post">
-
 				<div class="form-group">
 					<label for="username">Username</label> <input type="text"
 						class="form-control" name="firstname"
 						value="${loggedinUser.username}">
 				</div>
-
 				<button type="submit" class="btn btn-primary">Update
 					Account</button>
 			</form>

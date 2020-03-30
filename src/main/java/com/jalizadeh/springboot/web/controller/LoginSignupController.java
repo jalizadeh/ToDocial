@@ -24,13 +24,17 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jalizadeh.springboot.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.springboot.web.error.EmailExistsException;
 import com.jalizadeh.springboot.web.error.UserAlreadyExistException;
 import com.jalizadeh.springboot.web.model.FlashMessage;
@@ -46,9 +50,10 @@ import com.jalizadeh.springboot.web.service.CommonServices;
 import com.jalizadeh.springboot.web.service.PasswordResetTokenService;
 import com.jalizadeh.springboot.web.service.TokenService;
 import com.jalizadeh.springboot.web.service.UserService;
+import com.jalizadeh.springboot.web.service.storage.StorageFileSystemService;
 
 @Controller
-public class LoginSignupController {
+public class LoginSignupController{
 
 	@Autowired
 	private UserService userService;
@@ -77,10 +82,22 @@ public class LoginSignupController {
 	@Autowired
 	private CommonServices utilites;
 	
+	@Autowired
+	private SettingsGeneralConfig settings;
+	
+	//image upload
+	private final StorageFileSystemService storageService;
+
+	@Autowired
+	public LoginSignupController(StorageFileSystemService storageService) {
+		this.storageService = storageService;
+	}
+	
 	
 	@RequestMapping("/login")
     public String LoginForm(ModelMap model, HttpServletRequest request) {
 		if(utilites.isUserAnonymous()) {
+			model.put("settings", settings);
 			model.put("PageTitle", "Log in");
 	        model.put("user", new User());
 	        
@@ -118,6 +135,7 @@ public class LoginSignupController {
 	
 	@RequestMapping(value="/forgot-password", method=RequestMethod.GET)
 	public String forgotPasswordShowPage(ModelMap model) {
+		model.put("settings", settings);
 		model.put("PageTitle", "Forgot Password");
 		return "forgot-password";
 	}
@@ -127,7 +145,7 @@ public class LoginSignupController {
 	public String forgotPasswordSubmit(ModelMap model, 
 			@RequestParam String email, WebRequest request,
 			RedirectAttributes redirectAttributes) {
-		model.put("PageTitle", "Forgot Password");
+		//model.put("PageTitle", "Forgot Password");
 		User user = userService.findByEmail(email);
 		
 		if(user != null) {
@@ -136,8 +154,7 @@ public class LoginSignupController {
 			prtService.saveNewToken(prt);
 
     		String appUrl = request.getContextPath();
-            eventPublisher.publishEvent(new OnPasswordResetEvent
-            		(prt, appUrl, request.getLocale()));
+            eventPublisher.publishEvent(new OnPasswordResetEvent(prt, appUrl, request.getLocale()));
 			
             redirectAttributes.addFlashAttribute("flash", 
             		new FlashMessage("An email is sent to you", FlashMessage.Status.success));
@@ -153,6 +170,7 @@ public class LoginSignupController {
 	@RequestMapping(value="reset-password", method=RequestMethod.GET)
 	public String resetPasswordConfirmedShowPage(@RequestParam String token,
 			ModelMap model, RedirectAttributes redirectAttributes) {
+		model.put("settings", settings);
 		model.put("PageTitle", "Reset Password");
 		
 		String tokenStatus = tokenService.validateVerificationToken(
@@ -199,8 +217,8 @@ public class LoginSignupController {
 			@RequestParam String password, @RequestParam String mp,
 			@RequestParam Long sq, @RequestParam String sqa,
 			RedirectAttributes redirectAttributes) {
+		model.put("settings", settings);
 		model.put("PageTitle", "Change Password");
-
 		
 		if (!password.equals(mp)) {
 			model.put("errorMessages", "Passwords do not match");
@@ -234,8 +252,9 @@ public class LoginSignupController {
 	@RequestMapping(value="/signup", method=RequestMethod.GET)
 	public String SignupMessage(ModelMap model) {
 		if(utilites.isUserAnonymous()) {
-			model.addAttribute("user", new User());
+			model.put("settings", settings);
 			model.put("PageTitle", "Sign up");
+			model.addAttribute("user", new User());
 			model.put("securityQuestions", sqdRepo.findAll());
 			return "signup";
 		}
@@ -245,32 +264,41 @@ public class LoginSignupController {
 	
 	
 	//Register new user and handle all errors
-	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	@PostMapping("/signup")
 	public ModelAndView registerUserAccount (@Valid User user,
-			@RequestParam Long sq, @RequestParam String sqa, 
-			BindingResult result, Errors errors, WebRequest request) 
+			@RequestParam Long sq, @RequestParam String sqa,
+			BindingResult result,
+			Errors errors, WebRequest request,
+			@RequestParam(value="file", required=false) MultipartFile file) 
 	    	throws UserAlreadyExistException, EmailExistsException { 
 		
-		System.err.println("1");
 		//ValidationUtils.invokeValidator(new UserValidator(), user, errors);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("settings", settings);
 	    
 		if(result.hasErrors()) {
 			List<String> errorMessages = new ArrayList<String>();
 	    	for (ObjectError obj : errors.getAllErrors()) {
 	    		errorMessages.add(obj.getDefaultMessage());
 			}
-	    	ModelAndView mv = new ModelAndView();
+	    	
 	    	mv.addObject("errorMessages", errorMessages);
 	    	mv.addObject("user", user);
+	    	mv.addObject("securityQuestions", sqdRepo.findAll());
 	    	mv.setViewName("signup");
-	    	System.err.println("2");
-	    	//return new ModelAndView("signup", "errorMessages", errorMessages);
 	    	return mv;
 		}
 		
 		User registered = null;
-		System.err.println("3");
     	try {
+    	
+    		if (file.isEmpty()) {
+    			user.setPhoto("default.jpg");
+			} else {
+				storageService.store(file, user.getUsername() + ".jpg");
+				user.setPhoto(user.getUsername() + ".jpg");    			
+			}
+            
     		registered = userService.registerNewUserAccount(user);
     		SecurityQuestionDefinition sqd = sqdRepo.getOne(sq);
     		sqRepo.save(new SecurityQuestion(registered,
@@ -282,30 +310,27 @@ public class LoginSignupController {
     		String appUrl = request.getContextPath();
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent
             		(registered, appUrl, request.getLocale()));
-            System.err.println("4");
     	} catch (UserAlreadyExistException | EmailExistsException | 
 				Exception e) {
 			
-    		ModelAndView mv = new ModelAndView();
 	    	mv.addObject("exception", e.getMessage());
 	    	mv.addObject("user", user);
+	    	mv.addObject("securityQuestions", sqdRepo.findAll());
 	    	mv.setViewName("signup");
-	    	System.err.println("51");
 	    	return mv;
-    		//return new ModelAndView("signup", "exception", e.getMessage());
 		}
-    	System.err.println("6");
     	
     	return new ModelAndView("confirm_email", "registeredUser", registered);
 	}
 	
 	
-	@RequestMapping(value="/registration-confirm", method=RequestMethod.GET)
+	@GetMapping("/registration-confirm")
 	public String confirmRegistration(ModelMap model, WebRequest request,
 			@RequestParam("token") String token) {
 		
 		Locale locale = request.getLocale();
 		model.put("user", new User());
+		model.put("settings", settings);
 		
 		String tokenStatus = tokenService.validateVerificationToken(
 				tokenService.TOKEN_TYPE_VERIFICATION,token);

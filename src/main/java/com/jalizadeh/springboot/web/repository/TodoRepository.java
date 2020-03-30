@@ -11,7 +11,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
 	//this is used for current loggedin user
 	@Query("select t from Todo t where t.user.id=:#{principal.id}")
-	List<Todo> findAll();
+	List<Todo> findAllByLoggedinUser();
 	
 	List<Todo> findAllByUserIdAndPubliccTrue(Long id);
 
