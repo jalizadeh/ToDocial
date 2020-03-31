@@ -53,6 +53,8 @@ This project is a combination of the features in Github and Wordpress that I cou
 		- During working on the todo, user might need to comment some thoughts
 		- Not editable, only removable
 	- [ ] Archive
+	- [ ] Sub-todo
+	- [x] Progress bar
 - [ ] Log in
 	- Spring Security 
 	- There are two roles `ROLE_USER` and `ROLE_ADMIN`
@@ -118,7 +120,9 @@ This project is a combination of the features in Github and Wordpress that I cou
 		- [ ] Anyone can register?
 			- [x] Shows/Hids the links in pages
 			- [ ] Changes security policy for accessing `signup` page
-		- [x] Default role for registered user
+		- [ ] Default role for registered user
+			- [x] Add new role
+			- [ ] Modify role
 		- [ ] Server Local time
 		- [x] Date Structure
 		- [x] Time structure

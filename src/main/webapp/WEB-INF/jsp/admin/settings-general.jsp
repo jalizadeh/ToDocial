@@ -68,9 +68,11 @@
 
 
 					<fieldset class="form-group">
-						<label for="inputState">Default role for registered user</label>
-						<form:select class="form-control" path="defaultRole"
-							items="${roles}" />
+						<label for="inputState">Default role for registered user
+						<a href="/admin/settings/add-role" class="badge badge-success"><i class="fas fa-plus"></i> Add new role</a>
+						<a class="badge badge-success text-white" onclick='modifyRole()'><i class="fas fa-cog"></i> Modify selected role</a>						
+						</label>
+						<form:select class="form-control" path="defaultRole" items="${roles}" id="roles"/>
 					</fieldset>
 
 					<fieldset class="form-group">
@@ -167,5 +169,11 @@
 		</div>
 	</div>
 </div>
+
+	<script type="text/javascript">
+		function modifyRole() {
+		    window.location = "/admin/settings/modify-role?name="+document.getElementById('roles').value;
+		}
+	</script>
 
 <%@ include file="../common/footer.jspf"%>

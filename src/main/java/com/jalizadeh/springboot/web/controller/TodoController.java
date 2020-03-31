@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -54,12 +55,14 @@ public class TodoController {
 	@Autowired
 	private SettingsGeneralConfig settings;
 	
+	
 	@InitBinder
 	protected void InitBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		binder.registerCustomEditor(Date.class, 
 				new CustomDateEditor(dateFormat, false));
 	}
+	
 
 	
 	/**
