@@ -89,7 +89,7 @@ public class User implements UserDetails{
 			inverseJoinColumns = @JoinColumn(name="follower", referencedColumnName="id"))
 	private Collection<User> followers;
 	
-	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created
+	@ManyToMany(cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created
 	@JoinTable(name="users_follows",
 			joinColumns = @JoinColumn(name="follower"),
 			inverseJoinColumns = @JoinColumn(name="followed", referencedColumnName="id"))

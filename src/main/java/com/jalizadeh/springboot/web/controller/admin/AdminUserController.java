@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 
-import com.jalizadeh.springboot.web.error.EmailExistsException;
-import com.jalizadeh.springboot.web.error.UserAlreadyExistException;
+import com.jalizadeh.springboot.web.exception.EmailExistsException;
+import com.jalizadeh.springboot.web.exception.UserAlreadyExistException;
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.springboot.web.repository.RoleRepository;

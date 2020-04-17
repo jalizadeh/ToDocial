@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jalizadeh.springboot.web</groupId>
-	<artifactId>spring-boot-first-web-application</artifactId>
+	<artifactId>todocial</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-boot-first-web-application</name>
-	<description>Demo project for Spring Boot</description>
+	<description>ToDocial, share your todos</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -110,7 +110,11 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-data-jpa</artifactId>
-		    <!-- <version>2.2.4.RELEASE</version> -->
+		</dependency>
+		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 		
 		<dependency>

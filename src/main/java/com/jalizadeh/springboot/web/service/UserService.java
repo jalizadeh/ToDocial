@@ -16,8 +16,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.jalizadeh.springboot.web.error.EmailExistsException;
-import com.jalizadeh.springboot.web.error.UserAlreadyExistException;
+import com.jalizadeh.springboot.web.exception.EmailExistsException;
+import com.jalizadeh.springboot.web.exception.UserAlreadyExistException;
 import com.jalizadeh.springboot.web.model.User;
 import com.jalizadeh.springboot.web.repository.RoleRepository;
 import com.jalizadeh.springboot.web.repository.UserRepository;

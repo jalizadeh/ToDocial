@@ -15,7 +15,8 @@ This project is a combination of the features in Github and Wordpress that I cou
 
 ### WIP:
 - [x] Initialize Spring project
-- [x] Implement SQLite database
+- [x] Database
+	- Currently data is stored in `todo.db` file in root folder
 	- User
 		- users_roles (many-to-many)
 		- Role (high-level roles)
@@ -30,11 +31,11 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- Todo
 		- todo-log
 		- todos_logs
-	- hibernate_sequence
 	- [ ] Set username & password
+	- [ ] Migrate to MySQL
 - [ ] General
 	- [x] Header/Navigation/Footer fragments
-		- Spring Security JSP Taglib is added for easier contorll of authenticated users
+		- Spring Security JSP Taglib is added for easier control of authenticated users
 	- [x] Set page title
 		- Each page&#39;s title is encapsulated in `model`
 	- [x] Support UTF-8 encoding
@@ -46,15 +47,18 @@ This project is a combination of the features in Github and Wordpress that I cou
 - [x] Todos
 	- [x] All user&#39;s todos
 	- [x] Public / Private
+	- [ ] Completion date & note
 	- [ ] Photo
 	- [x] Add/Update/Delete todos
 	- [x] 1-click state change
 	- [x] Log
 		- During working on the todo, user might need to comment some thoughts
 		- Not editable, only removable
-	- [ ] Archive
-	- [ ] Sub-todo
+	- [ ] Task
 	- [x] Progress bar
+- [ ] Wishes
+	- Todos that will be taken care later, at unknown time. When the user wants, he can turn a `wish` into a todo.
+	- Other users can comment on his wishes, or help with appropriate advices.
 - [ ] Log in
 	- Spring Security 
 	- There are two roles `ROLE_USER` and `ROLE_ADMIN`
@@ -64,7 +68,7 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- [x] Field validation
 	- [x] Log out
 	- [ ] Forgot my password
-		- The data is seperately stored in `PasswordResetToken` with 12-hour limit
+		- The data is separately  stored in `PasswordResetToken` with 12-hour limit
 		- [ ] Security Question
 		- [ ] Field validation
 	- [x] Remember me
@@ -98,7 +102,7 @@ This project is a combination of the features in Github and Wordpress that I cou
 			- [x] Token is not valid
 			- [x] Token is expired
 			- [ ] User already activated
-	- [x] Unseccessfull sign up
+	- [x] Unsuccessful  sign up
 		- [ ] Show errors & exceptions
 - [ ] User
 	- [ ] Profile
@@ -112,13 +116,13 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- [x] User&#39;s Public Page
 	- [x] Follower / Following
 		- [ ] Follow / Unfollow
-			- 🟡 a user can follow any user, mutlitple times
+			- 🟡 a user can follow any user, mulitple times
 - [ ] Admin panel
 	- [ ] General
 		- [x] Site name & description
 		- [x] Footer copyright
 		- [ ] Anyone can register?
-			- [x] Shows/Hids the links in pages
+			- [x] Shows/Hides the links in pages
 			- [ ] Changes security policy for accessing `signup` page
 		- [ ] Default role for registered user
 			- [x] Add new role
@@ -130,7 +134,7 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- [ ] Users
 		- If user has `ROLE_ADMIN`, she can access the dashboard
 		- [x] List of online users
-		- [x] 1-click users's state change
+		- [x] 1-click user's state change
 		- [x] 1-click delete user
 		- [ ] Modify user
 		- [x] Add new user
@@ -145,6 +149,7 @@ This project is a combination of the features in Github and Wordpress that I cou
 		- [ ] Allow search engines to fetch public todos
 		- [ ] Users must be registered to access a public page
 		- [ ] Users must be registered to access a public todo
+		- [ ] Manage Todo types & priority
 	- [ ] Email
 		- [ ] Admin email
 		- [ ] Configurations
@@ -152,8 +157,29 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- [ ] Security
 		- [ ] How long last verification email
 		- [ ] How long last reset password email
-		- [ ] Newly registered users must be verified for furthur access
+		- [ ] Newly registered users must be verified for further access
 		- [ ] Define new security questions
 		- [ ] Password combination
 - [ ] Logger
 - [ ] Query Optimization
+- [ ] Charts
+	- [x] Start-End range
+	- [x] Gantt
+
+
+
+## REST:
+
+| Action  | Endpoint |
+| ------------- | ------------- |
+| Retrieve all `User`s  | `GET /users`  |
+| Create a `User`  | `POST /users`  |
+| Retrieve one `User`  | `GET /users/{id}`  |
+| Delete a `User`  | `DELETE /users/{id}`  |
+
+| Action  | Endpoint |
+| ------------- | ------------- |
+| Retrieve all `Todo`s  | `GET /users/{id}/todos`  |
+| Create a `Todo` for `User`  | `POST /users/{id}/todos`  |
+| Retrieve one `Todo`  | `GET /users/{id}/todos/{id}`  |
+| Delete a `Todo`  | `DELETE /users/{id}/todos/{id}`  |

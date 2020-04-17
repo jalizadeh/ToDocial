@@ -1,4 +1,4 @@
-package com.jalizadeh.springboot.web.error;
+package com.jalizadeh.springboot.web.exception;
 
 @SuppressWarnings("serial")
 public class EmailExistsException extends Throwable {

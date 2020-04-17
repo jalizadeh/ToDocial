@@ -73,8 +73,8 @@
 		<button type="submit" class="btn btn-primary">Sign up</button>
 	</form:form>
 
-	<script src="/static_res/js/pwstrength.js"></script>
-	<script src="/static_res/js/jquery.validate.js"></script>
+	<script src="/resources/js/pwstrength.js"></script>
+	<script src="/resources/js/jquery.validate.js"></script>
 
 	<script type="text/javascript">
 		$(document)

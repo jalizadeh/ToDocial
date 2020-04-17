@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 						"/user-avatar/*",
 						"/registration-confirm",
 						"/login",
-						//"/signup",
+						"/signup",
 						"/forgot-password",
 						"/reset-password",
 						"/error",

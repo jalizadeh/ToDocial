@@ -35,8 +35,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jalizadeh.springboot.web.controller.admin.model.SettingsGeneralConfig;
-import com.jalizadeh.springboot.web.error.EmailExistsException;
-import com.jalizadeh.springboot.web.error.UserAlreadyExistException;
+import com.jalizadeh.springboot.web.exception.EmailExistsException;
+import com.jalizadeh.springboot.web.exception.UserAlreadyExistException;
 import com.jalizadeh.springboot.web.model.FlashMessage;
 import com.jalizadeh.springboot.web.model.PasswordResetToken;
 import com.jalizadeh.springboot.web.model.SecurityQuestion;

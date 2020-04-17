@@ -82,13 +82,13 @@
 										<c:choose>
 											<c:when test="${todos[j.index].completed == true}">
 												<i class="fas fa-clipboard-check text-success"></i>
-												<a href="#"> ${todos[j.index].desc}</a>
+												<a href="#"> ${todos[j.index].name}</a>
 
 												<div class="row mt-3">
 													<div class="col">
 														<!-- date -->
 														<i class="fas fa-calendar-alt"></i>
-														<fmt:formatDate value="${todos[j.index].due_date}"
+														<fmt:formatDate value="${todos[j.index].target_date}"
 															pattern="yyyy/MM/dd" />
 													</div>
 													<div class="col">
@@ -99,13 +99,13 @@
 											</c:when>
 											<c:otherwise>
 												<i class="fas fa-clipboard text-warning"></i>
-												<a href="#"> ${todos[j.index].desc}</a>
+												<a href="#"> ${todos[j.index].name}</a>
 
 												<div class="row mt-3">
 													<div class="col">
 														<!-- date -->
 														<i class="fas fa-calendar-alt"></i>
-														<fmt:formatDate value="${todos[j.index].due_date}"
+														<fmt:formatDate value="${todos[j.index].target_date}"
 															pattern="yyyy/MM/dd" />
 													</div>
 													<div class="col">
@@ -130,13 +130,13 @@
 										<c:choose>
 											<c:when test="${todos[j.index].completed == true}">
 												<i class="fas fa-clipboard-check text-success"></i>
-												<a href="#"> ${todos[j.index].desc}</a>
+												<a href="#"> ${todos[j.index].name}</a>
 
 												<div class="row mt-3">
 													<div class="col">
 														<!-- date -->
 														<i class="fas fa-calendar-alt"></i>
-														<fmt:formatDate value="${todos[j.index].due_date}"
+														<fmt:formatDate value="${todos[j.index].target_date}"
 															pattern="yyyy/MM/dd" />
 													</div>
 													<div class="col">
@@ -147,13 +147,13 @@
 											</c:when>
 											<c:otherwise>
 												<i class="fas fa-clipboard text-warning"></i>
-												<a href="#"> ${todos[j.index].desc}</a>
+												<a href="#"> ${todos[j.index].name}</a>
 
 												<div class="row mt-3">
 													<div class="col">
 														<!-- date -->
 														<i class="fas fa-calendar-alt"></i>
-														<fmt:formatDate value="${todos[j.index].due_date}"
+														<fmt:formatDate value="${todos[j.index].target_date}"
 															pattern="yyyy/MM/dd" />
 													</div>
 													<div class="col">
