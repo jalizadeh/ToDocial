@@ -1,5 +1,5 @@
-# Spring TO-DO Web Application
-A To-Do manager with Spring and SQLite. I am trying to make it as much as possible complete, as an industry product, at the same time, a project to learn stuff.
+# ToDocial: Manage your todos and share with friends
+A ToDo manager with Spring Boot. I am trying to make it as much as possible complete, as an industry product, at the same time, a project to learn stuff.
 
 ### Inspirations:
 This project is a combination of the features in Github and Wordpress that I could merge into one single project.
@@ -8,9 +8,10 @@ This project is a combination of the features in Github and Wordpress that I cou
 
 ### Features:
 - Login / Sign up (multi-user)
-- Todo management
-- User profile
-- Administrator dashboard
+- Todo Management
+- User Profile
+- Charts & Statistics
+- Administrator Dashboard
 
 
 ### WIP:
@@ -47,14 +48,14 @@ This project is a combination of the features in Github and Wordpress that I cou
 - [x] Todos
 	- [x] All user&#39;s todos
 	- [x] Public / Private
-	- [ ] Completion date & note
+	- [x] Completion date & note
 	- [ ] Photo
 	- [x] Add/Update/Delete todos
 	- [x] 1-click state change
 	- [x] Log
 		- During working on the todo, user might need to comment some thoughts
 		- Not editable, only removable
-	- [ ] Task
+	- [ ] mini-Task
 	- [x] Progress bar
 - [ ] Wishes
 	- Todos that will be taken care later, at unknown time. When the user wants, he can turn a `wish` into a todo.
@@ -155,8 +156,8 @@ This project is a combination of the features in Github and Wordpress that I cou
 		- [ ] Configurations
 		- [ ] Formats
 	- [ ] Security
-		- [ ] How long last verification email
-		- [ ] How long last reset password email
+		- [ ] How long lasts verification email
+		- [ ] How long lasts reset password email
 		- [ ] Newly registered users must be verified for further access
 		- [ ] Define new security questions
 		- [ ] Password combination
@@ -168,7 +169,7 @@ This project is a combination of the features in Github and Wordpress that I cou
 
 
 
-## REST:
+## REST (WIP):
 
 | Action  | Endpoint |
 | ------------- | ------------- |

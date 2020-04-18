@@ -86,9 +86,8 @@ public class StorageFileSystemService implements StorageService {
 				return resource;
 			}
 			else {
-				throw new StorageFileNotFoundException(
-						"Could not read file: " + filename);
-				
+				//throw new StorageFileNotFoundException("Could not read file: " + filename);
+				return new UrlResource(load("default.jpg").toUri());
 			}
 		}
 		catch (MalformedURLException e) {

@@ -25,11 +25,6 @@
 				<h4>Change Password</h4>
 				<div class="border-top my-1 mb-1"></div>
 				<div class="form-group">
-					<label for="password">Old password</label> <input type="password"
-						class="form-control" name="old-password" id="old-password"
-						value="${loggedinUser.password}">
-				</div>
-				<div class="form-group">
 					<label for="password">New password</label> <input type="password"
 						class="form-control" name="password" id="password">
 				</div>

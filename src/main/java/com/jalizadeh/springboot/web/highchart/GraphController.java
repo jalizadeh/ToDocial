@@ -51,7 +51,7 @@ public class GraphController {
 	}
 	
 	
-	@GetMapping("/ghantt")
+	@GetMapping("/gantt")
 	public String ghantt(Model model) {
 		List<TodoChartModel> list = new ArrayList<TodoChartModel>();
 		
@@ -71,7 +71,7 @@ public class GraphController {
 				
 		model.addAttribute("list",list);
 		
-		return "chart/ghantt";
+		return "chart/gantt";
 	}
 
 	

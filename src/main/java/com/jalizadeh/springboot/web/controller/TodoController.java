@@ -2,8 +2,10 @@ package com.jalizadeh.springboot.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -70,7 +72,7 @@ public class TodoController {
 	 * but if it is an anonymous user, can access the public area of
 	 * a registered user's page
 	 */
-	@RequestMapping(value = "/@{username}", method = RequestMethod.GET)
+	@GetMapping("/@{username}")
 	public String ShowTodosList(ModelMap model, @PathVariable String username,
 			RedirectAttributes redirectAttributes) {
 		
@@ -97,10 +99,9 @@ public class TodoController {
 		//the user is logged in and is checking another profile
 		if(!currentUser.getUsername().equals(username)) {
 			
-			List<String> listOfFollowings = new ArrayList<>();
-			for (User user : currentUser.getFollowings()) {
-				listOfFollowings.add(user.getUsername());
-			}
+			List<String> listOfFollowings = currentUser.getFollowings().stream()
+						.map(u -> u.getUsername())
+						.collect(Collectors.toList());
 			
 			for (String following : listOfFollowings) {
 				if(following.equals(targetUser.getUsername())) {
@@ -129,9 +130,8 @@ public class TodoController {
 	}
 	
 	
-	@RequestMapping(value = "/@{username}", method = RequestMethod.POST)
-	public String AddNewTodoLog(ModelMap model, 
-			@RequestParam Long todoId, 
+	@PostMapping("/@{username}")
+	public String AddNewTodoLog(ModelMap model, @RequestParam Long todoId, 
 			@RequestParam String log) {
 
 		User user = userService.GetAuthenticatedUser();
@@ -236,6 +236,96 @@ public class TodoController {
 				new FlashMessage("Todo updated successfully", FlashMessage.Status.success));
 		return "redirect:/@" + user.getUsername();
 	}
+	
+	
+	@PostMapping("/update-todo-newlog")
+	public String UpdateTodoNewLog(ModelMap model, @RequestParam Long todoId, 
+			@RequestParam String log) {
+
+		//TODO: check for security+null
+		
+		TodoLog todoLog = new TodoLog(new Date(), log);
+		Todo todo = todoRepository.getOne(todoId);
+		
+		todoLog.getTodos().add(todo);
+		todo.getLogs().add(todoLog);
+		
+		todoRepository.save(todo);
+		
+		return "redirect:/update-todo?id=" + todoId;
+	}
+	
+	
+	@GetMapping("/update-todo-deletelog")
+	public String UpdateTodoDeleteLog(ModelMap model, @RequestParam Long todoId, 
+			@RequestParam Long logId) {
+		todoLogRepository.deleteById(logId);
+		return "redirect:/update-todo?id=" + todoId;
+	}
+	
+	
+	@GetMapping("/complete-todo")
+	public String ShowCompleteTodo(ModelMap model, @RequestParam Long id) {
+		model.put("PageTitle", "Complete & Archive Todo");
+		model.put("settings", settings);
+		
+		Todo todo = todoRepository.getOne(id);
+		todo.setCompletion_date(new Date());
+		todo.setCompleted(true);
+		model.put("todo", todo);
+		
+		model.addAttribute("allPriority",allPriority());
+		model.addAttribute("allType",allType());
+		return "todo";
+	}
+	
+	
+	@PostMapping("/complete-todo")
+	public String SetCompleteTodo(@Valid Todo todo, BindingResult result,
+			RedirectAttributes redirectAttributes, ModelMap model) {
+
+		if(result.hasErrors()) {
+			model.put("error", result.getAllErrors());
+			model.put("settings", settings);
+			model.put("PageTitle", "Complete & Archive Todo");
+			model.addAttribute("allPriority",allPriority());
+			model.addAttribute("allType",allType());
+			return "todo";
+		}
+		
+		Todo ref = todoRepository.getOne(todo.getId());
+		todo.setCreation_date(ref.getCreation_date());
+		todo.setCompletion_date(new Date());
+		todo.setCompleted(true);
+		todo.setUser(ref.getUser());
+		todo.setLogs(ref.getLogs());
+		
+		todoRepository.save(todo);
+		
+		redirectAttributes.addFlashAttribute("flash", 
+				new FlashMessage("Todo completed successfully", FlashMessage.Status.success));
+		return "redirect:/@" + ref.getUser().getUsername();
+	}
+	
+	
+	@GetMapping("/completed-todo")
+	public String ShowCompletedTodo(ModelMap model, @RequestParam Long id,
+			RedirectAttributes redirectAttributes) {
+		model.put("PageTitle", "Completed Todo");
+		model.put("settings", settings);
+		
+		Todo todo = todoRepository.getOne(id);
+		if(!todo.isCompleted()) {
+			redirectAttributes.addFlashAttribute("flash", 
+					new FlashMessage("Todo is not completed yet.", FlashMessage.Status.warning));
+			return "redirect:/@" + todo.getUser().getUsername();
+		}
+		
+		model.put("todo", todo);
+		return "todo-completed";
+	}
+	
+	
 	
 	
 	@GetMapping("/todo-state")
