@@ -5,7 +5,6 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 @Entity
 public class Todo {
@@ -41,8 +39,12 @@ public class Todo {
 	private Date target_date;
 
 	private Date completion_date;
+	
+	private Date cancel_date;
 
 	private boolean completed;
+	
+	private boolean canceled;
 
 	private boolean publicc;
 	
@@ -57,7 +59,7 @@ public class Todo {
 	private Collection<TodoLog> logs;
 
 	public static enum TType {
-		Fun, Learning, Improvement, Job, Book
+		Fun, Learning, Improvement, Job, Book, Life
 	}
 
 	public static enum TPriority {
@@ -188,6 +190,22 @@ public class Todo {
 
 	public void setLogs(Collection<TodoLog> logs) {
 		this.logs = logs;
-	}	
+	}
 	
+
+	public Date getCancel_date() {
+		return cancel_date;
+	}
+
+	public void setCancel_date(Date cancel_date) {
+		this.cancel_date = cancel_date;
+	}
+
+	public boolean isCanceled() {
+		return canceled;
+	}
+
+	public void setCanceled(boolean canceled) {
+		this.canceled = canceled;
+	}
 }

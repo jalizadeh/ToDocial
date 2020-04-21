@@ -2,7 +2,6 @@ package com.jalizadeh.springboot.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +10,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -125,6 +121,7 @@ public class TodoController {
 		model.put("user", targetUser);
 		model.put("todosCompleted", todoRepository.getAllCompleted());
 		model.put("todosNotCompleted", todoRepository.getAllNotCompleted());
+		model.put("todosCanceled", todoRepository.getAllCanceled());
 		model.put("PageTitle", "My Todos");
 		return "my-todos";
 	}
@@ -150,11 +147,23 @@ public class TodoController {
 	}
 	
 	
-	@GetMapping("/delete-todo")
+	@GetMapping("/cancel-todo")
 	public String DeleteTodo(ModelMap model, @RequestParam Long id) {
-		User user = userService.GetAuthenticatedUser();
-		todoRepository.deleteById(id);
-		return "redirect:/@" + user.getUsername();
+		Todo todo = todoRepository.getOne(id);
+		todo.setCanceled(true);
+		todo.setCancel_date(new Date());
+		todoRepository.save(todo);
+		return "redirect:/@" + todo.getUser().getUsername();
+	}
+	
+	
+	@GetMapping("/resume-todo")
+	public String ResumeTodo(ModelMap model, @RequestParam Long id) {
+		Todo todo = todoRepository.getOne(id);
+		todo.setCanceled(false);
+		todo.setCancel_date(new Date());
+		todoRepository.save(todo);
+		return "redirect:/@" + todo.getUser().getUsername();
 	}
 	
 	

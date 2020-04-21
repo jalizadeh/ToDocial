@@ -15,42 +15,49 @@
 		</c:if>
 
 		<div class="sticky-top">
-			<div class="row">
-				<div class="col-7">
-					<p>Jump to</p>
-				</div>
-				<div class="col">
-					<a class="badge badge-pill badge-primary text-white">${todosNotCompleted.size()}</a>
-					<a href="/add-todo" class="badge badge-success"><i
-						class="fas fa-plus"></i> New</a>
-				</div>
-
+			<div class="list-group">
+			  <li class="list-group-item d-flex justify-content-between align-items-center  bg-light">
+			    <spring:message code="mytodos.jumpto"/>
+			    <span class="badge badge-primary badge-pill">${todosNotCompleted.size()}</span>
+			    <a href="/add-todo" class="badge badge-success"><i
+						class="fas fa-plus"></i> <spring:message code="mytodos.new"/></a>
+			  </li>
+			  
+			  <c:forEach items="${todosNotCompleted}" var="todo">
+				<a href="#${todo.id}" data-toggle="tooltip" title="${todo.name}" 
+					class="list-group-item list-group-item-action">
+					<i class="fas fa-clipboard text-warning"></i> ${fn:substring(todo.name, 0, 20)}...</a>
+			  </c:forEach>
 			</div>
-			<hr>
-			<c:forEach items="${todosNotCompleted}" var="todo">
-				<p>
-					<i class="fas fa-clipboard text-warning"></i> <a href="#${todo.id}"
-						data-toggle="tooltip" title="${todo.name}">${fn:substring(todo.name, 0, 25)}...</a>
-				</p>
-			</c:forEach>
+			
 
-			<div class="row">
-				<div class="col-7">
-					<p>Completed</p>
-				</div>
-				<div class="col">
-					<a class="badge badge-pill badge-primary text-white">${todosCompleted.size()}</a>
-
-				</div>
-
+			<div class="list-group mt-2">
+			  <li class="list-group-item d-flex justify-content-between align-items-center  bg-light">
+			    <spring:message code="mytodos.completed"/>
+			    <span class="badge badge-primary badge-pill">${todosCompleted.size()}</span>
+			  </li>
+			  
+			  <c:forEach items="${todosCompleted}" var="todo">
+				<a href="/completed-todo?id=${todo.id}" data-toggle="tooltip" title="${todo.name}" 
+					class="list-group-item list-group-item-action">
+					<i class="fas fa-clipboard-check text-success"></i> ${fn:substring(todo.name, 0, 20)}...</a>
+			  </c:forEach>
 			</div>
-			<hr>
-			<c:forEach items="${todosCompleted}" var="todo">
-				<p>
-					<i class="fas fa-clipboard-check text-success"></i> <a
-						href="/completed-todo?id=${todo.id}" data-toggle="tooltip" title="${todo.name}">${fn:substring(todo.name, 0, 25)}...</a>
-				</p>
-			</c:forEach>
+			
+
+			<div class="list-group mt-2">
+			  <li class="list-group-item d-flex justify-content-between align-items-center  bg-light">
+			    <spring:message code="mytodos.canceled"/>
+			    <span class="badge badge-primary badge-pill">${todosCanceled.size()}</span>
+			  </li>
+			  
+			  <c:forEach items="${todosCanceled}" var="todo">
+				<a href="/update-todo?id=${todo.id}" data-toggle="tooltip" title="${todo.name}" 
+					class="list-group-item list-group-item-action">
+					<i class="fas fa-clipboard text-danger"></i> ${fn:substring(todo.name, 0, 20)}...</a>
+			  </c:forEach>
+			</div>
+			
 		</div>
 	</div>
 
@@ -157,7 +164,7 @@
 							<h5 class="card-title"></h5>
 							<c:forEach items="${todo.logs}" var="log">
 								<p>
-									<a href="/delete-todo-log?id=${log.id}"> <i
+									<a href="/cancel-todo-log?id=${log.id}"> <i
 										class="fas fa-times btn-delete-todo"></i>
 									</a> <span class="badge badge-secondary"> <fmt:formatDate
 											value="${log.logDate}" pattern="yyyy/MM/dd" />
@@ -173,7 +180,7 @@
 										aria-label="Text input with segmented dropdown button"
 										name="log" id="log">
 									<div class="input-group-append">
-										<button type="submit" class="btn btn-outline-secondary">Post</button>
+										<button type="submit" class="btn btn-outline-secondary"><spring:message code="mytodos.post"/></button>
 										<button type="button"
 											class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
 											data-toggle="dropdown" aria-haspopup="true"
@@ -182,13 +189,12 @@
 										</button>
 										<div class="dropdown-menu">
 											 <a class="dropdown-item" href="/update-todo?id=${todo.id}"><i
-												class="fas fa-edit"></i> Modify</a> <a class="dropdown-item"
-												href="/complete-todo?id=${todo.id}"><i class="fas fa-archive"></i> Complete &
-												Archive</a>
+												class="fas fa-edit"></i> <spring:message code="mytodos.modify"/></a> <a class="dropdown-item"
+												href="/complete-todo?id=${todo.id}"><i class="fas fa-archive"></i> <spring:message code="mytodos.completeandarchive"/></a>
 											<div role="separator" class="dropdown-divider"></div>
 											<a class="dropdown-item text-danger"
-												href="/delete-todo?id=${todo.id}"><i
-												class="fas fa-trash-alt"></i> Delete</a>
+												href="/cancel-todo?id=${todo.id}"><i
+												class="fas fa-trash-alt"></i> <spring:message code="mytodos.delete"/></a>
 										</div>
 									</div>
 								</div>
@@ -201,11 +207,11 @@
 	<div class="col mx-2">
 		<div class="row">
 			<div class="col-7">
-				<p>Friends</p>
+				<p><spring:message code="mytodos.friends"/></p>
 			</div>
 			<div class="col">
 				<a class="badge badge-pill badge-primary text-white">${user.followings.size()}</a>
-				<a href="#" class="badge badge-success"> Explore</a>
+				<a href="#" class="badge badge-success"> <spring:message code="mytodos.explore"/></a>
 			</div>
 
 		</div>

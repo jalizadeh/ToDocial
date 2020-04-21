@@ -112,10 +112,27 @@
 				</div>
 			</div>
 
-			<c:if test="${todo.completed == false}">
-				<a class="btn btn-success btn-lg btn-block mt-2"
-					href="/complete-todo?id=${todo.id}" role="button">Complete & Archive</a>
-			</c:if>
+			<div class="row">
+				<div class="col">
+					<c:if test="${todo.completed == false}">
+						<a class="btn btn-success btn-lg btn-block mt-2"
+							href="/complete-todo?id=${todo.id}" role="button"><i class="far fa-check-circle"></i> Complete</a>
+					</c:if>
+				</div>
+				
+				<div class="col">
+					<c:choose>
+						<c:when test="${todo.canceled == false}">
+						<a class="btn btn-danger btn-lg btn-block mt-2"
+							href="/cancel-todo?id=${todo.id}" role="button"><i class="far fa-stop-circle"></i> Stop</a>
+						</c:when>
+						<c:otherwise>
+							<a class="btn btn-warning btn-lg btn-block mt-2"
+								href="/resume-todo?id=${todo.id}" role="button"><i class="fas fa-play-circle"></i> Resume</a>
+						</c:otherwise>
+					</c:choose>
+				</div>
+			</div>
 
 
 			<div class="card mt-2">

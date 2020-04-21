@@ -51,7 +51,7 @@
 				styledMode : true
 			},
 			title : {
-				text : 'Todos Over Time'
+				text : 'Timeline of your Not-Completed Todos'
 			},
 			tooltip: {
 			    crosshairs: [true, true],

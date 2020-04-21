@@ -43,15 +43,17 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- [x] Handle exceptions with exact error reason
 		- All exceptions will be redirected to `/error` showing the reason and what happened.
 		- [x] If any error occurs in subdirectories, the page is not shown correctly
-	- [ ] Multi-language
+	- [ ] Multi-language (English / Italian)
+		- Currently `user-session` based
+		- [ ] Change static texts to `<spring:message code="key"/>`
 - [x] Basic Search
 - [x] Todos
 	- [x] All user&#39;s todos
 	- [x] Public / Private
-	- [x] Completion date & note
-	- [ ] Photo
-	- [x] Add/Update/Delete todos
-	- [x] 1-click state change
+	- [x] Add new
+	- [x] Modify
+	- [x] Complete & Archive
+	- [x] Cancel/Resume (todo is never deleted, but kept forever, can be resumed)
 	- [x] Log
 		- During working on the todo, user might need to comment some thoughts
 		- Not editable, only removable
@@ -103,7 +105,7 @@ This project is a combination of the features in Github and Wordpress that I cou
 			- [x] Token is not valid
 			- [x] Token is expired
 			- [ ] User already activated
-	- [x] Unsuccessful  sign up
+	- [x] Unsuccessful sign up
 		- [ ] Show errors & exceptions
 - [ ] User
 	- [ ] Profile
@@ -128,10 +130,11 @@ This project is a combination of the features in Github and Wordpress that I cou
 		- [ ] Default role for registered user
 			- [x] Add new role
 			- [ ] Modify role
-		- [ ] Server Local time
 		- [x] Date Structure
 		- [x] Time structure
 		- [x] Language
+			- 1. Admin can configure the language/country of whole system
+			- 2. Any user can change the language/country of current session by himself (in footer)
 	- [ ] Users
 		- If user has `ROLE_ADMIN`, she can access the dashboard
 		- [x] List of online users
@@ -166,6 +169,8 @@ This project is a combination of the features in Github and Wordpress that I cou
 - [ ] Charts
 	- [x] Start-End range
 	- [x] Gantt
+- [x] Personal Life Cycle Test
+	- The test is currently in Persian
 
 
 
@@ -184,3 +189,14 @@ This project is a combination of the features in Github and Wordpress that I cou
 | Create a `Todo` for `User`  | `POST /users/{id}/todos`  |
 | Retrieve one `Todo`  | `GET /users/{id}/todos/{id}`  |
 | Delete a `Todo`  | `DELETE /users/{id}/todos/{id}`  |
+
+
+
+## Run:
+
+- Clone the project
+- In terminal run `mvn spring-boot:run`
+- Go to `http://localhost:8080`
+- Login:
+	- as `admin` with username: `javad` & password: `12345`
+	- as `user`  with username: `alexfergosen` & password: `12345`

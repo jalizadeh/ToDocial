@@ -40,7 +40,7 @@ public class SettingsGeneralConfig {
 	@Value("${time.structure:short}") 
 	private String timeStructure;
 	
-	@Value("${language:English}") 
+	@Value("${language:en_US}") 
 	private String language;
 	
 

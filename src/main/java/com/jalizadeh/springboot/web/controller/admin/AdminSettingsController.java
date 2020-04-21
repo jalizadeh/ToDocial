@@ -3,19 +3,25 @@ package com.jalizadeh.springboot.web.controller.admin;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jalizadeh.springboot.web.controller.admin.model.SettingsGeneral;
@@ -25,6 +31,7 @@ import com.jalizadeh.springboot.web.model.Privilege;
 import com.jalizadeh.springboot.web.model.Role;
 import com.jalizadeh.springboot.web.repository.PrivilegeRepository;
 import com.jalizadeh.springboot.web.repository.RoleRepository;
+import com.jalizadeh.springboot.web.security.AppLocaleResolver;
 
 @Controller
 public class AdminSettingsController {
@@ -37,6 +44,9 @@ public class AdminSettingsController {
 	
 	@Autowired
 	private PrivilegeRepository privilegeRepository;
+	
+	@Autowired
+	AppLocaleResolver alr;
 	
 	
 	@GetMapping("/admin/settings")
@@ -53,20 +63,24 @@ public class AdminSettingsController {
 	
 	@PostMapping("/admin/settings")
 	public String SaveChanges(ModelMap model, @Valid SettingsGeneral sg, 
-			BindingResult result, RedirectAttributes redirectAttributes) {
+			BindingResult result, RedirectAttributes redirectAttributes,
+			HttpServletRequest request, HttpServletResponse response, Locale locale) {
 		if(result.hasErrors()) {
 			model.put("flash", 
 					new FlashMessage("There is some error",  FlashMessage.Status.danger));
 			return "admin/settings-general";
 		}
 		
+		alr.setLocale(request, response, stringToLocale(sg.getLanguage()));
 		updateSettings(sg);
 		redirectAttributes.addFlashAttribute("flash", 
 				new FlashMessage("Settings are saved successfully",  FlashMessage.Status.success));
 		return "redirect:/admin/settings";
 	}
 	
-	
+	public Locale stringToLocale(String s) {    	
+        return new Locale(s.split("_")[0],s.split("_")[1]);
+    }
 	
 	@GetMapping("/admin/settings/add-role")
 	public String showRole(ModelMap model) {
@@ -120,9 +134,18 @@ public class AdminSettingsController {
 	
 	
 	private Map<String,String> languages(){
-		Map<String,String> l = new HashMap<String, String>();
-		l.put("en", "English");
-		l.put("it", "Italian");
-		return l;
+		Map<String, String> localeChoices = new LinkedHashMap<>();
+		Locale l = Locale.US;
+		localeChoices.put(l.toString(), l.getDisplayLanguage());
+		l = Locale.ITALY;
+		localeChoices.put(l.toString(), l.getDisplayLanguage());
+		return localeChoices;
+	}
+	
+	
+	
+	@Bean
+	public LocaleResolver localeResolver2() {
+	    return new AppLocaleResolver();
 	}
 }

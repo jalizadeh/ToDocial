@@ -1,16 +1,17 @@
 
 	</div> <!-- container -->
 	
-	<footer id="sticky-footer" style="background-color: #e3f2fd;">
+	<footer id="sticky-footer" style="background-color: #e3f2fd; z-index:2000">
 		<div class="container  text-center">
 			<div class="row">
 				<div class="col-3">${settings.footerCopyright}</div>
 				<div class="col-3"></div>
 				<div class="col-3"></div>
-				<div class="col-3"></div>
+				<div class="col-3">
+					<a href="?lang=en_US">English</a> / <a href="?lang=it_IT">Italiano</a>
+				</div>
 			</div>
 		</div>
 	</footer>
-
 </body>
 </html>

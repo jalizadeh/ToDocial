@@ -31,7 +31,7 @@ public class GraphController {
 	public String chart(Model model) {
 		List<TodoChartModel> list = new ArrayList<TodoChartModel>();
 		
-		for (Todo todo : todoRepository.findAllByLoggedinUser()) {
+		for (Todo todo : todoRepository.getAllNotCompleted()) {
 			int d1 = getDateDiff(new Date(),todo.getCreation_date());
 			int d2 = getDateDiff(todo.getTarget_date(),todo.getCreation_date());
 			float dif = (float)d1 / (float)d2;
@@ -55,7 +55,7 @@ public class GraphController {
 	public String ghantt(Model model) {
 		List<TodoChartModel> list = new ArrayList<TodoChartModel>();
 		
-		for (Todo todo : todoRepository.findAllByLoggedinUser()) {
+		for (Todo todo : todoRepository.getAllNotCompleted()) {
 			int d1 = getDateDiff(new Date(),todo.getCreation_date());
 			int d2 = getDateDiff(todo.getTarget_date(),todo.getCreation_date());
 			float dif = (float)d1 / (float)d2;

@@ -47,10 +47,10 @@
 					<tbody>
 					<c:forEach items="${all_todos}" var="todo">
 						<tr>
-							<th>${todo.desc}</th>
+							<th>${todo.name}</th>
 							<th><fmt:formatDate value="${todo.creation_date}"
 									pattern="yyyy/MM/dd" /></th>
-							<th><fmt:formatDate value="${todo.due_date}"
+							<th><fmt:formatDate value="${todo.target_date}"
 									pattern="yyyy/MM/dd" /></th>
 							<th>${todo.completed}</th>
 							<th>${todo.publicc}</th>
