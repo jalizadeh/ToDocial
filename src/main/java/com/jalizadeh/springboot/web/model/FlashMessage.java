@@ -10,8 +10,8 @@ public class FlashMessage {
     }
 
 
-     // It matches the CSS in Bootstrap.
-     // https://getbootstrap.com/docs/4.4/components/alerts/}
+    // It matches the CSS in Bootstrap.
+    // https://getbootstrap.com/docs/4.4/components/alerts/}
     public static enum Status {
     	primary,
     	secondary,

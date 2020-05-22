@@ -2,6 +2,7 @@ package com.jalizadeh.springboot.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,8 +58,7 @@ public class TodoController {
 	@InitBinder
 	protected void InitBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		binder.registerCustomEditor(Date.class, 
-				new CustomDateEditor(dateFormat, false));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
 	}
 	
 
@@ -83,19 +83,22 @@ public class TodoController {
 			return "redirect:/error";
 		}
 
+		//if the user is anonymous
 		if (utilites.isUserAnonymous()) {
 			model.put("user", targetUser); 
 			model.put("todos", todoRepository.findAllByUserIdAndPubliccTrue(targetUser.getId()));
-			String pageTitle = targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + 
-					targetUser.getUsername() + ")";
+			String pageTitle = targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")";
 			model.put("PageTitle", pageTitle);
 			return "public-page";
 		}
 		
+		
+		User loggedinUser  =  userRepository.findByUsername(currentUser.getUsername());
+
 		//the user is logged in and is checking another profile
+		//but first check if current user is following the target or not
 		if(!currentUser.getUsername().equals(username)) {
-			
-			List<String> listOfFollowings = currentUser.getFollowings().stream()
+			List<String> listOfFollowings = loggedinUser.getFollowings().stream()
 						.map(u -> u.getUsername())
 						.collect(Collectors.toList());
 			
@@ -108,10 +111,10 @@ public class TodoController {
 				}
 			}
 			
+			
 			model.put("user", targetUser); 
 			model.put("todos", todoRepository.findAllByUserIdAndPubliccTrue(targetUser.getId()));
-			String pageTitle = targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + 
-					targetUser.getUsername() + ")";
+			String pageTitle = targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")";
 			model.put("PageTitle", pageTitle);
 			return "public-page";
 		}
@@ -161,7 +164,7 @@ public class TodoController {
 	public String ResumeTodo(ModelMap model, @RequestParam Long id) {
 		Todo todo = todoRepository.getOne(id);
 		todo.setCanceled(false);
-		todo.setCancel_date(new Date());
+		//todo.setCancel_date(new Date());
 		todoRepository.save(todo);
 		return "redirect:/@" + todo.getUser().getUsername();
 	}
@@ -201,7 +204,7 @@ public class TodoController {
 		
 		User user = userService.GetAuthenticatedUser();
     	todo.setUser(user);
-    	todo.setCreation_date(new Date());
+    	//todo.setCreation_date(new Date());
 		todoRepository.save(todo);
 		
 		redirectAttributes.addFlashAttribute("flash", 
@@ -237,7 +240,7 @@ public class TodoController {
 		
 		todo.setUser(user);
 		todo.setLike(ref.getLike());
-		todo.setCreation_date(ref.getCreation_date());
+		//todo.setCreation_date(ref.getCreation_date());
 		todo.setLogs(ref.getLogs());
 		todoRepository.save(todo);
 		
@@ -382,11 +385,12 @@ public class TodoController {
 
 	private List<String> allType() {
 		List<String> allType = new ArrayList<>();
+		allType.add("Book");
 		allType.add("Fun");
-		allType.add("Learning");
 		allType.add("Improvement");
 		allType.add("Job");
-		allType.add("Book");
+		allType.add("Learning");
+		allType.add("Life");
 		return allType;
 	}
 }

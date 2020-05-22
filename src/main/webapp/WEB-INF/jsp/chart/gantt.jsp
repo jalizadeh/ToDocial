@@ -8,17 +8,14 @@
 	</style>
 
 
-	<figure class="highcharts-figure">
-		<div id="container"></div>
-		<p class="highcharts-description">All your Todos over the time</p>
-	</figure>
+	<div id="container-chart"></div>
 
 
 
 	<script type="text/javascript">
 		//source: https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/gantt/demo/with-navigation
 		
-		Highcharts.ganttChart('container', {
+		Highcharts.ganttChart('container-chart', {
 
 	    title: {
 	        text: 'Gantt Chart with Navigation'

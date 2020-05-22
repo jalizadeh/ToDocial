@@ -2,7 +2,6 @@ package com.jalizadeh.springboot.web.model;
 
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Role {
@@ -23,7 +22,7 @@ public class Role {
 	@Column(nullable=false)
 	private String name;
 	
-	@ManyToMany(fetch= FetchType.EAGER)
+	@OneToMany(fetch= FetchType.EAGER)
 	@JoinTable(name="roles_privileges", 
 		joinColumns = @JoinColumn(name="role_id", referencedColumnName="id"),
 		inverseJoinColumns = @JoinColumn(name="privilege_id", referencedColumnName="id"))

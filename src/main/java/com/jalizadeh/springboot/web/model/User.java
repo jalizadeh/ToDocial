@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -83,13 +84,13 @@ public class User implements UserDetails{
 			inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id"))
 	private Collection<Role> roles;
 	
-	@ManyToMany(cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created 
+	@OneToMany(cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created 
 	@JoinTable(name="users_follows",
 			joinColumns = @JoinColumn(name="followed"),
 			inverseJoinColumns = @JoinColumn(name="follower", referencedColumnName="id"))
 	private Collection<User> followers;
 	
-	@ManyToMany(cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created
+	@OneToMany(cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created
 	@JoinTable(name="users_follows",
 			joinColumns = @JoinColumn(name="follower"),
 			inverseJoinColumns = @JoinColumn(name="followed", referencedColumnName="id"))

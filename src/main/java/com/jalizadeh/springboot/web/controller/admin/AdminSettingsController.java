@@ -46,7 +46,7 @@ public class AdminSettingsController {
 	private PrivilegeRepository privilegeRepository;
 	
 	@Autowired
-	AppLocaleResolver alr;
+	private AppLocaleResolver appLocaleResolver;
 	
 	
 	@GetMapping("/admin/settings")
@@ -71,7 +71,7 @@ public class AdminSettingsController {
 			return "admin/settings-general";
 		}
 		
-		alr.setLocale(request, response, stringToLocale(sg.getLanguage()));
+		appLocaleResolver.setLocale(request, response, stringToLocale(sg.getLanguage()));
 		updateSettings(sg);
 		redirectAttributes.addFlashAttribute("flash", 
 				new FlashMessage("Settings are saved successfully",  FlashMessage.Status.success));
@@ -87,25 +87,47 @@ public class AdminSettingsController {
 		model.put("settings", settings);
 		model.put("PageTitle", "Add new role");
 		
-		List<Privilege> allPrivileges = privilegeRepository.findAll();
+		//List<Privilege> allPrivileges = privilegeRepository.findAll();
 		Role role = new Role();
-		role.setPrivileges(allPrivileges);
+		//role.setPrivileges(allPrivileges);
 		model.put("role", role);
 		return "admin/role";
 	}
 	
-	@GetMapping("/admin/settings/modify-role")
-	public String showSelectedRole(ModelMap model, @RequestParam String name) {
-		model.put("settings", settings);
-		model.put("PageTitle", "Modify role");		
-		model.put("role", roleReporsitory.findByName(name));
-		return "admin/role";
+	@PostMapping("/admin/settings/add-role")
+	public String addNewRole(@Valid Role role, ModelMap model) {		
+		role.setName("ROLE_"+role.getName().toUpperCase());
+		//privilege_read is added by default
+		role.getPrivileges().add(privilegeRepository.getOne(1L));
+		roleReporsitory.save(role);
+		return "redirect:/admin/settings";
 	}
 	
-	@PostMapping("/admin/settings/role")
-	public String addNewRole(@Valid Role role, ModelMap model) {
-		role.setName("ROLE_"+role.getName().toUpperCase());
-		roleReporsitory.save(role);
+	@GetMapping("/admin/settings/modify-role")
+	public String showSelectedRole(ModelMap model, @RequestParam String role_name) {
+		model.put("settings", settings);
+		model.put("PageTitle", "Modify role");		
+		model.put("role", roleReporsitory.findByName(role_name));
+		model.put("allPrivileges", privilegeRepository.findAll());
+		return "admin/role-modify";
+	}
+	
+	@PostMapping("/admin/settings/modify-role")
+	public String modifyRole(@Valid Role role, ModelMap model) {		
+		Role target = roleReporsitory.findByName(role.getName());
+
+		//privilege_read is added by default
+		role.getPrivileges().add(privilegeRepository.getOne(1L));
+		target.setPrivileges(role.getPrivileges());
+		roleReporsitory.save(target);
+		return "redirect:/admin/settings";
+	}
+	
+	
+	@GetMapping("/admin/settings/delete-role")
+	public String DeleteRole(ModelMap model, @RequestParam String role_name) {
+		Role role = roleReporsitory.findByName(role_name);
+		roleReporsitory.delete(role);
 		return "redirect:/admin/settings";
 	}
 	

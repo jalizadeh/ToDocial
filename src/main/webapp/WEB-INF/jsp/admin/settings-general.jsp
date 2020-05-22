@@ -181,7 +181,7 @@
 
 <script type="text/javascript">
 	function modifyRole() {
-		window.location = "/admin/settings/modify-role?name="
+		window.location = "/admin/settings/modify-role?role_name="
 				+ document.getElementById('roles').value;
 	}
 </script>

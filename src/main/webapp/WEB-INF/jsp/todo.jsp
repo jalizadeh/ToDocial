@@ -33,26 +33,44 @@
 						<form:errors path="reason" cssClass="text-warning" />
 					</fieldset>
 
+					<div class="row">
+						<div class="col">
+							<fieldset class="form-group">
+								<label for="ttype">Type</label>
+								<form:select class="form-control" path="ttype" items="${allType}"
+									id="ttype" />
+							</fieldset>
+						</div>
+						
+						<div class="col">
+							<fieldset class="form-group">
+								<label for="priority">Priority</label>
+								<form:select class="form-control" path="priority"
+									items="${allPriority}" id="priority" />
+							</fieldset>						
+						</div>
+					</div>
 
-					<fieldset class="form-group">
-						<label for="ttype">Type</label>
-						<form:select class="form-control" path="ttype" items="${allType}"
-							id="ttype" />
-					</fieldset>
 
-
-					<fieldset class="form-group">
-						<label for="priority">Priority</label>
-						<form:select class="form-control" path="priority"
-							items="${allPriority}" id="priority" />
-					</fieldset>
-
-					<fieldset class="form-group">
-						<form:label path="target_date">Target Date</form:label>
-						<form:input path="target_date" type="text"
-							class="form-control date-picker" required="required" />
-						<form:errors path="target_date" cssClass="text-warning" />
-					</fieldset>
+					<div class="row">
+						<div class="col">
+							<fieldset class="form-group">
+								<form:label path="creation_date">Start Date</form:label>
+								<form:input path="creation_date" type="text"
+									class="form-control date-picker" required="required" />
+								<form:errors path="creation_date" cssClass="text-warning" />
+							</fieldset>
+						</div>
+						
+						<div class="col">
+							<fieldset class="form-group">
+								<form:label path="target_date">Target Date</form:label>
+								<form:input path="target_date" type="text"
+									class="form-control date-picker" required="required" />
+								<form:errors path="target_date" cssClass="text-warning" />
+							</fieldset>
+						</div>
+					</div>
 
 
 					<fieldset class="form-group">

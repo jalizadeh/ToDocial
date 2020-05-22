@@ -19,7 +19,7 @@ import com.jalizadeh.springboot.web.model.Todo;
 import com.jalizadeh.springboot.web.repository.TodoRepository;
 
 @Controller
-public class GraphController {
+public class ChartController {
 	
 	private static DecimalFormat df2 = new DecimalFormat("#.##");
 	
@@ -27,8 +27,8 @@ public class GraphController {
 	private TodoRepository todoRepository;
 
 	
-	@GetMapping("/chart")
-	public String chart(Model model) {
+	@GetMapping("/chart-timeline-todo")
+	public String chartTimelineTodo(Model model) {
 		List<TodoChartModel> list = new ArrayList<TodoChartModel>();
 		
 		for (Todo todo : todoRepository.getAllNotCompleted()) {
@@ -47,7 +47,31 @@ public class GraphController {
 				
 		model.addAttribute("list",list);
 		
-		return "chart/over-time";
+		return "chart/chart-timeline-todo";
+	}
+	
+	
+	@GetMapping("/chart-timeline-completed")
+	public String chartTimeLineCompleted(Model model) {
+		List<TodoChartModel> list = new ArrayList<TodoChartModel>();
+		
+		for (Todo todo : todoRepository.getAllCompleted()) {
+			int d1 = getDateDiff(new Date(),todo.getCreation_date());
+			int d2 = getDateDiff(todo.getTarget_date(),todo.getCreation_date());
+			float dif = (float)d1 / (float)d2;
+			String progress = "";
+			if(dif > 1)
+				progress = df2.format(1);
+			else
+				progress = df2.format(dif);
+		    
+			list.add(new TodoChartModel(todo.getName(), 
+					todo.getCreation_date(), todo.getTarget_date(), progress));
+		}
+				
+		model.addAttribute("list",list);
+		
+		return "chart/chart-timeline-completed";
 	}
 	
 	

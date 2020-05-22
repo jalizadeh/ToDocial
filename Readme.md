@@ -1,12 +1,31 @@
 # ToDocial: Manage your todos and share with friends
 A ToDo manager with Spring Boot. I am trying to make it as much as possible complete, as an industry product, at the same time, a project to learn stuff.
 
+
+### Images
+
+Public page of a registered user
+![](assets/public-page.png)
+
+List of all todos, with full access
+![](assets/my-todos.png)
+
+Todos over time for a better visualization
+![](assets/chart-todo.png)
+
+Settings of the system
+![](assets/settings.png)
+
+
 ### Inspirations:
+
 This project is a combination of the features in Github and Wordpress that I could merge into one single project.
 - Todo management & sociality (Github)
 - Content management (Wordpress)
 
+
 ### Features:
+
 - Login / Sign up (multi-user)
 - Todo Management
 - User Profile
@@ -15,6 +34,7 @@ This project is a combination of the features in Github and Wordpress that I cou
 
 
 ### WIP:
+
 - [x] Initialize Spring project
 - [x] Database
 	- Currently data is stored in `todo.db` file in root folder
@@ -127,9 +147,9 @@ This project is a combination of the features in Github and Wordpress that I cou
 		- [ ] Anyone can register?
 			- [x] Shows/Hides the links in pages
 			- [ ] Changes security policy for accessing `signup` page
-		- [ ] Default role for registered user
+		- [x] Default role for registered user
 			- [x] Add new role
-			- [ ] Modify role
+			- [x] Modify role
 		- [x] Date Structure
 		- [x] Time structure
 		- [x] Language

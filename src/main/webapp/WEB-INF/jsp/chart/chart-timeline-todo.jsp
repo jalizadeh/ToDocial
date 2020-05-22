@@ -32,10 +32,9 @@
 	</style>
 
 
-	<figure class="highcharts-figure">
-		<div id="container"></div>
-		<p class="highcharts-description">All your Todos over the time</p>
-	</figure>
+
+	<div id="container-chart"></div>
+
 
 
 	<jsp:useBean id="today" class="java.util.Date" />
@@ -45,7 +44,7 @@
 	<script type="text/javascript">
 		//source: https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/css/x-range/
 		
-		Highcharts.chart('container', {
+		Highcharts.chart('container-chart', {
 			chart : {
 				type : 'xrange',
 				styledMode : true

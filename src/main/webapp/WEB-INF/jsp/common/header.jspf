@@ -69,13 +69,18 @@
 						href="/@<sec:authentication property='principal.username'/>">
 							<spring:message code="header.mytodos"/> <i class="fas fa-list-alt"></i>
 					</a></li>
+					
+					<li class="nav-item active">
+						<a class="nav-link" href="/diary"><spring:message code="header.diary"/></a>
+					</li>
 
 					<li class="nav-item dropdown ">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
 						role="button" data-toggle="dropdown" aria-haspopup="true"
 						aria-expanded="false"> <spring:message code="header.charts"/> </a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="/chart">Timeline</a>
+							<a class="dropdown-item" href="/chart-timeline-completed">Completed Timeline</a>
+							<a class="dropdown-item" href="/chart-timeline-todo">Not-completed Timeline</a>
 							<a class="dropdown-item" href="/gantt">Gantt</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="#">more</a>
