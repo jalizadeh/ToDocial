@@ -67,10 +67,10 @@
 
 					<li class="nav-item active"><a class="nav-link"
 						href="/@<sec:authentication property='principal.username'/>">
-							<spring:message code="header.mytodos"/> <i class="fas fa-list-alt"></i>
+							<spring:message code="header.mytodos"/>
 					</a></li>
 					
-					<li class="nav-item active">
+					<li class="nav-item">
 						<a class="nav-link" href="/diary"><spring:message code="header.diary"/></a>
 					</li>
 
@@ -158,4 +158,4 @@
 	</nav>
 
 
-	<div class="container" style="margin-top: 90px; margin-bottom: 30px;">
+	<div class="container px-0" style="margin-top: 90px; margin-bottom: 30px;">

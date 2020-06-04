@@ -1,17 +1,40 @@
 
 	</div> <!-- container -->
 	
-	<footer id="sticky-footer" style="background-color: #e3f2fd; z-index:2000">
+	<footer id="sticky-footer" class="py-1" 
+		style="background-color: #e3f2fd; z-index:2000">
 		<div class="container  text-center">
 			<div class="row">
 				<div class="col-3">${settings.footerCopyright}</div>
 				<div class="col-3"></div>
 				<div class="col-3"></div>
 				<div class="col-3">
-					<a href="?lang=en_US">English</a> / <a href="?lang=it_IT">Italiano</a>
+					<a id="langEN" href="#">
+					English <img src="/resources/img/flag-united-states_1f1fa-1f1f8.png" width="20px">
+					</a> / <a id="langIT" href="#">
+					Italiano <img src="/resources/img/flag-italy_1f1ee-1f1f9.png" width="20px">
+					</a>
 				</div>
 			</div>
 		</div>
 	</footer>
+	
+	<script type="text/javascript">
+		var url = window.location.href;
+		
+		//at first, purify the url, otherwise it is added at the end
+		if(url.indexOf('lang=') > -1){
+			url = url.slice(0, -11); 
+		}
+		
+		//there is already ? in url
+		if(url.indexOf('?') > -1){
+			document.getElementById("langEN").href= url + "&lang=en_US";
+			document.getElementById("langIT").href= url + "&lang=it_IT";
+		} else {
+			document.getElementById("langEN").href= url + "?lang=en_US";
+			document.getElementById("langIT").href= url + "?lang=it_IT";		
+		}
+	</script>
 </body>
 </html>

@@ -19,13 +19,13 @@
 
 				<div class="card">
 					<div class="card-header" id="headingActive">
-						<div class="row">
-							<div class="col">
+						<div class="row align-items-center">
+							<div class="col px-0">
 								<button class="btn btn-link" type="button" data-toggle="collapse"
 								data-target="#collapseActive" aria-expanded="true"
 								aria-controls="collapseActive"><spring:message code="mytodos.jumpto" /></button>
 							</div>
-							<div class="col-6">
+							<div class="col-auto">
 								<span class="badge badge-primary badge-pill">${todosNotCompleted.size()}</span>
 								<a href="/add-todo" class="badge badge-success">
 									<i class="fas fa-plus"></i> <spring:message code="mytodos.new" />
@@ -55,13 +55,13 @@
 
 				<div class="card">
 					<div class="card-header" id="headingCompleted">
-						<div class="row">
-							<div class="col">
+						<div class="row align-items-center">
+							<div class="col px-0">
 								<button class="btn btn-link" type="button" data-toggle="collapse"
 									data-target="#collapseCompleted" aria-expanded="true"
 									aria-controls="collapseCompleted"><spring:message code="mytodos.completed" /></button>
 							</div>
-							<div class="col-3">
+							<div class="col-auto">
 								<span class="badge badge-primary badge-pill">${todosCompleted.size()}</span>
 							</div>
 						</div>
@@ -89,13 +89,13 @@
 				
 				<div class="card">
 					<div class="card-header" id="headingCanceled">
-						<div class="row">
-							<div class="col">
+						<div class="row align-items-center">
+							<div class="col px-0">
 								<button class="btn btn-link" type="button" data-toggle="collapse"
 									data-target="#collapseCanceled" aria-expanded="false"
 									aria-controls="collapseCanceled"><spring:message code="mytodos.canceled" /></button>
 							</div>
-							<div class="col-3">
+							<div class="col-auto">
 								<span class="badge badge-primary badge-pill">${todosCanceled.size()}</span>
 							</div>
 						</div>
@@ -127,7 +127,7 @@
 	<!-- todosNotCompleted -->
 	<!-- ///// -->
 	<jsp:useBean id="today" class="java.util.Date" />
-	<div class="col-6 mx-2">
+	<div class="col-6">
 		<c:forEach items="${todosNotCompleted}" var="todo">
 			<div class="card mb-3">
 				<div class="accordion" id="accordionExample">
@@ -280,14 +280,12 @@
 		</c:forEach>
 	</div>
 
-	<div class="col mx-2">
-		<div class="row">
-			<div class="col-7">
-				<p>
-					<spring:message code="mytodos.friends" />
-				</p>
-			</div>
+	<div class="col">
+		<div class="row align-items-center">
 			<div class="col">
+				<strong><spring:message code="mytodos.friends" /></strong>
+			</div>
+			<div class="col-auto">
 				<a class="badge badge-pill badge-primary text-white">${user.followings.size()}</a>
 				<a href="#" class="badge badge-success"> <spring:message
 						code="mytodos.explore" /></a>

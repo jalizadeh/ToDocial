@@ -8,23 +8,31 @@
 	<div class="col-8">
 		<div class="card">
 			<div class="card-body">
-				<h3>${todo.name}</h3>
+				<div class="row">
+					<div class="col">
+						<h3>${todo.name}</h3>
+					</div>
+
+					<div class="col-auto">
+						<i class="fas fa-th" title="Todo type"></i> ${todo.ttype}
+						<br />
+						<i class="fas fa-sort-numeric-up" title="Todo priority"></i> ${todo.priority}
+					</div>
+				</div>
+
+
 				<hr />
 
-				<p class="font-weight-bold">Description</p>
-				<p class="font-weight-normal">${todo.description}</p>
+				<p class="font-weight-bold"><spring:message code="completedTodo.description" /></p>
+				<pre class="font-weight-normal">${todo.description}</pre>
 
-				<p class="font-weight-bold">The reasons why this todo was/should
-					be added</p>
+				<p class="font-weight-bold"><spring:message code="completedTodo.why" /></p>
 				<p class="font-weight-normal">${todo.reason}</p>
 
-				<p class="font-weight-bold">Type</p>
-				<p class="font-weight-normal">${todo.ttype}</p>
 
-				<p class="font-weight-bold">Priority</p>
-				<p class="font-weight-normal">${todo.priority}</p>
 
-				<p class="font-weight-bold">Closing Note</p>
+
+				<p class="font-weight-bold"><spring:message code="completedTodo.closingNote" /></p>
 				<p class="font-weight-normal">${todo.completion_note}</p>
 
 			</div>
@@ -37,10 +45,10 @@
 				<!-- likes -->
 				<div class="col">
 					<div class="card  bg-info text-white">
-						<div class="card-body">
-							<p class="h2">
+						<div class="card-body text-center">
+							<h2>
 								<i class="fas fa-heart"></i> ${todo.like}
-							</p>
+							</h2>
 						</div>
 					</div>
 				</div>
