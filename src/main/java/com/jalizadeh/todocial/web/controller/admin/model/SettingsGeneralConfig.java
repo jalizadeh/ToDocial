@@ -1,10 +1,10 @@
 package com.jalizadeh.todocial.web.controller.admin.model;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.annotation.Scope;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,40 +18,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Configuration
+@Scope(scopeName = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @PropertySource("classpath:settings-default.properties")
 public class SettingsGeneralConfig {
 	
-	@Value("${site.name:ToDocial}")
+	@Value("${site.title:ToDocial}")
 	private String siteName;
 	
-	@Value("${footer.copyright:© 2020 ToDocial}")
+	@Value("${site.footer.copyright:© 2020 ToDocial}")
 	private String footerCopyright;
 	
 	@Value("${site.description:}")
 	private String siteDescription;
 	
-	@Value("${anyone.can.register:true}") 
+	@Value("${system.anyoneCanRegister:true}") 
 	private boolean anyoneCanRegister;
 	
-	@Value("${default.role:ROLE_USER}") 
+	@Value("${system.role.default:ROLE_USER}") 
 	private String defaultRole;
 	
-	@Value("${server.local.time:+0 UTC}") 
+	@Value("${system.localTime:+0 UTC}") 
 	private String serverLocalTime;
 	
-	@Value("${date.structure:long}") 
+	@Value("${system.date:long}") 
 	private String dateStructure;
 	
-	@Value("${time.structure:short}") 
+	@Value("${system.time:short}") 
 	private String timeStructure;
 	
-	@Value("${language:en_US}") 
+	@Value("${system.language:en_US}") 
 	private String language;
 	
-
-	@Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-
 }

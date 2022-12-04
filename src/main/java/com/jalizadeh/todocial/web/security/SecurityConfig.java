@@ -81,6 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 						"/signup",
 						"/forgot-password",
 						"/reset-password",
+						"/api/v1/**",
 						"/error",
 						"/",
 						"/@*"

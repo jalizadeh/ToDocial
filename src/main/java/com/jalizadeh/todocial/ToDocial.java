@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.web;
+package com.jalizadeh.todocial;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

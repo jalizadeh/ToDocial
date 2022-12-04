@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommonServices {
 
-	
 	public boolean isUserAnonymous() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication instanceof AnonymousAuthenticationToken)
@@ -16,4 +15,5 @@ public class CommonServices {
 		
 		return false;
 	}
+	
 }
