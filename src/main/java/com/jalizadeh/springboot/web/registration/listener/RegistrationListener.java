@@ -14,8 +14,7 @@ import com.jalizadeh.springboot.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.springboot.web.service.TokenService;
 
 @Component
-public class RegistrationListener implements 
-		ApplicationListener<OnRegistrationCompleteEvent>{
+public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent>{
 
 	@Autowired
 	private TokenService tokenService;

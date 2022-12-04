@@ -64,4 +64,5 @@ public class ExceptionController implements ErrorController {
     	mv.setViewName("error");
     	return mv;
     }
+    
 }

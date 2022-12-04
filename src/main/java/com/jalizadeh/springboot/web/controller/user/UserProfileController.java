@@ -19,4 +19,5 @@ public class UserProfileController {
 		model.put("loggedinUser", userService.GetAuthenticatedUser());
 		return "user/profile";
 	}
+	
 }

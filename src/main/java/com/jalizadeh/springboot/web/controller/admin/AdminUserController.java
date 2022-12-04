@@ -34,7 +34,6 @@ import com.jalizadeh.springboot.web.validator.UserValidator;
 @Controller
 public class AdminUserController {
 
-	
 	@Autowired
 	UserService userService;
 	
@@ -147,12 +146,6 @@ public class AdminUserController {
 	}
 	
 
-	
-	
-	
-	
-	
-	//==========Methods=============================
 	
 	private Map<String, String> roleValues() {
 		Map<String,String> roleValues = new LinkedHashMap<String,String>();

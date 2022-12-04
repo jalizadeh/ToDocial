@@ -1,10 +1,8 @@
 package com.jalizadeh.springboot.web.controller.admin;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -27,11 +25,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jalizadeh.springboot.web.controller.admin.model.SettingsGeneral;
 import com.jalizadeh.springboot.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.springboot.web.model.FlashMessage;
-import com.jalizadeh.springboot.web.model.Privilege;
 import com.jalizadeh.springboot.web.model.Role;
 import com.jalizadeh.springboot.web.repository.PrivilegeRepository;
 import com.jalizadeh.springboot.web.repository.RoleRepository;
-import com.jalizadeh.springboot.web.security.AppLocaleResolver;
+import com.jalizadeh.springboot.web.system.AppLocaleResolver;
 
 @Controller
 public class AdminSettingsController {

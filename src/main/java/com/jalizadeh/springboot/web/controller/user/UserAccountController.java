@@ -19,4 +19,5 @@ public class UserAccountController {
 		model.put("loggedinUser", userService.GetAuthenticatedUser());
 		return "user/account";
 	}
+	
 }

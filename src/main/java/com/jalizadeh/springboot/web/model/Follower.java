@@ -2,20 +2,10 @@ package com.jalizadeh.springboot.web.model;
 
 import java.util.Collection;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import com.jalizadeh.springboot.web.service.UserService;
-import com.jalizadeh.springboot.web.validator.UserValidator;
-import com.jalizadeh.springboot.web.validator.ValidEmail;
-import com.jalizadeh.springboot.web.validator.ValidPassword;
 
 /**
  * This entity represents users that a user is "following" or is "followed"  by.

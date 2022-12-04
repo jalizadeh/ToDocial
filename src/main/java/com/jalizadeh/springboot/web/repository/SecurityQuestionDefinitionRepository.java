@@ -7,5 +7,4 @@ import com.jalizadeh.springboot.web.model.SecurityQuestionDefinition;
 public interface SecurityQuestionDefinitionRepository extends 
 		JpaRepository<SecurityQuestionDefinition, Long> {
 
-	
 }

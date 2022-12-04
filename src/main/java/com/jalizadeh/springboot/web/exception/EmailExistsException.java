@@ -1,7 +1,8 @@
 package com.jalizadeh.springboot.web.exception;
 
-@SuppressWarnings("serial")
 public class EmailExistsException extends Throwable {
+
+	private static final long serialVersionUID = 1L;
 
 	public EmailExistsException() {
 		super();
@@ -23,7 +24,5 @@ public class EmailExistsException extends Throwable {
 	public EmailExistsException(Throwable cause) {
 		super(cause);
 	}
-    
-    
 
 }

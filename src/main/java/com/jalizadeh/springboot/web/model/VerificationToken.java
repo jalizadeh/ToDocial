@@ -12,6 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Data
 @Entity
 public class VerificationToken {
 	
@@ -37,10 +42,6 @@ public class VerificationToken {
 		return new Date(cal.getTime().getTime());
 	}
 
-	public VerificationToken() {
-		super();
-	}
-
 	public VerificationToken(String token, User user, Date expiryDate) {
 		super();
 		this.token = token;
@@ -49,38 +50,6 @@ public class VerificationToken {
 		//add 24 hours to the expiry date
 		long sum = expiryDate.getTime() + EXPIRATION; 
 		this.expiryDate = new Date(sum);
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public Date getExpiryDate() {
-		return expiryDate;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public void setExpiryDate(Date expiryDate) {
-		this.expiryDate = expiryDate;
 	}
 
 	@Override

@@ -10,4 +10,5 @@ public class DiaryController {
 	public String ShowDiary() {
 		return "diary/diary";
 	}
+	
 }

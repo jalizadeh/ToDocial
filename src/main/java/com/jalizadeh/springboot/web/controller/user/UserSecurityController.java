@@ -19,4 +19,5 @@ public class UserSecurityController {
 		model.put("loggedinUser", userService.GetAuthenticatedUser());
 		return "user/security";
 	}
+	
 }

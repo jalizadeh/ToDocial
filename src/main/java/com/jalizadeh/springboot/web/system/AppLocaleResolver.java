@@ -1,4 +1,4 @@
-package com.jalizadeh.springboot.web.security;
+package com.jalizadeh.springboot.web.system;
 
 import java.util.Locale;
 

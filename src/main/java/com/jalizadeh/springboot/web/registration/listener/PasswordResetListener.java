@@ -1,7 +1,5 @@
 package com.jalizadeh.springboot.web.registration.listener;
 
-import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
@@ -12,8 +10,7 @@ import org.springframework.stereotype.Component;
 import com.jalizadeh.springboot.web.registration.OnPasswordResetEvent;
 
 @Component
-public class PasswordResetListener implements 
-		ApplicationListener<OnPasswordResetEvent>{
+public class PasswordResetListener implements ApplicationListener<OnPasswordResetEvent>{
 	
 	@Autowired
     private MessageSource messages;

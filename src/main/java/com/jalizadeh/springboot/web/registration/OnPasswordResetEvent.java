@@ -21,18 +21,13 @@ public class OnPasswordResetEvent extends ApplicationEvent{
 	}
 
 	
-
 	public PasswordResetToken getPrt() {
 		return prt;
 	}
 
-
-
 	public void setPrt(PasswordResetToken prt) {
 		this.prt = prt;
 	}
-
-
 
 	public String getAppUrl() {
 		return appUrl;

@@ -40,4 +40,5 @@ public class FollowUnfollowController {
 		
 		return "redirect:/@" + user.getUsername();
 	}
+	
 }

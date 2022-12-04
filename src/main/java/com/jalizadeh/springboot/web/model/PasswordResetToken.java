@@ -42,7 +42,6 @@ public class PasswordResetToken {
 	}
 
 	public PasswordResetToken(String token, User user, Date expiryDate) {
-		super();
 		this.token = token;
 		this.user = user;
 		
@@ -88,7 +87,5 @@ public class PasswordResetToken {
 		return "PasswordResetToken [id=" + id + ", token=" + token + ", user=" + user + ", expiryDate=" + expiryDate
 				+ "]";
 	}
-
-	
 	
 }

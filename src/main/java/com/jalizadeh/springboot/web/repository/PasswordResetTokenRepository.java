@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jalizadeh.springboot.web.model.PasswordResetToken;
 import com.jalizadeh.springboot.web.model.User;
-import com.jalizadeh.springboot.web.model.VerificationToken;
 
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
 	

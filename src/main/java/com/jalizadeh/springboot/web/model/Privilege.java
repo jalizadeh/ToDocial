@@ -1,11 +1,10 @@
 package com.jalizadeh.springboot.web.model;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import javax.persistence.Entity;
-import javax.persistence.GenerationType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
