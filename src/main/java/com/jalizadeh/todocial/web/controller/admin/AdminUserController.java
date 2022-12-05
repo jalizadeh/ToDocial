@@ -26,9 +26,9 @@ import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.todocial.web.repository.RoleRepository;
 import com.jalizadeh.todocial.web.repository.TodoRepository;
-import com.jalizadeh.todocial.web.repository.UserRepository;
+import com.jalizadeh.todocial.system.repository.UserRepository;
 import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
-import com.jalizadeh.todocial.web.service.UserService;
+import com.jalizadeh.todocial.system.service.UserService;
 import com.jalizadeh.todocial.web.validator.UserValidator;
 
 @Controller

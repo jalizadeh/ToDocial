@@ -22,7 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.jalizadeh.todocial.web.service.UserService;
+import com.jalizadeh.todocial.system.service.UserService;
 import com.jalizadeh.todocial.web.validator.PasswordMatches;
 import com.jalizadeh.todocial.web.validator.UserValidator;
 import com.jalizadeh.todocial.web.validator.ValidEmail;

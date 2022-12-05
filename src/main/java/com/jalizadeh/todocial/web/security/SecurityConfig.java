@@ -33,7 +33,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import com.google.common.collect.Lists;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.todocial.web.model.FlashMessage;
-import com.jalizadeh.todocial.web.service.UserService;
+import com.jalizadeh.todocial.system.service.UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -47,6 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private DataSource dataSource;
+	
+	@Autowired
+	private BasicAuthEntryPoint basicAuthEntryPoint;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
@@ -70,6 +73,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		
+		//security config for REST APIs
+		http
+			.authorizeRequests().antMatchers("/api/v1/**").authenticated()
+			.and()
+            .httpBasic()
+            .authenticationEntryPoint(basicAuthEntryPoint);
+
+		
+		//security config for Web
 		http
 			.authorizeRequests()
 				.antMatchers(
@@ -81,7 +94,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 						"/signup",
 						"/forgot-password",
 						"/reset-password",
-						"/api/v1/**",
 						"/error",
 						"/",
 						"/@*"
@@ -129,8 +141,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.key("lssApplicationKey") //my own key to be used while hashing
 				//.useSecureCookie(true) //enable cookie only in secured connection = https
 				.rememberMeParameter("remember") //the element's name in login form
-				
-				
 				
 				/*
 				 * Persistence-based

@@ -46,10 +46,10 @@ import com.jalizadeh.todocial.web.registration.OnPasswordResetEvent;
 import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.todocial.web.repository.SecurityQuestionDefinitionRepository;
 import com.jalizadeh.todocial.web.repository.SecurityQuestionRepository;
-import com.jalizadeh.todocial.web.service.CommonServices;
-import com.jalizadeh.todocial.web.service.PasswordResetTokenService;
-import com.jalizadeh.todocial.web.service.TokenService;
-import com.jalizadeh.todocial.web.service.UserService;
+import com.jalizadeh.todocial.system.service.CommonServices;
+import com.jalizadeh.todocial.system.service.PasswordResetTokenService;
+import com.jalizadeh.todocial.system.service.TokenService;
+import com.jalizadeh.todocial.system.service.UserService;
 import com.jalizadeh.todocial.web.service.storage.StorageFileSystemService;
 
 @Controller

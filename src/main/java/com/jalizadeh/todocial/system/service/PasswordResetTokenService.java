@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.web.service;
+package com.jalizadeh.todocial.system.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

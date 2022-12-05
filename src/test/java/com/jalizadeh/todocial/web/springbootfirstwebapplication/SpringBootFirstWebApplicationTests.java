@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.repository.UserRepository;
+import com.jalizadeh.todocial.system.repository.UserRepository;
 
 @SpringBootTest
 class SpringBootFirstWebApplicationTests {

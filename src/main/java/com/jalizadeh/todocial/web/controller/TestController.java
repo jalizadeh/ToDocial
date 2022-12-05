@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.todocial.web.model.Test;
 import com.jalizadeh.todocial.web.repository.TestRepository;
-import com.jalizadeh.todocial.web.service.UserService;
+import com.jalizadeh.todocial.system.service.UserService;
 
 @Controller
 public class TestController {

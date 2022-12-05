@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.web.repository;
+package com.jalizadeh.todocial.system.repository;
 
 import java.util.List;
 
@@ -13,7 +13,6 @@ import com.jalizadeh.todocial.web.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	
 	User findByUsername(String username);
-	
 	User findByEmail(String email);
 
 	@Transactional

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
-import com.jalizadeh.todocial.web.service.TokenService;
+import com.jalizadeh.todocial.system.service.TokenService;
 
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent>{

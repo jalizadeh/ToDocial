@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.repository.UserRepository;
-import com.jalizadeh.todocial.web.service.UserService;
+import com.jalizadeh.todocial.system.repository.UserRepository;
+import com.jalizadeh.todocial.system.service.UserService;
 
 @Controller
 public class FollowUnfollowController {

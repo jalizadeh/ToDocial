@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.web.service;
+package com.jalizadeh.todocial.system.service;
 
 import java.security.Principal;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import com.jalizadeh.todocial.web.exception.EmailExistsException;
 import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.repository.RoleRepository;
-import com.jalizadeh.todocial.web.repository.UserRepository;
+import com.jalizadeh.todocial.system.repository.UserRepository;
 
 @Service
 //@Transactional

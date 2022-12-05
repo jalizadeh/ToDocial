@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.web.service;
+package com.jalizadeh.todocial.system.service;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,7 +11,7 @@ import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.model.VerificationToken;
 import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
 import com.jalizadeh.todocial.web.repository.PasswordResetTokenRepository;
-import com.jalizadeh.todocial.web.repository.UserRepository;
+import com.jalizadeh.todocial.system.repository.UserRepository;
 
 @Service
 public class TokenService {
