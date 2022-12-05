@@ -9,6 +9,7 @@ import org.springframework.boot.actuate.trace.http.HttpTrace.Principal;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-public class UserController {
+public class ApiUser {
 	
 	@Autowired
 	private UserService userService;
@@ -50,13 +51,14 @@ public class UserController {
 	private TokenService tokenService;
 
 	@GetMapping("/api/v1/user/me")
-	public Principal getMe(Principal user) {
-		return user;
+	public UserDTO getMe() {
+		User currentUser = userService.GetAuthenticatedUser();
+		return mapUserToDTO(currentUser);
 	}
 
 	@GetMapping("/api/v1/user")
 	public ResponseEntity<List<UserDTO>> getUsers() {
-		List<User> users = userRepository.findAll();
+		List<User> users = userRepository.findByEnabled(true);
 		return new ResponseEntity<List<UserDTO>>(users.stream()
 				.map(i -> mapUserToDTO(i)).collect(Collectors.toList())
 				, HttpStatus.OK);
@@ -65,6 +67,7 @@ public class UserController {
 	@GetMapping("/api/v1/user/{username}")
 	public UserDTO getUserByUsername(@PathVariable("username") String username) {
 		User user = userRepository.findByUsername(username);
+		//User currentUser = userService.GetAuthenticatedUser();
 		return mapUserToDTO(user);
 	}
 	
@@ -111,6 +114,14 @@ public class UserController {
 	}
 
 	
+	@DeleteMapping("/api/v1/user/{username}")
+	public ResponseEntity<String> deleteUser(@PathVariable("username") String username){
+		User user = userRepository.findByUsername(username);
+		user.setEnabled(false);
+		User updated = userRepository.save(user);
+		return new ResponseEntity<String>(updated.isEnabled() + "", HttpStatus.OK);
+	}
+	
 	
 	@AllArgsConstructor
 	@Data
@@ -141,7 +152,6 @@ public class UserController {
 		private String username;
 		private String email;
 		private String password;
-		private boolean enabled;
 	}
 	
 	private UserDTO mapUserToDTO(User u) {

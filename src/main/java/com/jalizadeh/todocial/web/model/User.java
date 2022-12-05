@@ -84,13 +84,15 @@ public class User implements UserDetails{
 			inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id"))
 	private Collection<Role> roles;
 	
-	@OneToMany(cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created 
+	@OneToMany(fetch=FetchType.EAGER, //by default: FetchType.LAZY, I don't need to fetch all when object is created
+			cascade=CascadeType.REMOVE)  
 	@JoinTable(name="users_follows",
 			joinColumns = @JoinColumn(name="followed"),
 			inverseJoinColumns = @JoinColumn(name="follower", referencedColumnName="id"))
 	private Collection<User> followers;
 	
-	@OneToMany(cascade=CascadeType.REMOVE) //by default: FetchType.LAZY, I don't need to fetch all when object is created
+	@OneToMany(fetch=FetchType.EAGER, //by default: FetchType.LAZY, I don't need to fetch all when object is created
+			cascade=CascadeType.REMOVE) 
 	@JoinTable(name="users_follows",
 			joinColumns = @JoinColumn(name="follower"),
 			inverseJoinColumns = @JoinColumn(name="followed", referencedColumnName="id"))
