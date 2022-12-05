@@ -198,17 +198,17 @@ This project is a combination of the features in Github and Wordpress that I cou
 
 | Action  | Endpoint |
 | ------------- | ------------- |
-| Retrieve all `User`s  | `GET /users`  |
-| Create a `User`  | `POST /users`  |
-| Retrieve one `User`  | `GET /users/{id}`  |
-| Delete a `User`  | `DELETE /users/{id}`  |
+| Retrieve all `User`s  | `GET /api/v1/user`  |
+| Create a `User`  | `POST /api/v1/user`  |
+| Retrieve one `User`  | `GET /api/v1/user/{username}`  |
+| Delete a `User`  | `DELETE /api/v1/user/{username}`  |
 
 | Action  | Endpoint |
 | ------------- | ------------- |
-| Retrieve all `Todo`s  | `GET /users/{id}/todos`  |
-| Create a `Todo` for `User`  | `POST /users/{id}/todos`  |
-| Retrieve one `Todo`  | `GET /users/{id}/todos/{id}`  |
-| Delete a `Todo`  | `DELETE /users/{id}/todos/{id}`  |
+| Retrieve all `Todo`s  | `GET /api/v1/user/{username}/todos`  |
+| Create a `Todo` for `User`  | `POST /api/v1/user/{username}/todos`  |
+| Retrieve one `Todo`  | `GET /api/v1/user/{username}/todos/{id}`  |
+| Delete a `Todo`  | `DELETE /api/v1/user/{username}/todos/{id}`  |
 
 
 
