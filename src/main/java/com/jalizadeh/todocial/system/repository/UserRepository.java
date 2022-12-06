@@ -13,7 +13,11 @@ import com.jalizadeh.todocial.web.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	
+	@Query("select u from User u where u.id=:#{principal.id}")
+	User findLoggedinUser();
+
 	User findByUsername(String username);
+	
 	User findByEmail(String email);
 	
 	//@Query("select u from User u where u.enabled=true")

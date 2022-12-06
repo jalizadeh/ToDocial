@@ -25,7 +25,7 @@ import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.todocial.web.repository.RoleRepository;
-import com.jalizadeh.todocial.web.repository.TodoRepository;
+import com.jalizadeh.todocial.system.repository.TodoRepository;
 import com.jalizadeh.todocial.system.repository.UserRepository;
 import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
 import com.jalizadeh.todocial.system.service.UserService;

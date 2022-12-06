@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.trace.http.HttpTrace.Principal;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,6 @@ import com.jalizadeh.todocial.web.exception.EmailExistsException;
 import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.model.VerificationToken;
-import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
 
 import lombok.AllArgsConstructor;

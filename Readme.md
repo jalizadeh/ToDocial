@@ -185,23 +185,28 @@ This project is a combination of the features in Github and Wordpress that I cou
 
 
 ## REST API
+The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is `enabled` and credentials are fine, he will receive his own resources.
+
 
 | Action  | Endpoint |
 | ------------- | ------------- |
-| Retrieve all `User`s  | `GET /api/v1/user`  |
+| Get all `User`s  | `GET /api/v1/user`  |
+| Get one `User`  | `GET /api/v1/user/{username}`  |
 | Create a `User`  | `POST /api/v1/user`  |
-| Retrieve one `User`  | `GET /api/v1/user/{username}`  |
-| Delete a `User`  | `DELETE /api/v1/user/{username}`  |
 | Get `User` activation token | `GET /api/v1/user/{username}/activation_token`  |
 | Activate a `User`  | `POST /api/v1/user/{username}/activate?token={{token}}`  |
+| Delete a `User`  | `DELETE /api/v1/user/{username}`  |
 
 
 | Action  | Endpoint |
 | ------------- | ------------- |
-| Retrieve all `Todo`s  | `GET /api/v1/user/{username}/todos`  |
-| Create a `Todo` for `User`  | `POST /api/v1/user/{username}/todos`  |
-| Retrieve one `Todo`  | `GET /api/v1/user/{username}/todos/{id}`  |
-| Delete a `Todo`  | `DELETE /api/v1/user/{username}/todos/{id}`  |
+| Get all `Todo`s  | `GET /api/v1/todo`  |
+| Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
+| Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  |
+| Create a `Todo` for `User` | `POST /api/v1/todo`  |
+| Get one `Todo`  | `GET /api/v1/todo/{id}`  |
+| Cancel a `Todo`  | `DELETE /api/v1/todo/{id}` |
+| Add a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
 
 
 

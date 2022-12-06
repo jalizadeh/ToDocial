@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.jalizadeh.todocial.system.repository.TodoRepository;
 import com.jalizadeh.todocial.web.model.Todo;
-import com.jalizadeh.todocial.web.repository.TodoRepository;
 
 @Controller
 public class ChartController {

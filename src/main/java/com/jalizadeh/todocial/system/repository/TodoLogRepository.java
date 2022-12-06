@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.web.repository;
+package com.jalizadeh.todocial.system.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
