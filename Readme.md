@@ -188,25 +188,22 @@ This project is a combination of the features in Github and Wordpress that I cou
 The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is `enabled` and credentials are fine, he will receive his own resources.
 
 
-| Action  | Endpoint |
-| ------------- | ------------- |
-| Get all `User`s  | `GET /api/v1/user`  |
-| Get one `User`  | `GET /api/v1/user/{username}`  |
-| Create a `User`  | `POST /api/v1/user`  |
-| Get `User` activation token | `GET /api/v1/user/{username}/activation_token`  |
-| Activate a `User`  | `POST /api/v1/user/{username}/activate?token={{token}}`  |
-| Delete a `User`  | `DELETE /api/v1/user/{username}`  |
-
-
-| Action  | Endpoint |
-| ------------- | ------------- |
-| Get all `Todo`s  | `GET /api/v1/todo`  |
-| Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
-| Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  |
-| Create a `Todo` for `User` | `POST /api/v1/todo`  |
-| Get one `Todo`  | `GET /api/v1/todo/{id}`  |
-| Cancel a `Todo`  | `DELETE /api/v1/todo/{id}` |
-| Add a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
+| Action  | Endpoint | Test | 
+| ------------- | ------------- | ------------- |
+| Get all `User`s  | `GET /api/v1/user`  | [ ] |
+| Get one `User`  | `GET /api/v1/user/{username}`  | [ ] |
+| Create a `User`  | `POST /api/v1/user`  | [x] |
+| Get `User` activation token | `GET /api/v1/user/{username}/activation_token`  | [x] |
+| Activate a `User`  | `POST /api/v1/user/{username}/activate?token={{token}}`  | [x] |
+| Delete (diactivate) a `User`  | `DELETE /api/v1/user/{username}`  | [ ] |
+| Delete from DB a `User`  | `DELETE /api/v1/user/{username}/db`  | [x] |
+| Get all `Todo`s  | `GET /api/v1/todo`  | [ ] |
+| Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  | [ ] |
+| Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  | [ ] |
+| Create a `Todo` for `User` | `POST /api/v1/todo`  | [ ] |
+| Get one `Todo`  | `GET /api/v1/todo/{id}`  | [ ] |
+| Cancel a `Todo`  | `DELETE /api/v1/todo/{id}` | [ ] |
+| Add a `Todo Log`  | `POST /api/v1/todo/{id}/log` | [ ] |
 
 
 

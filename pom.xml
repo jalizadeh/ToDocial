@@ -7,10 +7,10 @@
 		<version>2.2.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.jalizadeh.todocial.web</groupId>
+	<groupId>com.jalizadeh.todocial</groupId>
 	<artifactId>todocial</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-boot-first-web-application</name>
+	<name>todocial</name>
 	<description>ToDocial, share your todos</description>
 
 	<properties>

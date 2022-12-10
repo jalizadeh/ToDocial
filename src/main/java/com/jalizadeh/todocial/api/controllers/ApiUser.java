@@ -100,7 +100,7 @@ public class ApiUser {
 			@RequestParam("token") String token){
 		String tokenStatus = tokenService.validateVerificationToken(
 				tokenService.TOKEN_TYPE_VERIFICATION,token);
-		return new ResponseEntity<String>(tokenStatus, HttpStatus.OK);
+		return new ResponseEntity<String>(tokenStatus, HttpStatus.ACCEPTED);
 	}
 	
 	
@@ -108,7 +108,7 @@ public class ApiUser {
 	public ResponseEntity<TokenDTO> getActivationToken(@PathVariable("username") String username){
 		User user = userRepository.findByUsername(username);
 		VerificationToken token = vTokenRepository.findByUser(user);
-		return new ResponseEntity<TokenDTO>(new TokenDTO(token.getToken()) , HttpStatus.ACCEPTED);
+		return new ResponseEntity<TokenDTO>(new TokenDTO(token.getToken()) , HttpStatus.OK);
 	}
 
 	
@@ -118,6 +118,22 @@ public class ApiUser {
 		user.setEnabled(false);
 		User updated = userRepository.save(user);
 		return new ResponseEntity<String>(updated.isEnabled() + "", HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/api/v1/user/{username}/db")
+	public ResponseEntity<String> deleteUserFromDB(@PathVariable("username") String username){
+		User user = userRepository.findByUsername(username);
+
+		if(user == null)
+			return new ResponseEntity<String>(HttpStatus.OK);
+		
+		//in case user is not activated yet and the token exists
+		VerificationToken token = vTokenRepository.findByUser(user);
+		if(token != null) 
+			vTokenRepository.delete(token);
+		
+		userRepository.delete(user);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	
