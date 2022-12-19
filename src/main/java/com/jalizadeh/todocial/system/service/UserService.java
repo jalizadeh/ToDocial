@@ -42,6 +42,10 @@ public class UserService implements UserDetailsService {
 	public UserService() {
 		super();
 	}
+	
+	public String seyHi(String string) {
+		return "Hi";
+	}
 
 
 	public User GetUserByPrincipal(Principal principal) {

@@ -1,11 +1,13 @@
-package com.jalizadeh.todocial.api.user;
+package com.jalizadeh.todocial.api.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterAll;
@@ -22,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -46,16 +49,16 @@ class UserServiceTests {
 	private int port;
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
-	VerificationTokenRepository vtRepository;
+	private VerificationTokenRepository vtRepository;
 	
 	@Autowired
-	Environment env;
+	private Environment env;
 	
 	@Autowired
-	TestRestTemplate rest;
+	private TestRestTemplate rest;
 	
 	private UserTestInput inputUser = new UserTestInput("firstname_test", "lastname_test", "username_test", "email@test.com", "12345");
 	private UserTestResponse responseUser;
@@ -66,6 +69,7 @@ class UserServiceTests {
 	
 	@BeforeAll
 	void setup() {
+		//delete previously broken generated test user, if exists
 		deleteUser(inputUser.getUsername());
 		
 		// create a new test user
@@ -82,7 +86,7 @@ class UserServiceTests {
 	@Test
 	@Order(1)
 	@Tag("positive")
-	@DisplayName("Created user & exists in the DB")
+	@DisplayName("Create user and check in the DB")
 	void createUser() {
 		User dbUser = userRepository.findById(userId).get();
 		assertEquals(dbUser.getFirstname(), responseUser.getFirstname());
@@ -95,7 +99,7 @@ class UserServiceTests {
 	@Test
 	@Order(2)
 	@Tag("positive")
-	@DisplayName("Activated user after registration")
+	@DisplayName("Activate user after registration")
 	void activateUser() {
 		//check if activation code exists
 		VerificationToken vToken = vtRepository.findByUserId(userId);
@@ -117,7 +121,47 @@ class UserServiceTests {
 	}
 	
 	
+	@Test
+	@Order(3)
+	@DisplayName("Get a user by username")
+	void testUserService_whenAUsernameisGiven_returnsItsDetails() {
+		ResponseEntity<UserTestResponse> response = rest.exchange(mkUrl(getUrl(), username), HttpMethod.GET,
+				getEntity(false), UserTestResponse.class);
+
+		assertNotNull(response);
+		assertEquals(userId, response.getBody().getId());
+		assertEquals(userRepository.findById(userId).get().getId(), response.getBody().getId());
+		assertEquals(username, response.getBody().getUsername());
+		assertEquals(userRepository.findById(userId).get().getUsername(), response.getBody().getUsername());
+	}
+	
+	@Test
+	@Order(4)
+	@DisplayName("Get list of all users")
+	void testUserService_whenAskedForAllUsers_returnsListOfAllUsers() {
+		ResponseEntity<List<UserTestResponse>> response = rest.exchange(getUrl(), HttpMethod.GET,
+				getEntity(false), new ParameterizedTypeReference<List<UserTestResponse>>(){});
+
+		assertNotNull(response);
+		assertTrue(response.getBody().size() > 0); //at least 1 user (the generated test user) exists
+	}
+	
+	
+	@Test
+	@Order(5)
+	@DisplayName("Deactivate a user by username")
+	void testUserService_whenAUsernameisGiven_returnsIsEnabledFalse() {
+		ResponseEntity<String> response = rest.exchange(mkUrl(getUrl(), username), HttpMethod.DELETE,
+				getEntity(false), String.class);
+
+		assertNotNull(response);
+		assertEquals("false", response.getBody());
+		assertFalse(userRepository.findById(userId).get().isEnabled());
+	}
+	
+	
 	@AfterAll
+	@DisplayName("Delete test user from DB")
 	void teardown() {
 		deleteUser(username);
 		System.err.println("User " + inputUser.getFirstname() + " deleted successfully");
@@ -125,21 +169,26 @@ class UserServiceTests {
 	
 	
 	
+	/**
+	 * Deletes the user via API and verifies by checking DB
+	 */
 	private void deleteUser(String username) {
 		rest.exchange(mkUrl(getUrl(), username, "db"), 
 				HttpMethod.DELETE, getEntity(false), String.class);
 		assertNull(userRepository.findByUsername(username));
 	}
 
+	//make url using given parameters
 	private String mkUrl(String... list) {
 		return Arrays.asList(list).stream().collect(Collectors.joining("/"));
 	}
 
+	//get base URL of API service 
 	private String getUrl() {
 		return this.baseUrl + ":" + this.port + env.getProperty("api.rootUrl") + servicePath;
 	}
 	
-	
+	//generate HttpEntity w/ or w/o body
 	private HttpEntity<UserTestInput> getEntity(boolean body) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);

@@ -1,6 +1,8 @@
-package com.jalizadeh.todocial.api.user;
+package com.jalizadeh.todocial.api.controllers;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +10,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 class UserTestResponse{
 	private Long id;
 	private String firstname;

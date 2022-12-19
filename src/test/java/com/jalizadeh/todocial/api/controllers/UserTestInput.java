@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.api.user;
+package com.jalizadeh.todocial.api.controllers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
