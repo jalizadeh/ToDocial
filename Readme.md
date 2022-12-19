@@ -1,43 +1,33 @@
-# ToDocial: Manage your todos and share with friends
-A ToDo manager with Spring Boot. I am trying to make it as much as possible complete, as an industry product, at the same time, a project to learn stuff.
+# ToDocial
+
+## Manage your todos and share with friends
+The projects is inspired by Github. A social media to create, track todos and share them publicly with friends and others. ToDocial is inspired by Github as a tool to let others cooperate on your todos and ideas. Just signup and create your first todo ☺️
 
 
-### Images
-
-Public page of a registered user
-![](assets/public-page.png)
-
-List of all todos, with full access
-![](assets/my-todos.png)
-
-Todos over time for a better visualization
-![](assets/chart-todo.png)
-
-Settings of the system
-![](assets/settings.png)
-
-
-### Inspirations:
-
+### Inspirations
 This project is a combination of the features in Github and Wordpress that I could merge into one single project.
 - Todo management & sociality (Github)
 - Content management (Wordpress)
 
 
-### Features:
-
+### Features
 - Login / Sign up (multi-user)
 - Todo Management
 - User Profile
 - Charts & Statistics
 - Administrator Dashboard
+- Simulation
+- CI
+- Tests
+	- JUnit (REST API)
+	- Selenium (Web pages)
 
 
-### WIP:
 
+## TODO
 - [x] Initialize Spring project
 - [x] Database
-	- Currently data is stored in `todo.db` file in root folder
+	- Currently data is stored using SQLite in `todo.db` file in root folder
 	- User
 		- users_roles (many-to-many)
 		- Role (high-level roles)
@@ -52,11 +42,11 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- Todo
 		- todo-log
 		- todos_logs
-	- [ ] Set username & password
+	- [x] Set username & password
 	- [ ] Migrate to MySQL
 - [ ] General
 	- [x] Header/Navigation/Footer fragments
-		- Spring Security JSP Taglib is added for easier control of authenticated users
+		- `Spring Security JSP Taglib` is added for easier control of authenticated users
 	- [x] Set page title
 		- Each page&#39;s title is encapsulated in `model`
 	- [x] Support UTF-8 encoding
@@ -66,7 +56,7 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- [ ] Multi-language (English / Italian)
 		- Currently `user-session` based
 		- [ ] Change static texts to `<spring:message code="key"/>`
-- [x] Basic Search
+- [ ] Search in todos
 - [x] Todos
 	- [x] All user&#39;s todos
 	- [x] Public / Private
@@ -80,8 +70,8 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- [ ] mini-Task
 	- [x] Progress bar
 - [ ] Wishes
-	- Todos that will be taken care later, at unknown time. When the user wants, he can turn a `wish` into a todo.
-	- Other users can comment on his wishes, or help with appropriate advices.
+	- Todos that will be taken care later, at unknown time. When the user wants, he can turn a `wish` into a todo
+	- Other users can comment on his wishes, or help with appropriate advices
 - [ ] Log in
 	- Spring Security 
 	- There are two roles `ROLE_USER` and `ROLE_ADMIN`
@@ -186,37 +176,66 @@ This project is a combination of the features in Github and Wordpress that I cou
 		- [ ] Password combination
 - [ ] Logger
 - [ ] Query Optimization
-- [ ] Charts
+- [x] Charts
 	- [x] Start-End range
 	- [x] Gantt
 - [x] Personal Life Cycle Test
 	- The test is currently in Persian
+- [ ] Test
+	- [x] Test report
+		- with `mvn clean test` or `mvn site -DgenerateReports=false`
+	- [x] Test coverage report
 
 
 
-## REST (WIP):
-
-| Action  | Endpoint |
-| ------------- | ------------- |
-| Retrieve all `User`s  | `GET /users`  |
-| Create a `User`  | `POST /users`  |
-| Retrieve one `User`  | `GET /users/{id}`  |
-| Delete a `User`  | `DELETE /users/{id}`  |
-
-| Action  | Endpoint |
-| ------------- | ------------- |
-| Retrieve all `Todo`s  | `GET /users/{id}/todos`  |
-| Create a `Todo` for `User`  | `POST /users/{id}/todos`  |
-| Retrieve one `Todo`  | `GET /users/{id}/todos/{id}`  |
-| Delete a `Todo`  | `DELETE /users/{id}/todos/{id}`  |
+## REST API
+The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is `enabled` and credentials are fine, he will receive his own resources.
 
 
+| Test | Action  | Endpoint |
+| ------------- | ------------- | ------------- |
+| ✅ | Get all `User`\`s  | `GET /api/v1/user`  |
+| ✅ | Get one `User` by `username` | `GET /api/v1/user/{username}`  |
+| ✅ | Create a `User`  | `POST /api/v1/user`  |
+| ✅ | Get `User` activation token | `GET /api/v1/user/{username}/activation_token`  |
+| ✅ | Activate a `User`  | `POST /api/v1/user/{username}/activate?token={{token}}`  |
+| ✅ | Delete (deactivate) a `User`  | `DELETE /api/v1/user/{username}`  |
+| ✅ | Delete from DB a `User`  | `DELETE /api/v1/user/{username}/db`  |
+|   | Get all `Todo`s  | `GET /api/v1/todo`  |
+|   | Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
+|   | Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  |
+|   | Create a `Todo` for `User` | `POST /api/v1/todo`  |
+|   | Get one `Todo`  | `GET /api/v1/todo/{id}`  |
+|   | Cancel a `Todo`  | `DELETE /api/v1/todo/{id}` |
+|   | Add a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
 
-## Run:
 
+
+## Run
 - Clone the project
 - In terminal run `mvn spring-boot:run`
 - Go to `http://localhost:8080`
 - Login:
-	- as `admin` with username: `javad` & password: `12345`
-	- as `user`  with username: `alexfergosen` & password: `12345`
+	- as `admin` with `admin:12345`
+	- as `user`  with `alexfergosen:12345`
+	
+	
+
+## Simulation Scenario
+In simulation mode, a list of random users are created and they interact with each other. You, as an admin, can observe what is happening inside the ecosystem
+
+
+
+### Images
+
+Public page of a registered user
+![](assets/public-page.png)
+
+List of all todos, with full access
+![](assets/my-todos.png)
+
+Todos over time for a better visualization
+![](assets/chart-todo.png)
+
+Settings of the system
+![](assets/settings.png)

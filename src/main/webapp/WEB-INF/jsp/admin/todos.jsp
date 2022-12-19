@@ -23,7 +23,7 @@
 			</div>
 		</div>
 
-		<p>Total number of users: ${all_todos.size()}</p>
+		<p>Total number of todos: ${all_todos.size()}</p>
 
 		<table class="table table-striped table-hover">
 			<thead>
