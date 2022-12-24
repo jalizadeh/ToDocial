@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import javax.sql.DataSource;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.OngoingStubbing;
 import org.modelmapper.ModelMapper;
@@ -71,6 +72,7 @@ class UserControllerWebLayerTest {
 	@MockBean
 	private StorageService storageService;
 	
+	@Disabled
 	@Test
 	void createUser_whenValidUserDetailsProvided_returnsCreatedUserDetails() throws Exception, UserAlreadyExistException, EmailExistsException {
 		UserTestInput inputUser = 

@@ -1,5 +1,6 @@
 HELP.md
-todo_?.db
+*_?.db
+*.log
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
