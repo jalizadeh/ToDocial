@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,7 +102,7 @@ class ServiceTests {
 	@Order(1)
 	@Tag("positive")
 	@DisplayName("Create user and check in the DB")
-	void createUser() {
+	void testUserService_givenUserDetailsAsRequestBody_returnsGeneratedUserDetails() {
 		// create a new test user
 		userResponseEntity = rest.postForEntity(getUrl_User(), getEntity(userRequest, true), TestModel_User_Response.class);
 		assertNotNull(userResponseEntity);
@@ -124,7 +125,7 @@ class ServiceTests {
 	@Order(2)
 	@Tag("positive")
 	@DisplayName("Activate user after registration")
-	void activateUser() {
+	void testUserService_givenUsername_returnsActivatedUser() {
 		// check if activation code exists
 		VerificationToken vToken = vtRepository.findByUserId(userId);
 		assertNotNull(vToken, "Verification token doesnt exist");
@@ -147,7 +148,7 @@ class ServiceTests {
 	@Test
 	@Order(3)
 	@DisplayName("Get a user by username")
-	void testUserService_whenAUsernameisGiven_returnsItsDetails() {
+	void testUserService_givenUsername_returnsItsDetails() {
 		ResponseEntity<TestModel_User_Response> response = rest.exchange(mkUrl(getUrl_User(), USERNAME), HttpMethod.GET,
 				getEntity(userRequest, false), TestModel_User_Response.class);
 
@@ -191,12 +192,49 @@ class ServiceTests {
 		assertFalse(todoResponse.isCanceled());
 		assertFalse(todoResponse.isPublicc());
 	}
+	
+	
+	@Test
+	@Order(21)
+	@DisplayName("Get all Todo")
+	void testTodoService_givenATodoId_returnsTodoDetails() {
+		ResponseEntity<List<TestModel_Todo_Response>> responses = rest.exchange(getUrl_Todo(), 
+				HttpMethod.GET,
+				getEntity(todoRequest, USERNAME, PASSWORD ,false),
+				new ParameterizedTypeReference<List<TestModel_Todo_Response>>(){});
+		List<TestModel_Todo_Response> todoResponseList = responses.getBody();
+		
+		assertTrue(todoResponseList.size() > 0);
+		
+		boolean found = false;
+		for(TestModel_Todo_Response tr : todoResponseList) {
+			if(tr.getId().equals(todoId))
+				found = true;
+		}
+		
+		if(!found)
+			fail("Todo id #" + todoId + " doesn't exist in the list of all todos");
+	}
 
+	
+	@Test
+	@Order(21)
+	@DisplayName("Find all Todos of a user by username")
+	void testTodoService_givenAUsername_returnsAllItsTodos() {
+		ResponseEntity<List<TestModel_Todo_Response>> responses = rest.exchange(mkUrl(getUrl_Todo(),USERNAME), HttpMethod.GET,
+				getEntity(todoRequest, USERNAME, PASSWORD, false),
+				new ParameterizedTypeReference<List<TestModel_Todo_Response>>(){});
+		
+		List<TestModel_Todo_Response> todoResponseList = responses.getBody();
+		assertEquals(1, todoResponseList.size());
+		assertEquals(todoId, todoResponseList.get(0).getId());
+	}
+	
 	
 	@Test
 	@Order(40)
 	@DisplayName("Delete a Todo from DB")
-	void testTodoService_whenTodoIsDeleted_returnsNullOnDBCheck() {
+	void testTodoService_whenTodoIsDeleted_returnsNullOnDBFindByTodoId() {
 		rest.exchange(mkUrl(getUrl_Todo(),String.valueOf(todoId),"db"), HttpMethod.DELETE, getEntity(todoRequest, USERNAME, PASSWORD, false), String.class);
 		Todo deletedTodo = todoRepository.findById(todoId).orElse(null);
 		assertNull(deletedTodo);
@@ -210,7 +248,7 @@ class ServiceTests {
 	@Test
 	@Order(90)
 	@DisplayName("Deactivate a user by username")
-	void testUserService_whenAUsernameisGiven_returnsIsEnabledFalse() {
+	void testUserService_whenAUsernameIsGiven_returnsIsEnabledFalse() {
 		ResponseEntity<String> response = rest.exchange(mkUrl(getUrl_User(), USERNAME), HttpMethod.DELETE,
 				getEntity(userRequest, false), String.class);
 
