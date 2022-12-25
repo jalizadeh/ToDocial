@@ -204,9 +204,10 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
 |   | Get all `Todo`s  | `GET /api/v1/todo`  |
 |   | Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
 |   | Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  |
-|   | Create a `Todo` for `User` | `POST /api/v1/todo`  |
+| ✅ | Create a `Todo` for `User` | `POST /api/v1/todo`  |
 |   | Get one `Todo`  | `GET /api/v1/todo/{id}`  |
 |   | Cancel a `Todo`  | `DELETE /api/v1/todo/{id}` |
+| ✅ | Delete a `Todo`  | `DELETE /api/v1/todo/{id}/db` |
 |   | Add a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
 
 

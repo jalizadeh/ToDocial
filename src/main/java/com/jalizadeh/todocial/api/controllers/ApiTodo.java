@@ -1,5 +1,6 @@
 package com.jalizadeh.todocial.api.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,6 +92,27 @@ public class ApiTodo {
 	
 	
 	
+	@DeleteMapping("/api/v1/todo/{id}/db")
+	public ResponseEntity<String> deleteTodoFromDB(@PathVariable("id") Long id){
+		User loggedInUser = userService.GetAuthenticatedUser();
+		Todo foundTodo = todoRepository.findById(id).orElse(null);
+		
+		System.err.println(loggedInUser.getId() + " / " + foundTodo.getUser().getId());
+		
+		//if user asks for a Todo that doesnt belong to him, i wont indicate it with 403, but with a general response
+		//if(foundTodo == null || foundTodo.getUser().getId() != loggedInUser.getId())
+		if(foundTodo == null)
+			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+		
+		if(!foundTodo.getUser().getId().equals(loggedInUser.getId()))
+			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+		
+		todoRepository.delete(foundTodo);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
+	
+	
 	@PostMapping("/api/v1/todo/{id}/log")
 	public ResponseEntity<String> createTodoLog(@PathVariable("id") Long id, @RequestBody InputLog log){
 		User loggedinUser = userService.GetAuthenticatedUser();
@@ -112,7 +134,7 @@ public class ApiTodo {
 	private TodoDTO mapTodoToDTO(Todo t) {
 		return new TodoDTO(
 					t.getId(), t.getName(), t.getDescription(), t.getReason(), 
-					t.getLogs().stream().map(i -> mapTodoToLogDTO(i)).collect(Collectors.toList()),
+					new ArrayList<>(),
 					t.getLike(),t.isCompleted(), t.isCanceled(), t.isPublicc()
 				);
 	}
