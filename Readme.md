@@ -207,11 +207,11 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
 | ✅ | Create a `Todo` for `User` | `POST /api/v1/todo`  |
 |   | Get one `Todo`  | `GET /api/v1/todo/{id}`  |
 |   | Cancel (pause) a `Todo`  | `DELETE /api/v1/todo/{id}` |
-| ✅ | Delete a `Todo`  | `DELETE /api/v1/todo/{id}/db` |
-|   | Create a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
+| ✅ | Delete a `Todo` and its `TodoLog`  | `DELETE /api/v1/todo/{id}/db` |
+| ✅ | Create a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
 |   | Get a `Todo Log`  | `GET /api/v1/todo/{id}/log/{id}` |
 |   | Get all `Todo Log`  | `GET /api/v1/todo/{id}/log` |
-|   | Delete a `Todo Log`  | `DELETE /api/v1/todo/{id}/log/{id}` |
+| ✅ | Delete a `Todo Log`  | `DELETE /api/v1/todo/{id}/log/{id}` |
 
 
 

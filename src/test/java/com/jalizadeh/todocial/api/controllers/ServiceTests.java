@@ -29,13 +29,16 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.jalizadeh.todocial.system.repository.TodoLogRepository;
 import com.jalizadeh.todocial.system.repository.TodoRepository;
 import com.jalizadeh.todocial.system.repository.UserRepository;
 import com.jalizadeh.todocial.web.model.Todo;
+import com.jalizadeh.todocial.web.model.TodoLog;
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.model.VerificationToken;
 import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
@@ -59,6 +62,9 @@ class ServiceTests {
 	
 	@Autowired
 	private TodoRepository todoRepository;
+	
+	@Autowired
+	private TodoLogRepository todoLogRepository;
 
 	@Autowired
 	private VerificationTokenRepository vtRepository;
@@ -82,14 +88,18 @@ class ServiceTests {
 	
 	//Arrange Todo model
 	private Long todoId;
-	private TestModel_Todo_Request todoRequest = new TestModel_Todo_Request(
-			"TODO - auto-generated in test",
-			"You can'\''t quantify the monitor without calculating the 1080p EXE circuit! The RSS port is down, input the haptic hard drive so we can connect the CSS bandwidth! Try to connect the SDD feed, maybe it will parse the multi-byte matrix!",
-			"You can'\''t input the driver without copying the haptic TCP driver!");
+	private TestModel_Todo_Request todoRequest = 
+			new TestModel_Todo_Request("TODO - auto-generated in test", "You can read","You can do");
 	private TestModel_Todo_Response todoResponse;
 	private ResponseEntity<TestModel_Todo_Response> todoResponseEntity;
 	
+	//Arrange TodoLog model
+	private Long todoLogId;
+	private TestModel_TodoLog_Request todoLogRequest = new TestModel_TodoLog_Request(); //log filled later
+	private TestModel_TodoLog_Response todoLogResponse;
+	private ResponseEntity<TestModel_TodoLog_Response> todoLogResponseEntity;
 
+	
 	@BeforeAll
 	void setup() {
 		// delete previously broken generated test user, if exists
@@ -104,7 +114,7 @@ class ServiceTests {
 	@DisplayName("Create user and check in the DB")
 	void testUserService_givenUserDetailsAsRequestBody_returnsGeneratedUserDetails() {
 		// create a new test user
-		userResponseEntity = rest.postForEntity(getUrl_User(), getEntity(userRequest, true), TestModel_User_Response.class);
+		userResponseEntity = rest.postForEntity(getUrl_User(), getEntity(userRequest, false), TestModel_User_Response.class);
 		assertNotNull(userResponseEntity);
 		userReponse = userResponseEntity.getBody();
 		assertEquals(userRequest.getFirstname(), userReponse.getFirstname());
@@ -131,15 +141,16 @@ class ServiceTests {
 		assertNotNull(vToken, "Verification token doesnt exist");
 
 		// get activation code
-		ResponseEntity<TestModel_Token_Request> resp1 = rest.exchange(
-				mkUrl(getUrl_User(), USERNAME, "activation_token"), HttpMethod.GET, getEntity(userRequest, false),
+		ResponseEntity<TestModel_Token_Request> r1 = rest.exchange(
+				mkUrl(getUrl_User(), USERNAME, "activation_token"), HttpMethod.GET, getEntity(null, false),
 				TestModel_Token_Request.class);
-		assertEquals(vToken.getToken(), resp1.getBody().getToken());
+		assertEquals(vToken.getToken(), r1.getBody().getToken());
 
 		// activate user
-		ResponseEntity<String> resp2 = rest.postForEntity(
-				mkUrl(getUrl_User(), USERNAME, "activate?token=" + vToken.getToken()), getEntity(userRequest, false), String.class);
-		assertEquals("valid", resp2.getBody());
+		ResponseEntity<String> r2 = rest.postForEntity(
+				mkUrl(getUrl_User(), USERNAME, "activate?token=" + vToken.getToken()), 
+				getEntity(null, false), String.class);
+		assertEquals("valid", r2.getBody());
 
 		// activation code should be removed
 		assertNull(vtRepository.findByUserId(userId), "Verification token is not deleted after activation");
@@ -149,38 +160,37 @@ class ServiceTests {
 	@Order(3)
 	@DisplayName("Get a user by username")
 	void testUserService_givenUsername_returnsItsDetails() {
-		ResponseEntity<TestModel_User_Response> response = rest.exchange(mkUrl(getUrl_User(), USERNAME), HttpMethod.GET,
-				getEntity(userRequest, false), TestModel_User_Response.class);
+		ResponseEntity<TestModel_User_Response> r = rest.exchange(mkUrl(getUrl_User(), USERNAME), HttpMethod.GET,
+				getEntity(null, false), TestModel_User_Response.class);
 
-		assertNotNull(response);
-		assertEquals(userId, response.getBody().getId());
-		assertEquals(userRepository.findById(userId).get().getId(), response.getBody().getId());
-		assertEquals(USERNAME, response.getBody().getUsername());
-		assertEquals(userRepository.findById(userId).get().getUsername(), response.getBody().getUsername());
+		assertNotNull(r);
+		assertEquals(userId, r.getBody().getId());
+		assertEquals(userRepository.findById(userId).get().getId(), r.getBody().getId());
+		assertEquals(USERNAME, r.getBody().getUsername());
+		assertEquals(userRepository.findById(userId).get().getUsername(), r.getBody().getUsername());
 	}
 
 	@Test
 	@Order(4)
 	@DisplayName("Get list of all users")
 	void testUserService_whenAskedForAllUsers_returnsListOfAllUsers() {
-		ResponseEntity<List<TestModel_User_Request>> response = rest.exchange(getUrl_User(), HttpMethod.GET,
-				getEntity(userRequest, false), new ParameterizedTypeReference<List<TestModel_User_Request>>() {
-				});
+		ResponseEntity<List<TestModel_User_Request>> r = rest.exchange(getUrl_User(), HttpMethod.GET,
+				getEntity(null, false), new ParameterizedTypeReference<List<TestModel_User_Request>>() {});
 
-		assertNotNull(response);
-		assertTrue(response.getBody().size() > 0); // at least 1 user (the generated test user) exists
+		assertNotNull(r);
+		assertTrue(r.getBody().size() > 0); // at least 1 user (the generated test user) exists
 	}
 
 	
 	
 	
-	//------------------------------- Tests 20-to-40 are for Todo Service
+	//------------------------------- Tests 20-to-40 are for Todo & Log Service
 
 	@Test
 	@Order(20)
 	@DisplayName("Create a Todo for existing user")
 	void testTodoService_whenATodoIsCreated_returnsNewTodoDetails() {
-		todoResponseEntity = rest.postForEntity(getUrl_Todo(), getEntity(todoRequest, USERNAME, PASSWORD, true), 
+		todoResponseEntity = rest.postForEntity(getUrl_Todo(), getEntity(todoRequest, true), 
 				TestModel_Todo_Response.class);
 		todoResponse = todoResponseEntity.getBody();
 		todoId = todoResponse.getId();
@@ -198,11 +208,9 @@ class ServiceTests {
 	@Order(21)
 	@DisplayName("Get all Todo")
 	void testTodoService_givenATodoId_returnsTodoDetails() {
-		ResponseEntity<List<TestModel_Todo_Response>> responses = rest.exchange(getUrl_Todo(), 
-				HttpMethod.GET,
-				getEntity(todoRequest, USERNAME, PASSWORD ,false),
-				new ParameterizedTypeReference<List<TestModel_Todo_Response>>(){});
-		List<TestModel_Todo_Response> todoResponseList = responses.getBody();
+		ResponseEntity<List<TestModel_Todo_Response>> r = rest.exchange(getUrl_Todo(), HttpMethod.GET,
+				getEntity(null, true), new ParameterizedTypeReference<List<TestModel_Todo_Response>>(){});
+		List<TestModel_Todo_Response> todoResponseList = r.getBody();
 		
 		assertTrue(todoResponseList.size() > 0);
 		
@@ -221,25 +229,58 @@ class ServiceTests {
 	@Order(21)
 	@DisplayName("Find all Todos of a user by username")
 	void testTodoService_givenAUsername_returnsAllItsTodos() {
-		ResponseEntity<List<TestModel_Todo_Response>> responses = rest.exchange(mkUrl(getUrl_Todo(),USERNAME), HttpMethod.GET,
-				getEntity(todoRequest, USERNAME, PASSWORD, false),
+		ResponseEntity<List<TestModel_Todo_Response>> r = rest.exchange(mkUrl(getUrl_Todo(),USERNAME), HttpMethod.GET,
+				getEntity(todoRequest, true),
 				new ParameterizedTypeReference<List<TestModel_Todo_Response>>(){});
 		
-		List<TestModel_Todo_Response> todoResponseList = responses.getBody();
+		List<TestModel_Todo_Response> todoResponseList = r.getBody();
 		assertEquals(1, todoResponseList.size());
 		assertEquals(todoId, todoResponseList.get(0).getId());
 	}
 	
 	
 	@Test
-	@Order(40)
-	@DisplayName("Delete a Todo from DB")
-	void testTodoService_whenTodoIsDeleted_returnsNullOnDBFindByTodoId() {
-		rest.exchange(mkUrl(getUrl_Todo(),String.valueOf(todoId),"db"), HttpMethod.DELETE, getEntity(todoRequest, USERNAME, PASSWORD, false), String.class);
-		Todo deletedTodo = todoRepository.findById(todoId).orElse(null);
-		assertNull(deletedTodo);
+	@Order(30)
+	@DisplayName("Create a log for a Todo")
+	void testTodoService_givenANewLogForATodo_returnsNewGeneratedLogOfTodo() {
+		todoLogRequest.setLog("TODO #" + todoId + " Log - some randome log");
+		todoLogResponseEntity = rest.postForEntity(mkUrl(getUrl_Todo(), String.valueOf(todoId), "log"), 
+				getEntity(todoLogRequest, true), TestModel_TodoLog_Response.class);
+		todoLogResponse = todoLogResponseEntity.getBody();
+		todoLogId = todoLogResponse.getId();
+		assertEquals(todoLogRequest.getLog(), todoLogResponse.getLog());
 	}
 	
+	
+	@Test
+	@Order(39)
+	@DisplayName("Delete a TodoLog from DB")
+	void testTodoService_whenTodoLogIsDeleted_returnsNullOnFindById() {
+		ResponseEntity<String> r = rest.exchange(mkUrl(getUrl_Todo(), String.valueOf(todoId), "log", String.valueOf(todoLogId)), 
+				HttpMethod.DELETE, getEntity(null, true), String.class);
+		assertEquals(HttpStatus.OK, r.getStatusCode());
+		
+		TodoLog foundTodoLog = todoLogRepository.findById(todoLogId).orElse(null);
+		assertNull(foundTodoLog);
+
+		
+		//create a new one and it will be deleted with Todo
+		testTodoService_givenANewLogForATodo_returnsNewGeneratedLogOfTodo();
+	}
+	
+	
+	
+	@Test
+	@Order(40)
+	@DisplayName("Delete a Todo and its Logs from DB")
+	void testTodoService_whenTodoIsDeleted_returnsNullOnDBFindByTodoId() {
+		rest.exchange(mkUrl(getUrl_Todo(),String.valueOf(todoId),"db"), HttpMethod.DELETE, 
+				getEntity(null, true), String.class);
+		TodoLog deletedLog = todoLogRepository.findById(todoLogId).orElse(null);
+		Todo deletedTodo = todoRepository.findById(todoId).orElse(null);
+		assertNull(deletedLog);
+		assertNull(deletedTodo);
+	}
 	
 	
 	
@@ -249,11 +290,11 @@ class ServiceTests {
 	@Order(90)
 	@DisplayName("Deactivate a user by username")
 	void testUserService_whenAUsernameIsGiven_returnsIsEnabledFalse() {
-		ResponseEntity<String> response = rest.exchange(mkUrl(getUrl_User(), USERNAME), HttpMethod.DELETE,
-				getEntity(userRequest, false), String.class);
+		ResponseEntity<String> r = rest.exchange(mkUrl(getUrl_User(), USERNAME), HttpMethod.DELETE,
+				getEntity(null, false), String.class);
 
-		assertNotNull(response);
-		assertEquals("false", response.getBody());
+		assertNotNull(r);
+		assertEquals("false", r.getBody());
 		assertFalse(userRepository.findById(userId).get().isEnabled());
 	}
 
@@ -268,7 +309,7 @@ class ServiceTests {
 	 * Deletes the user via API and verifies by checking DB
 	 */
 	private void deleteUser(String username) {
-		rest.exchange(mkUrl(getUrl_User(), username, "db"), HttpMethod.DELETE, getEntity(userRequest, false), String.class);
+		rest.exchange(mkUrl(getUrl_User(), username, "db"), HttpMethod.DELETE, getEntity(null, false), String.class);
 		assertNull(userRepository.findByUsername(username));
 	}
 
@@ -287,23 +328,17 @@ class ServiceTests {
 	}
 
 	// generate HttpEntity w/ or w/o body
-	private <T> HttpEntity<T> getEntity(T model, boolean body) {
+	private <T> HttpEntity<T> getEntity(T model, boolean newAuth) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setBasicAuth(env.getProperty("api.auth_user"), env.getProperty("api.auth_pass"));
+		
+		//use new generated user's username & pass for auth, otherwise use admin's
+		if(newAuth)
+			headers.setBasicAuth(USERNAME, PASSWORD);
+		else
+			headers.setBasicAuth(env.getProperty("api.auth_user"), env.getProperty("api.auth_pass"));
 
-		return body ? new HttpEntity<>(model, headers) : new HttpEntity<>(headers);
+		return (model != null) ? new HttpEntity<>(model, headers) : new HttpEntity<>(headers);
 	}
-
-	// generate HttpEntity w/ or w/o body with custom Basic Auth header
-	private <T> HttpEntity<T> getEntity(T model, String username, String password, boolean body) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setBasicAuth(username, password);
-
-		return body ? new HttpEntity<>(model, headers) : new HttpEntity<>(headers);
-	}
-
 }
