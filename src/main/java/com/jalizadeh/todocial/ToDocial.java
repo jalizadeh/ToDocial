@@ -23,7 +23,7 @@ public class ToDocial {
 	
 	@Bean
 	CommandLineRunner init(StorageService storageService) {
-		return (args) -> {
+		return args -> {
 			//storageService.deleteAll();
 			storageService.init();
 		};

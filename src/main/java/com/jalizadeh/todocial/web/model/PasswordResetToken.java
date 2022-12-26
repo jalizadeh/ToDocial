@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 public class PasswordResetToken {
 	
 	//12 hours in milliseconds
-	private static final long EXPIRATION = 1000 * 60 * 60 * 12;
+	private static final long EXPIRATION = 1000L * 60 * 60 * 12;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -229,6 +229,7 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
 	- Run and generate report
 - mvn clean site
 	- Run and generate styled report
+- mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=12345
 
 
 ## Simulation Scenario

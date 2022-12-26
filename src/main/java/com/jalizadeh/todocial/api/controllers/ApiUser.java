@@ -57,9 +57,7 @@ public class ApiUser {
 	@GetMapping("/api/v1/user")
 	public ResponseEntity<List<UserDTO>> getUsers() {
 		List<User> users = userRepository.findByEnabled(true);
-		return new ResponseEntity<List<UserDTO>>(users.stream()
-				.map(i -> mapUserToDTO(i)).collect(Collectors.toList())
-				, HttpStatus.OK);
+		return new ResponseEntity<>(users.stream().map(this::mapUserToDTO).collect(Collectors.toList()), HttpStatus.OK);
 	}
 
 	@GetMapping("/api/v1/user/{username}")
@@ -71,9 +69,13 @@ public class ApiUser {
 	
 	//Ambiguous handler methods mapped for '/api/v1/user/1'
 	//@GetMapping("/{id}")
-	public UserDTO getUserById(@PathVariable("id") Long id) {
+	public ResponseEntity<?> getUserById(@PathVariable("id") Long id) {
 		User user = userRepository.findById(id).orElseGet(null);
-		return mapUserToDTO(user);
+		
+		if(user == null)
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		
+		return new ResponseEntity<UserDTO>(mapUserToDTO(user), HttpStatus.OK);
 	}
 	
 	
@@ -91,16 +93,15 @@ public class ApiUser {
 
 		//generate verification token in async
 		eventPublisher.publishEvent(new OnApiRegistrationCompleteEvent(registeredUser));
-		return new ResponseEntity<UserDTO>(mapUserToDTO(registeredUser), HttpStatus.CREATED);
+		return new ResponseEntity<>(mapUserToDTO(registeredUser), HttpStatus.CREATED);
 	}
 	
 	
 	@PostMapping("/api/v1/user/{username}/activate")
 	public ResponseEntity<String> activateUser(@PathVariable("username") String username,
 			@RequestParam("token") String token){
-		String tokenStatus = tokenService.validateVerificationToken(
-				tokenService.TOKEN_TYPE_VERIFICATION,token);
-		return new ResponseEntity<String>(tokenStatus, HttpStatus.ACCEPTED);
+		String tokenStatus = tokenService.validateVerificationToken(TokenService.TOKEN_TYPE_VERIFICATION,token);
+		return new ResponseEntity<>(tokenStatus, HttpStatus.ACCEPTED);
 	}
 	
 	
@@ -108,7 +109,7 @@ public class ApiUser {
 	public ResponseEntity<TokenDTO> getActivationToken(@PathVariable("username") String username){
 		User user = userRepository.findByUsername(username);
 		VerificationToken token = vTokenRepository.findByUser(user);
-		return new ResponseEntity<TokenDTO>(new TokenDTO(token.getToken()) , HttpStatus.OK);
+		return new ResponseEntity<>(new TokenDTO(token.getToken()) , HttpStatus.OK);
 	}
 
 	
@@ -117,7 +118,7 @@ public class ApiUser {
 		User user = userRepository.findByUsername(username);
 		user.setEnabled(false);
 		User updated = userRepository.save(user);
-		return new ResponseEntity<String>(updated.isEnabled() + "", HttpStatus.OK);
+		return new ResponseEntity<>(updated.isEnabled() + "", HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/api/v1/user/{username}/db")
@@ -125,7 +126,7 @@ public class ApiUser {
 		User user = userRepository.findByUsername(username);
 
 		if(user == null)
-			return new ResponseEntity<String>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		
 		//in case user is not activated yet and the token exists
 		VerificationToken token = vTokenRepository.findByUser(user);
@@ -133,7 +134,7 @@ public class ApiUser {
 			vTokenRepository.delete(token);
 		
 		userRepository.delete(user);
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	
@@ -174,8 +175,8 @@ public class ApiUser {
 		return new UserDTO(
 				u.getId(), u.getFirstname(), u.getLastname(), 
 				u.getUsername() ,u.getEmail(), u.isEnabled(), u.getPhoto(),
-				u.getFollowers() != null ? u.getFollowers().stream().map(i -> i.getUsername()).collect(Collectors.toList()) : new ArrayList<>(),
-				u.getFollowings() != null ? u.getFollowings().stream().map(i -> i.getUsername()).collect(Collectors.toList()) : new ArrayList<>()
+				u.getFollowers() != null ? u.getFollowers().stream().map(User::getUsername).collect(Collectors.toList()) : new ArrayList<>(),
+				u.getFollowings() != null ? u.getFollowings().stream().map(User::getUsername).collect(Collectors.toList()) : new ArrayList<>()
 				);
 	}
 	

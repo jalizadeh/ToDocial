@@ -44,19 +44,19 @@ public class ApiTodo {
 
 	@GetMapping("/api/v1/todo")
 	public List<TodoDTO> getAllTodo() {
-		return todoRepository.findAll().stream().map(t -> mapTodoToDTO(t)).collect(Collectors.toList());
+		return todoRepository.findAll().stream().map(this::mapTodoToDTO).collect(Collectors.toList());
 	}
 
 	@GetMapping("/api/v1/todo/{username}")
 	public List<TodoDTO> getUserTodo(@PathVariable("username") String username) {
 		User user = userRepository.findByUsername(username);
-		return todoRepository.findAllByUserId(user.getId()).stream().map(t -> mapTodoToDTO(t))
+		return todoRepository.findAllByUserId(user.getId()).stream().map(this::mapTodoToDTO)
 				.collect(Collectors.toList());
 	}
 
 	@GetMapping("/api/v1/todo/me")
 	public List<TodoDTO> getUserTodo() {
-		return todoRepository.findAllByLoggedinUser().stream().map(t -> mapTodoToDTO(t)).collect(Collectors.toList());
+		return todoRepository.findAllByLoggedinUser().stream().map(this::mapTodoToDTO).collect(Collectors.toList());
 	}
 
 	@PostMapping("/api/v1/todo")
@@ -80,14 +80,14 @@ public class ApiTodo {
 		User loggedinUser = userService.GetAuthenticatedUser();
 		Todo todo = todoRepository.getOne(id);
 
-		if (todo.getUser().getId() == loggedinUser.getId()) {
+		if (todo.getUser().getId().equals(loggedinUser.getId())) {
 			todo.setCanceled(true);
 			todo.setCancel_date(new Date());
 			todoRepository.save(todo);
-			return new ResponseEntity<String>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 
-		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	@DeleteMapping("/api/v1/todo/{id}/db")
@@ -96,13 +96,13 @@ public class ApiTodo {
 		Todo foundTodo = todoRepository.findById(id).orElse(null);
 
 		if (foundTodo == null)
-			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 		if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
-			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
 		todoRepository.delete(foundTodo);
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 
@@ -133,13 +133,13 @@ public class ApiTodo {
 		TodoLog foundTodoLog = todoLogRepository.findById(todoLogId).orElse(null);
 
 		if (foundTodo == null || foundTodoLog == null)
-			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
-			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
 		todoLogRepository.delete(foundTodoLog);
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	

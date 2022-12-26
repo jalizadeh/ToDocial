@@ -232,8 +232,7 @@ public class LoginSignupController{
 		
 		//check answer validity
 		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
-		if(!b.matches(sqa, secQ.getAnswer()) || 
-				sq != secQ.getQuestionDefinition().getId()) {
+		if(!b.matches(sqa, secQ.getAnswer()) || !sq.equals(secQ.getQuestionDefinition().getId())) {
 			model.put("errorMessages", "The given answer is not correct. Try again.");
 			model.put("securityQuestions", sqdRepo.findAll());
             return "change-password";

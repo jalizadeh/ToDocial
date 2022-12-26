@@ -16,11 +16,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.jalizadeh.todocial.system.repository.UserRepository;
 import com.jalizadeh.todocial.web.exception.EmailExistsException;
 import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.repository.RoleRepository;
-import com.jalizadeh.todocial.system.repository.UserRepository;
 
 @Service
 //@Transactional

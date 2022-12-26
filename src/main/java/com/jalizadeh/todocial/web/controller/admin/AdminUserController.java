@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -65,10 +66,13 @@ public class AdminUserController {
 	public String ActivateUser(ModelMap model , @RequestParam Long id) {
 		model.put("PageTitle", "Admin > Modify User");
 
-		User foundUser = userRepository.findById(id).get();
-		foundUser.setEnabled(!foundUser.isEnabled()); 
-		foundUser.setMp(foundUser.getPassword());
-		userRepository.save(foundUser);
+		Optional<User> found = userRepository.findById(id);
+		if(found.isPresent()) {
+			User foundUser = found.get();
+			foundUser.setEnabled(!foundUser.isEnabled()); 
+			foundUser.setMp(foundUser.getPassword());
+			userRepository.save(foundUser);
+		}
 
 		return "redirect:/admin/users";
 	}
