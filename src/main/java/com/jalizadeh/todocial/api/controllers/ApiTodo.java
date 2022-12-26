@@ -1,5 +1,6 @@
 package com.jalizadeh.todocial.api.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jalizadeh.todocial.system.repository.TodoLogRepository;
 import com.jalizadeh.todocial.system.repository.TodoRepository;
 import com.jalizadeh.todocial.system.repository.UserRepository;
 import com.jalizadeh.todocial.system.service.UserService;
@@ -30,38 +32,38 @@ public class ApiTodo {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private TodoRepository todoRepository;
 	
+	@Autowired
+	private TodoLogRepository todoLogRepository;
+
 	@GetMapping("/api/v1/todo")
 	public List<TodoDTO> getAllTodo() {
-		return todoRepository.findAll().stream()
-				.map(t -> mapTodoToDTO(t)).collect(Collectors.toList());
+		return todoRepository.findAll().stream().map(t -> mapTodoToDTO(t)).collect(Collectors.toList());
 	}
-	
+
 	@GetMapping("/api/v1/todo/{username}")
-	public List<TodoDTO> getUserTodo(@PathVariable("username") String username){
+	public List<TodoDTO> getUserTodo(@PathVariable("username") String username) {
 		User user = userRepository.findByUsername(username);
-		return todoRepository.findAllByUserId(user.getId()).stream()
-					.map(t -> mapTodoToDTO(t)).collect(Collectors.toList());
+		return todoRepository.findAllByUserId(user.getId()).stream().map(t -> mapTodoToDTO(t))
+				.collect(Collectors.toList());
 	}
-	
+
 	@GetMapping("/api/v1/todo/me")
-	public List<TodoDTO> getUserTodo(){
-		return todoRepository.findAllByLoggedinUser().stream()
-					.map(t -> mapTodoToDTO(t)).collect(Collectors.toList());
+	public List<TodoDTO> getUserTodo() {
+		return todoRepository.findAllByLoggedinUser().stream().map(t -> mapTodoToDTO(t)).collect(Collectors.toList());
 	}
-	
-	
+
 	@PostMapping("/api/v1/todo")
-	public TodoDTO createTodo(@RequestBody InputTodo todo){
-		//User currentUser = userRepository.findLoggedinUser();
+	public TodoDTO createTodo(@RequestBody InputTodo todo) {
+		// User currentUser = userRepository.findLoggedinUser();
 		User user = userService.GetAuthenticatedUser();
-		
+
 		Todo newTodo = new Todo();
 		newTodo.setName(todo.name);
 		newTodo.setDescription(todo.description);
@@ -69,65 +71,94 @@ public class ApiTodo {
 		newTodo.setUser(user);
 		newTodo.setCreation_date(new Date());
 		Todo savedTodo = todoRepository.save(newTodo);
-		
+
 		return mapTodoToDTO(savedTodo);
 	}
-	
-	
+
 	@DeleteMapping("/api/v1/todo/{id}")
-	public ResponseEntity<String> cancelTodo(@PathVariable("id") Long id){
+	public ResponseEntity<String> cancelTodo(@PathVariable("id") Long id) {
 		User loggedinUser = userService.GetAuthenticatedUser();
 		Todo todo = todoRepository.getOne(id);
-		
-		if(todo.getUser().getId() == loggedinUser.getId()) {
+
+		if (todo.getUser().getId() == loggedinUser.getId()) {
 			todo.setCanceled(true);
 			todo.setCancel_date(new Date());
 			todoRepository.save(todo);
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}
-		
+
 		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 	}
+
+	@DeleteMapping("/api/v1/todo/{id}/db")
+	public ResponseEntity<String> deleteTodoFromDB(@PathVariable("id") Long id) {
+		User loggedInUser = userService.GetAuthenticatedUser();
+		Todo foundTodo = todoRepository.findById(id).orElse(null);
+
+		if (foundTodo == null)
+			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+
+		if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
+			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+
+		todoRepository.delete(foundTodo);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
 	
-	
-	
+
 	@PostMapping("/api/v1/todo/{id}/log")
-	public ResponseEntity<String> createTodoLog(@PathVariable("id") Long id, @RequestBody InputLog log){
-		User loggedinUser = userService.GetAuthenticatedUser();
-		Todo todo = todoRepository.getOne(id);
-		
-		if(todo.getUser().getId() == loggedinUser.getId()) {
-			TodoLog todoLog = new TodoLog(new Date(), log.log);
-			todoLog.getTodos().add(todo);
-			todo.getLogs().add(todoLog);
-			todoRepository.save(todo);
-			return new ResponseEntity<String>(HttpStatus.OK);
-		}
-		
-		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+	public  ResponseEntity<?> createTodoLog(@PathVariable("id") Long id, @RequestBody InputLog log) {
+		User loggedInUser = userService.GetAuthenticatedUser();
+		Todo foundTodo = todoRepository.findById(id).orElse(null);
+
+		if (foundTodo == null)
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+
+		if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
+			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+
+		TodoLog todoLog = new TodoLog(new Date(), log.log);
+		todoLog.getTodos().add(foundTodo);
+		foundTodo.getLogs().add(todoLog);
+		todoLogRepository.save(todoLog);
+		todoRepository.save(foundTodo);
+		return new ResponseEntity<TodoLogDTO>(mapTodoToLogDTO(todoLog),HttpStatus.OK);
 	}
 	
 	
+	@DeleteMapping("/api/v1/todo/{todoId}/log/{todoLogId}")
+	public  ResponseEntity<String> deleteTodoLog(@PathVariable("todoId") Long todoId, @PathVariable("todoLogId") Long todoLogId) {
+		User loggedInUser = userService.GetAuthenticatedUser();
+		Todo foundTodo = todoRepository.findById(todoId).orElse(null);
+		TodoLog foundTodoLog = todoLogRepository.findById(todoLogId).orElse(null);
+
+		if (foundTodo == null || foundTodoLog == null)
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+
+		if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
+			return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+
+		todoLogRepository.delete(foundTodoLog);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
 	
+	
+
 	private TodoDTO mapTodoToDTO(Todo t) {
-		return new TodoDTO(
-					t.getId(), t.getName(), t.getDescription(), t.getReason(), 
-					t.getLogs().stream().map(i -> mapTodoToLogDTO(i)).collect(Collectors.toList()),
-					t.getLike(),t.isCompleted(), t.isCanceled(), t.isPublicc()
-				);
+		return new TodoDTO(t.getId(), t.getName(), t.getDescription(), t.getReason(), new ArrayList<>(), t.getLike(),
+				t.isCompleted(), t.isCanceled(), t.isPublicc());
 	}
-	
+
 	private TodoLogDTO mapTodoToLogDTO(TodoLog l) {
 		return new TodoLogDTO(l.getId(), l.getLog(), l.getLogDate());
 	}
 
-
 	@AllArgsConstructor
 	@NoArgsConstructor
 	@Data
-	static class TodoDTO{
+	static class TodoDTO {
 		private Long id;
-		private String name; 
+		private String name;
 		private String description;
 		private String reason;
 		private List<TodoLogDTO> logs;
@@ -136,32 +167,30 @@ public class ApiTodo {
 		private boolean canceled;
 		private boolean publicc;
 	}
-	
+
 	@AllArgsConstructor
 	@NoArgsConstructor
 	@Data
-	static class InputTodo{
-		private String name; 
+	static class InputTodo {
+		private String name;
 		private String description;
 		private String reason;
 	}
-	
-	
+
 	@AllArgsConstructor
 	@NoArgsConstructor
 	@Data
-	static class TodoLogDTO{
+	static class TodoLogDTO {
 		private Long id;
-		private String log; 
+		private String log;
 		private Date logDate;
 	}
-	
+
 	@AllArgsConstructor
 	@NoArgsConstructor
 	@Data
-	static class InputLog{
-		private String log; 
+	static class InputLog {
+		private String log;
 	}
-	
-	
+
 }

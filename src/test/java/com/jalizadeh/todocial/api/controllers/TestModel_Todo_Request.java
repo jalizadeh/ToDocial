@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-class UserTestInput{
-	private String firstname;
-	private String lastname;
-	private String username;
-	private String email;
-	private String password;
+public class TestModel_Todo_Request {
+	private String name; 
+	private String description;
+	private String reason;
 }

@@ -201,13 +201,17 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
 | ✅ | Activate a `User`  | `POST /api/v1/user/{username}/activate?token={{token}}`  |
 | ✅ | Delete (deactivate) a `User`  | `DELETE /api/v1/user/{username}`  |
 | ✅ | Delete from DB a `User`  | `DELETE /api/v1/user/{username}/db`  |
-|   | Get all `Todo`s  | `GET /api/v1/todo`  |
-|   | Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
+| ✅ | Get all `Todo`s  | `GET /api/v1/todo`  |
+| ✅ | Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
 |   | Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  |
-|   | Create a `Todo` for `User` | `POST /api/v1/todo`  |
+| ✅ | Create a `Todo` for `User` | `POST /api/v1/todo`  |
 |   | Get one `Todo`  | `GET /api/v1/todo/{id}`  |
-|   | Cancel a `Todo`  | `DELETE /api/v1/todo/{id}` |
-|   | Add a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
+|   | Cancel (pause) a `Todo`  | `DELETE /api/v1/todo/{id}` |
+| ✅ | Delete a `Todo` and its `TodoLog`  | `DELETE /api/v1/todo/{id}/db` |
+| ✅ | Create a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
+|   | Get a `Todo Log`  | `GET /api/v1/todo/{id}/log/{id}` |
+|   | Get all `Todo Log`  | `GET /api/v1/todo/{id}/log` |
+| ✅ | Delete a `Todo Log`  | `DELETE /api/v1/todo/{id}/log/{id}` |
 
 
 
@@ -219,7 +223,13 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
 	- as `admin` with `admin:12345`
 	- as `user`  with `alexfergosen:12345`
 	
-	
+
+## Run Tests
+- mvn clean test
+	- Run and generate report
+- mvn clean site
+	- Run and generate styled report
+
 
 ## Simulation Scenario
 In simulation mode, a list of random users are created and they interact with each other. You, as an admin, can observe what is happening inside the ecosystem

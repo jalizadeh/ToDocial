@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-class UserTestResponse{
+class TestModel_User_Response{
 	private Long id;
 	private String firstname;
 	private String lastname;
