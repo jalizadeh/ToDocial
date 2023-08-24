@@ -36,7 +36,8 @@
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
-			<scope>provided</scope>
+			<!--			disabled due to not importing package by IntelliJ-->
+			<!--			<scope>provided</scope>-->
 		</dependency>
 
 		<dependency>

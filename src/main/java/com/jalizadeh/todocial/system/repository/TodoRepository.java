@@ -16,6 +16,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 	List<Todo> findAllByUserId(Long id);
 
 	List<Todo> findAllByUserIdAndPubliccTrue(Long id);
+
+	List<Todo> findAllByPubliccTrue();
 	
 	@Query("select t from Todo t where t.user.id=:#{principal.id} and t.completed = true and t.canceled = false")
 	List<Todo> getAllCompleted();
