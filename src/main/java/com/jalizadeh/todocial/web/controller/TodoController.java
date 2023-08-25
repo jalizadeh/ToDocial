@@ -242,6 +242,9 @@ public class TodoController {
 		}
 
 		//to-do belongs to current logged in user. By default shows as editable
+		if(foundTodo.isCompleted())
+			return "todo-completed";
+
 		return "todo";
 	}
 	
