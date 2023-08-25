@@ -1,6 +1,6 @@
 <%@ include file="common/header.jspf"%>
 
-<h4 class="display-4">${PageTitle}</h4>
+<!--<h4 class="display-4">${PageTitle}</h4>-->
 
 <c:if test="${error != null}">
 	<div class="alert alert-danger" role="alert">${error}</div>

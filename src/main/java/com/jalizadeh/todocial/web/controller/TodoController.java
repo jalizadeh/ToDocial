@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -210,21 +211,42 @@ public class TodoController {
 				new FlashMessage("Todo created successfully", FlashMessage.Status.success));
 		return "redirect:/@" + user.getUsername();
 	}
-	
-	
-	@GetMapping("/update-todo")
-	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id) {
-		model.put("PageTitle", "Update Todo");
+
+
+	/**
+	 * 1. exists?
+	 * 2. show mine as editable
+	 * 3. show sb else as viewable
+	 */
+	@GetMapping("/todo")
+	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id, RedirectAttributes redirectAttributes) {
+		Optional<Todo> todo = todoRepository.findById(id);
+
+		//if requested to-do id doesnt exists
+		if(!todo.isPresent()){
+			redirectAttributes.addFlashAttribute("exception", "The requested todo with id "+ id + " doesn't exist");
+			return "redirect:/error";
+		}
+
+		Todo foundTodo = todo.get();
+		model.put("PageTitle", foundTodo.getName());
 		model.put("settings", settings);
-		model.put("todo", todoRepository.getOne(id));
+		model.put("todo", foundTodo);
 		model.addAttribute("allPriority",allPriority());
 		model.addAttribute("allType",allType());
+
+		//to-do doesnt belongs to current logged in user. It is viewable only, not editable
+		User currentUser = userService.GetAuthenticatedUser();
+		if(!foundTodo.getUser().getUsername().equals(currentUser.getUsername())){
+			return "todo-completed";
+		}
+
+		//to-do belongs to current logged in user. By default shows as editable
 		return "todo";
 	}
 	
-	@PostMapping("/update-todo")
-	public String UpdateTodo(@Valid Todo todo, BindingResult result,
-			RedirectAttributes redirectAttributes, ModelMap model) {
+	@PostMapping("/todo")
+	public String UpdateTodo(@Valid Todo todo, BindingResult result, RedirectAttributes redirectAttributes, ModelMap model) {
 		model.put("settings", settings);
 		
 		if(result.hasErrors()) {

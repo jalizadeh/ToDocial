@@ -31,13 +31,13 @@
 						<c:when test="${todo.completed == true}">
 							<p>
 								<i class="fas fa-clipboard-check text-success"></i> <a
-									href="/update-todo?id=${todo.id}">${todo.name}</a> by @${todo.user.username}
+									href="/todo?id=${todo.id}">${todo.name}</a> by @${todo.user.username}
 							</p>
 						</c:when>
 						<c:otherwise>
 							<p>
 								<i class="fas fa-clipboard text-warning"></i> <a
-									href="/update-todo?id=${todo.id}">${todo.name}</a> by @${todo.user.username}
+									href="/todo?id=${todo.id}">${todo.name}</a> by @${todo.user.username}
 							</p>
 						</c:otherwise>
 					</c:choose>

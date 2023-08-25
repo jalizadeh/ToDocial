@@ -12,7 +12,7 @@
 			</div>
 		</c:if>
 		
-		<form:form method="post" action="/login" modelAttribute="user">
+		<form:form class="col-6" method="post" action="/login" modelAttribute="user">
 			<div class="form-group">
 			    <label for="username">Username</label>
 			    <form:input path="username" type="text" class="form-control" name="username" id="username" required="required"/>
