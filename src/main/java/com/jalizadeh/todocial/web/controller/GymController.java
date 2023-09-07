@@ -15,7 +15,7 @@ public class GymController {
     private SettingsGeneralConfig settings;
 
     @RequestMapping(value = "/gym", method = RequestMethod.GET)
-    public String gymHomepage(ModelMap model){
+    public String homepage(ModelMap model){
         model.put("settings", settings);
         model.put("PageTitle", "Gym");
         return "gym/home";

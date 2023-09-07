@@ -3,6 +3,7 @@ package com.jalizadeh.todocial.web.model.gym;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +21,5 @@ public class GymPlan {
 
     private int progress;
 
+    //private List<GymWeek> weeks;
 }
