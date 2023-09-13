@@ -2,18 +2,22 @@ package com.jalizadeh.todocial.web.model.gym;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
-public class GymWorkout {
-
+public class GymWorkout extends Progress {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "plan_id")
+    private GymPlan plan;
+
+    @ManyToOne
+    @JoinColumn(name = "day_id")
+    private GymDay day;
 
     private String name;
 

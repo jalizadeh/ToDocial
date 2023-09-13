@@ -36,14 +36,22 @@
 
 	<div class="row mt-2">
 		<div class="col border-bottom">
-			Your Active Plans
+			<h2>Your Active Plans</h2>
 		</div>
 	</div>
 
 	<div class="row">
-		<div class="col">
-			Advance Workout Plan [Advanced - 12 weeks]
-		</div>
+		<c:forEach items="${plans}" var="plan">
+			<div class="card p-2" >
+				<div class="card-body">
+				  <h5 class="card-title">${plan.title}</h5>
+				  <h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} - ${plan.numberOfWeeks} weeks</h6>
+				  <p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
+				  <a href="/gym/plan?id=${plan.id}" class="card-link">View details</a>
+				  <a href="/gym/plan?edit=${plan.id}" class="card-link">Edit plan</a>
+				</div>
+			  </div>
+		</c:forEach>
 	</div>
 
 	<div class="row mt-2">
