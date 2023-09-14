@@ -10,4 +10,7 @@ public interface GymDayRepository extends JpaRepository<GymDay, Long>{
 
     List<GymDay> findAllByPlanId(Long id);
 
+    List<GymDay> findAllByPlanIdOrderByDayNumber(Long id);
+
+    GymDay findByDayNumber(Long planId);
 }

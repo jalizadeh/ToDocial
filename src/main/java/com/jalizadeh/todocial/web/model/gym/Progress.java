@@ -7,6 +7,6 @@ public class Progress {
 
     @Min(0)
     @Max(100)
-    private int progress;
+    protected int progress;
 
 }

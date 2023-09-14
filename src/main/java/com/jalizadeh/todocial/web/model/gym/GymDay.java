@@ -8,7 +8,7 @@ import javax.validation.constraints.Min;
 
 @Entity
 @Data
-public class GymDay extends Progress {
+public class GymDay {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
@@ -21,5 +21,9 @@ public class GymDay extends Progress {
 
     @Min(1)
     @Max(7)
-    private int dayNumber;
+    private Long dayNumber;
+
+    @Min(0)
+    @Max(100)
+    protected int progress;
 }
