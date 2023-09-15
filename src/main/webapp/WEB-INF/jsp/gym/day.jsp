@@ -20,22 +20,40 @@
 				<div class="card mb-3">
 					<div class="row g-0">
 						<div class="col-md-4">
-							<img src="/${workout.img}" class="img-fluid rounded-start" alt="${workout.name}">
+							<img src="/resources/img/gym/default-workout.jpg" class="img-fluid rounded-start" alt="${workout.name}">
 						</div>
-						<div class="col-md-8">
+						<div class="col-4">
 							<div class="card-body">
-							<h5 class="card-title">${workout.name}</h5>
-							<div class="row">
-								<div class="col-2"><p class="card-text">Sets:</p></div>
-								<div class="col"><p class="card-text">${workout.sets}</p></div>
+								<h5 class="card-title">${workout.name}</h5>
+								<div class="row">
+									<div class="col-3"><p class="card-text">Sets:</p></div>
+									<div class="col"><p class="card-text">${workout.sets}</p></div>
+								</div>
+								<div class="row">
+									<div class="col-3"><p class="card-text">Reps:</p></div>
+									<div class="col"><p class="card-text">${workout.repsMin}-${workout.repsMax} reps</p></div>
+								</div>
+								<div class="row">
+									<div class="col-3"><p class="card-text">Rest:</p></div>
+									<div class="col"><p class="card-text">${workout.restMin}-${workout.restMax} sec</p></div>
+								</div>
 							</div>
-							<div class="row">
-								<div class="col-2"><p class="card-text">Reps:</p></div>
-								<div class="col"><p class="card-text">${workout.repsMin}-${workout.repsMax} reps</p></div>
-							</div>
-							<div class="row">
-								<div class="col-2"><p class="card-text">Rest:</p></div>
-								<div class="col"><p class="card-text">${workout.restMin}-${workout.restMax} sec</p></div>
+						</div>
+						<div class="col-4">
+							<div class="card-body">
+								<h5 class="card-title">Workout Records</h5>
+								<div class="row">
+									<div class="col-3"><p class="card-text">Set 1:</p></div>
+									<div class="col"><p class="card-text">10 kg - 8 reps</p></div>
+								</div>
+								<div class="row">
+									<div class="col-3"><p class="card-text">Set 2:</p></div>
+									<div class="col"><p class="card-text">10 kg - 10 reps</p></div>
+								</div>
+								<div class="row">
+									<div class="col-3"><p class="card-text">Set 3:</p></div>
+									<div class="col"><p class="card-text">10 kg - 12 reps</p></div>
+								</div>
 							</div>
 						</div>
 					</div>

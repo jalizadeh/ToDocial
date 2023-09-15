@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface GymRepository extends JpaRepository<GymPlan, Long>{
 
+    List<GymPlan> findAllByActiveTrue();
 }

@@ -39,7 +39,7 @@ public class GymController {
     public String homepage(ModelMap model){
         model.put("settings", settings);
         model.put("PageTitle", "Gym");
-        model.put("plans", gymRepository.findAll());
+        model.put("plans", gymRepository.findAllByActiveTrue());
 
         return "gym/home";
     }

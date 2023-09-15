@@ -26,4 +26,6 @@ public class GymPlan extends Progress{
     @Max(7)
     private int numberOfDays;
 
+    private boolean active;
+
 }
