@@ -8,7 +8,7 @@ import javax.validation.constraints.Min;
 
 @Entity
 @Data
-public class GymWeek {
+public class GymPlanDayWorkout {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
@@ -17,11 +17,25 @@ public class GymWeek {
     @JoinColumn(name = "plan_id")
     private GymPlan plan;
 
-    @Min(1)
-    private int weekNumber;
+    @ManyToOne
+    @JoinColumn(name = "day_id")
+    private GymDay day;
+
+    private String name;
+
+    private int sets;
+
+    private int repsMin;
+    private int repsMax;
+
+    private int restMin;
+    private int restMax;
+
+    private String img;
+
+    private String suggestion;
 
     @Min(0)
     @Max(100)
     protected int progress;
-
 }

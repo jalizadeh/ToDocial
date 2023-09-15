@@ -1,5 +1,20 @@
 <%@ include file="../common/header.jspf" %>
 
+	<c:if test="${error != null}">
+		<div class="alert alert-danger" role="alert">${error}</div>
+	</c:if>
+
+	<c:if test="${flash != null}">
+			<div class="alert alert-${flash.status} alert-dismissible fade show"
+				role="alert">
+				${flash.message}
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</c:if>
+
 	<div class="row">
 		<div class="col-3">
 			<p>Blood</p>
@@ -36,15 +51,47 @@
 
 	<div class="row mt-2">
 		<div class="col border-bottom">
-			<h2>Your Active Plans</h2>
+			<h2>Your Active Plans <a href="gym/plan/new?step=1" class="badge badge-success"><i class="fas fa-plus"></i> New</a></h2>
 		</div>
 	</div>
 
 	<div class="row">
-		<c:forEach items="${plans}" var="plan">
+		<c:forEach items="${activePlans}" var="plan">
 			<div class="card p-2" >
 				<div class="card-body">
-				  <h5 class="card-title">${plan.title}</h5>
+				  	<h5 class="card-title">
+						<span class="badge rounded-pill bg-success">.</span> ${plan.title}
+					</h5>
+				  <h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
+				  <p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
+				  <a href="/gym/plan/${plan.id}" class="card-link">View details</a>
+				  <a href="/gym/plan?edit=${plan.id}" class="card-link">Edit plan</a>
+				</div>
+			  </div>
+		</c:forEach>
+	</div>
+
+	<div class="row mt-2">
+		<div class="col border-bottom">
+			<h2>All Plans</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<c:forEach items="${allPlans}" var="plan">
+			<div class="card p-2" >
+				<div class="card-body">
+				  	<h5 class="card-title">
+						<c:choose>
+							<c:when test="${plan.active == true}">
+								<span class="badge rounded-pill bg-success">.</span> 
+							</c:when>    
+							<c:otherwise>
+								<span class="badge rounded-pill bg-secondary">.</span> 
+							</c:otherwise>
+						</c:choose>
+						${plan.title}
+					</h5>
 				  <h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
 				  <p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
 				  <a href="/gym/plan/${plan.id}" class="card-link">View details</a>
