@@ -1,6 +1,6 @@
 package com.jalizadeh.todocial.web.model.gym;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -8,20 +8,22 @@ import javax.validation.constraints.Min;
 
 @Entity
 @Data
-public class GymPlanDayWorkout {
+public class GymDayWorkout {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "plan_id")
-    private GymPlan plan;
-
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "day_id")
     private GymDay day;
 
-    private String name;
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "workout_id")
+    private GymWorkout workout;
+
+    private int workoutNumber;
 
     private int sets;
 
@@ -30,10 +32,6 @@ public class GymPlanDayWorkout {
 
     private int restMin;
     private int restMax;
-
-    private String img;
-
-    private String suggestion;
 
     @Min(0)
     @Max(100)

@@ -4,11 +4,14 @@ import com.jalizadeh.todocial.web.model.gym.types.GymMainGoal;
 import com.jalizadeh.todocial.web.model.gym.types.GymTrainingLevel;
 import com.jalizadeh.todocial.web.model.gym.types.GymWorkoutType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class GymPlanIntroduction {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -24,19 +27,12 @@ public class GymPlanIntroduction {
     @Enumerated(EnumType.STRING)
     private GymTrainingLevel trainingLevel;
 
-    /*
-    private int programDuration;
-
-    private int daysPerWeek;
-
-    private int timePerWorkout;
+    private String timePerWorkout;
 
     //private List<GymEquipment> equipmentRequired;
 
     private byte targetGender;
 
     //private List<GymSupplement> recommendedSupplements;
-
-     */
 
 }

@@ -1,13 +1,17 @@
 package com.jalizadeh.todocial.web.model.gym;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class GymDay {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -15,9 +19,16 @@ public class GymDay {
 
     private String focus;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "plan_id")
+    @JsonIgnore
     private GymPlan plan;
+
+    //@ManyToMany(cascade = CascadeType.ALL)
+    //@JoinTable(name = "gym_day_workout", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "day_id"))
+    @Transient
+    private List<GymDayWorkout> dayWorkouts = new ArrayList<>();
 
     @Min(1)
     @Max(7)

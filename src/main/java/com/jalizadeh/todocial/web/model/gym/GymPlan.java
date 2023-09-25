@@ -1,15 +1,15 @@
 package com.jalizadeh.todocial.web.model.gym;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class GymPlan {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -17,12 +17,14 @@ public class GymPlan {
 
     private String title;
 
-    @OneToOne
+    //on Gym homepage, I need to have quick access to Plan's details
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "gym_plan_introduction")
     private GymPlanIntroduction gymPlanIntroduction;
 
-    @Transient
-    private List<GymWorkout> workouts;
+    //@Transient
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "plan")
+    private List<GymDay> days = new ArrayList<>();
 
     @Min(1)
     private int numberOfWeeks;

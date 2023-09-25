@@ -15,27 +15,27 @@
 	</div>
 
 	<div class="row">
-		<c:forEach items="${workouts}" var="workout">
+		<c:forEach items="${dayWorkouts}" var="dayWorkout">
 			<div class="col-12 p-2">
 				<div class="card mb-3">
 					<div class="row g-0">
 						<div class="col-md-4">
-							<img src="/resources/img/gym/default-workout.jpg" class="img-fluid rounded-start" alt="${workout.name}">
+							<img src="/resources/img/gym/${dayWorkout.workout.img}" class="mx-auto d-block" alt="${dayWorkout.workout.name}" style="max-width: 50%;">
 						</div>
 						<div class="col-4">
 							<div class="card-body">
-								<h5 class="card-title">${workout.name}</h5>
+								<h5 class="card-title">${dayWorkout.workout.name}</h5>
 								<div class="row">
 									<div class="col-3"><p class="card-text">Sets:</p></div>
-									<div class="col"><p class="card-text">${workout.sets}</p></div>
+									<div class="col"><p class="card-text">${dayWorkout.sets}</p></div>
 								</div>
 								<div class="row">
 									<div class="col-3"><p class="card-text">Reps:</p></div>
-									<div class="col"><p class="card-text">${workout.repsMin}-${workout.repsMax} reps</p></div>
+									<div class="col"><p class="card-text">${dayWorkout.repsMin}-${dayWorkout.repsMax} reps</p></div>
 								</div>
 								<div class="row">
 									<div class="col-3"><p class="card-text">Rest:</p></div>
-									<div class="col"><p class="card-text">${workout.restMin}-${workout.restMax} sec</p></div>
+									<div class="col"><p class="card-text">${dayWorkout.restMin}-${dayWorkout.restMax} sec</p></div>
 								</div>
 							</div>
 						</div>

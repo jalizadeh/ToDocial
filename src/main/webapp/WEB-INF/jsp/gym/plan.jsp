@@ -39,21 +39,28 @@
 			</div>
 
 			<div class="row">
-				<p>${plan.gymPlanIntroduction.moreInfo}</p>
-				</br>
-				<h4>Main Goal: ${plan.gymPlanIntroduction.mainGoal}</h4>
-				<h4>Workout Type: ${plan.gymPlanIntroduction.mainGoal}</h4>
-				<h4>Training Level: ${plan.gymPlanIntroduction.mainGoal}</h4>
-				<h4>Program Duration: ${plan.numberOfWeeks} weeks</h4>
-				<h4>Days per Week: ${plan.numberOfDays} days</h4>
-				<h4>Time per Workout: 60-70 min</h4>
-				<h4>Equipment Required: ${plan.gymPlanIntroduction.mainGoal}</h4>
-				</br>
-				<c:forEach items="${days}" var="day">
-					<div>
-						<h5>Day ${day.dayNumber}: ${day.focus}</h5>
-					</div>
-				</c:forEach>
+				<div>
+					<p>${plan.gymPlanIntroduction.moreInfo}</p>
+					<p>Main Goal: ${plan.gymPlanIntroduction.mainGoal}</p>
+					<p>Workout Type: ${plan.gymPlanIntroduction.workoutType}</p>
+					<p>Training Level: ${plan.gymPlanIntroduction.trainingLevel}</p>
+					<p>Program Duration: ${plan.numberOfWeeks} weeks</p>
+					<p>Days per Week: ${plan.numberOfDays} days</p>
+					<p>Time per Workout: ${plan.gymPlanIntroduction.timePerWorkout}</p>
+					<p>Equipment Required: ###</p>
+					<c:choose>
+						<c:when test="${plan.gymPlanIntroduction.targetGender == 0}">
+							<p>Target Gender: Men</p>
+						</c:when>
+						<c:otherwise>
+							<p>Target Gender: Women</p>
+						</c:otherwise>
+					</c:choose>
+					
+					<c:forEach items="${days}" var="day">
+						<p>Day ${day.dayNumber}: ${day.focus}</p>
+					</c:forEach>
+				</div>
 			</div>
 		</div>
 	</div>
