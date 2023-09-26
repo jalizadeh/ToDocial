@@ -22,7 +22,6 @@ public class GymPlan {
     @JoinColumn(name = "gym_plan_introduction")
     private GymPlanIntroduction gymPlanIntroduction;
 
-    //@Transient
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "plan")
     private List<GymDay> days = new ArrayList<>();
 

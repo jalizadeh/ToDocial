@@ -20,7 +20,7 @@
 				<div class="card mb-3">
 					<div class="row g-0">
 						<div class="col-md-4">
-							<img src="/resources/img/gym/${dayWorkout.workout.img}" class="mx-auto d-block" alt="${dayWorkout.workout.name}" style="max-width: 50%;">
+							<img src="/resources/img/gym/${dayWorkout.workout.img}" class="mx-auto d-block" alt="${dayWorkout.workout.name}" style="max-width: 30%;">
 						</div>
 						<div class="col-4">
 							<div class="card-body">
@@ -41,19 +41,17 @@
 						</div>
 						<div class="col-4">
 							<div class="card-body">
-								<h5 class="card-title">Workout Records</h5>
-								<div class="row">
-									<div class="col-3"><p class="card-text">Set 1:</p></div>
-									<div class="col"><p class="card-text">10 kg - 8 reps</p></div>
-								</div>
-								<div class="row">
-									<div class="col-3"><p class="card-text">Set 2:</p></div>
-									<div class="col"><p class="card-text">10 kg - 10 reps</p></div>
-								</div>
-								<div class="row">
-									<div class="col-3"><p class="card-text">Set 3:</p></div>
-									<div class="col"><p class="card-text">10 kg - 12 reps</p></div>
-								</div>
+								<c:forEach items="${dayWorkout.workoutLogs}" var="wlog" varStatus="loop">
+											<c:if test="${wlog.week == week}">
+												<div class="row">
+													<div class="col-3"><p class="card-text">Set ${wlog.setNumber}:</p></div>
+													<div class="col"><p class="card-text">${wlog.weight} kg - ${wlog.reps} reps</p></div>
+												</div>
+											</c:if>
+										</c:forEach>
+
+								<div id="myTable"></table>
+								<button type="button" id="addWorkout" class="btn btn-primary" onclick="addRow('${day.id}','${dayWorkout}', '${dayWorkout.id}')">Add Row</button>
 							</div>
 						</div>
 					</div>
@@ -62,6 +60,76 @@
 		</c:forEach>
 	</div>
 
+
+	<script>
+		function addRow(dayId, workout, workoutId) {
+			console.log(workout);
+			let counter = 1;
+
+			// Create the form elements
+			let form = document.createElement('form');
+            form.id = 'workoutLog';
+            form.action = dayId + '/workout/' + workoutId + '/add-workout-log';
+            form.method = 'post';
+
+			let setInput = document.createElement('input');
+            setInput.id = 'setNumber';
+            setInput.name = 'setNumber';
+            setInput.type = 'text';
+            //setInput.className = 'form-control';
+            setInput.required = true;
+
+			let weightInput = document.createElement('input');
+            weightInput.id = 'weight';
+            weightInput.name = 'weight';
+            weightInput.type = 'text';
+            //weightInput.className = 'form-control';
+            weightInput.required = true;
+
+			let repsInput = document.createElement('input');
+            repsInput.id = 'reps';
+            repsInput.name = 'reps';
+            repsInput.type = 'text';
+            //repsInput.className = 'form-control';
+            repsInput.required = true;
+			
+            let input1 = document.createElement('input');
+            let input2 = document.createElement('input');
+            let cancelButton = document.createElement('button');
+            let saveButton = document.createElement('button');
+
+			// Create the submit button
+            let submitButton = document.createElement('button');
+            submitButton.type = 'submit';
+            submitButton.textContent = 'Submit';
+
+            // Set attributes and values
+            cancelButton.textContent = 'Cancel';
+            saveButton.textContent = 'Save';
+
+            // Add event listeners to buttons
+            cancelButton.addEventListener('click', function() {
+                form.remove();
+				$('#addWorkout').show();
+            });
+            saveButton.addEventListener('click', function() {
+                // Add your save logic here
+                form.remove();
+            });
+
+            // Append elements to the form
+			form.appendChild(setInput);
+			form.appendChild(weightInput);
+            form.appendChild(repsInput);
+            form.appendChild(document.createElement('br'));
+            form.appendChild(cancelButton);
+            form.appendChild(submitButton);
+
+            // Append the form to the table
+            document.getElementById('myTable').appendChild(form);
+			$('#addWorkout').hide();
+        }
+	</script>
 
 
 <%@ include file="../common/footer.jspf" %>

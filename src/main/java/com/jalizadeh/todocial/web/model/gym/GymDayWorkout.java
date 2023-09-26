@@ -1,10 +1,12 @@
 package com.jalizadeh.todocial.web.model.gym;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,12 +18,15 @@ public class GymDayWorkout {
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "day_id")
+    @JsonIgnore
     private GymDay day;
 
-    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "workout_id")
     private GymWorkout workout;
+
+    @OneToMany(mappedBy = "dayWorkout")
+    private List<GymWorkoutLog> workoutLogs;
 
     private int workoutNumber;
 

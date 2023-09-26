@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 public class GymDay {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -25,14 +24,15 @@ public class GymDay {
     @JsonIgnore
     private GymPlan plan;
 
-    //@ManyToMany(cascade = CascadeType.ALL)
-    //@JoinTable(name = "gym_day_workout", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "day_id"))
     @Transient
     private List<GymDayWorkout> dayWorkouts = new ArrayList<>();
 
     @Min(1)
     @Max(7)
-    private Long dayNumber;
+    private int dayNumber;
+
+    @Min(1)
+    private int totalWorkouts;
 
     @Min(0)
     @Max(100)

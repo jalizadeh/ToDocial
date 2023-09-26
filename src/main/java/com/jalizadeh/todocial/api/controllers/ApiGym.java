@@ -1,19 +1,14 @@
 package com.jalizadeh.todocial.api.controllers;
 
-import com.jalizadeh.todocial.web.model.gym.GymDay;
-import com.jalizadeh.todocial.web.model.gym.GymPlan;
-import com.jalizadeh.todocial.web.model.gym.GymWeek;
-import com.jalizadeh.todocial.web.model.gym.GymDayWorkout;
-import com.jalizadeh.todocial.web.repository.GymDayRepository;
-import com.jalizadeh.todocial.web.repository.GymPlanRepository;
-import com.jalizadeh.todocial.web.repository.GymWeekRepository;
-import com.jalizadeh.todocial.web.repository.GymDayWorkoutRepository;
+import com.jalizadeh.todocial.web.model.gym.*;
+import com.jalizadeh.todocial.web.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ApiGym {
@@ -29,6 +24,9 @@ public class ApiGym {
 
     @Autowired
     private GymDayWorkoutRepository gymDayWorkoutRepository;
+
+    @Autowired
+    private GymWorkoutLogRepository gymWorkoutLogRepository;
 
     @GetMapping("/api/v1/gym/plan")
     public List<GymPlan> getAllPlans(){
@@ -58,4 +56,20 @@ public class ApiGym {
         //return gymDayWorkoutRepository.findAllByPlanIdAndDayId(planId, dayId);
         return null;
     }
+
+    @GetMapping("/api/v1/gym/plan/{planId}/week/{week}/day/{dayId}/workout/{workoutId}/log")
+    public List<GymWorkoutLog> getAllWorkoutsLogsOfDayWorkout(
+            @PathVariable("planId") Long planId,@PathVariable("week") Long week, @PathVariable("dayId") Long dayId,
+             @PathVariable("workoutId") Long workoutId){
+
+        //return gymDayWorkoutRepository.findAllByPlanIdAndDayId(planId, dayId);
+        Optional<GymDayWorkout> workout = gymDayWorkoutRepository.findById(workoutId);
+        if(!workout.isPresent()){
+            return null;
+        }
+
+        GymDayWorkout foundWorkout = workout.get();
+        return gymWorkoutLogRepository.findAllByWeekAndDayWorkout(week, foundWorkout);
+    }
+
 }
