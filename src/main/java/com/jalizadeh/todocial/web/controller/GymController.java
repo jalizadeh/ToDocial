@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class GymController {
@@ -38,6 +35,9 @@ public class GymController {
 
     @Autowired
     private GymWorkoutLogRepository gymWorkoutLogRepository;
+
+    @Autowired
+    private GymPlanWeekDayRepository gymplanWeekDayRepository;
 
     @Autowired
     private GymWorkoutRepository gymWorkoutRepository;
@@ -173,7 +173,7 @@ public class GymController {
         return "gym/plan";
     }
 
-    @GetMapping(value = "gym/plan/{planId}/week/{week}/day/{dayId}")
+    //@GetMapping(value = "gym/plan/{planId}/week/{week}/day/{dayId}")
     public String showDays(ModelMap model,
                            @PathVariable Long planId, @PathVariable Long week, @PathVariable Long dayId,
                            RedirectAttributes redirectAttributes) {
@@ -201,6 +201,45 @@ public class GymController {
         return "gym/day";
     }
 
+    @GetMapping(value = "gym/plan/{planId}/week/{week}/day/{day}")
+    public String showDayWorkoutsByDayNumber(ModelMap model,
+                           @PathVariable Long planId, @PathVariable Long week, @PathVariable Long day,
+                           RedirectAttributes redirectAttributes) {
+        Optional<GymPlan> plan = gymPlanRepository.findById(planId);
+
+        if (!plan.isPresent()) {
+            redirectAttributes.addFlashAttribute("exception", "The requested plan with id " + planId + " doesn't exist");
+            return "redirect:/error";
+        }
+
+        GymPlan foundPlan = plan.get();
+        GymDay dayOfPlan = gymDayRepository.findByPlanIdAndDayNumber(planId, day);
+        List<GymDayWorkout> dayWorkouts = gymDayWorkoutRepository.findAllByDayId(dayOfPlan.getId());
+
+        //if this is the first time the user opens this plan-week-day, add a new record in DB
+        Optional<GymPlanWeekDay> pwd = gymplanWeekDayRepository.findAllByPlanIdAndWeekNumberAndDayNumber(planId, week, day);
+        if(!pwd.isPresent()){
+            gymplanWeekDayRepository.save(new GymPlanWeekDay(foundPlan, week, day, 0));
+            model.put("pwdId", -1);
+        } else {
+            GymPlanWeekDay foundPWD = pwd.get();
+            model.put("pwdId", foundPWD.getId());
+        }
+
+
+        model.put("settings", settings);
+        model.put("PageTitle", "Gym - Plan: " + foundPlan.getTitle());
+        model.put("plan", foundPlan);
+        model.put("week", week);
+        model.put("day", dayOfPlan);
+
+        // Each dayWorkout has access to all its own logs
+        // On the FE side, i will compare the current `pwd.id` with `log.pwd.id`
+        model.put("dayWorkouts", dayWorkouts);
+
+        return "gym/day";
+    }
+
     @GetMapping(value = "gym/plan/{planId}/week/{week}/day/{dayId}/log_workout/{workoutId}")
     public String addWorkoutLog(ModelMap model,
                                 @PathVariable Long planId, @PathVariable Long week,
@@ -220,8 +259,8 @@ public class GymController {
     }
 
 
-    @PostMapping("gym/plan/{planId}/week/{week}/day/{dayId}/workout/{workoutId}/add-workout-log")
-    public String addNewPlanStep2(@Valid GymWorkoutLog workoutLog,
+    //@PostMapping("gym/plan/{planId}/week/{week}/day/{dayId}/workout/{workoutId}/add-workout-log")
+    public String addSingleWorkoutLogXXXX(@Valid GymWorkoutLog workoutLog,
                                   @PathVariable Long planId, @PathVariable Long week,
                                   @PathVariable Long dayId, @PathVariable Long workoutId,
                                   BindingResult result, RedirectAttributes redirectAttributes, ModelMap model) {
@@ -231,12 +270,64 @@ public class GymController {
             return "/gym";
         }
 
-        System.err.println(workoutLog);
-        GymDayWorkout gymDayWorkout = gymDayWorkoutRepository.findById(workoutId).get();
-        workoutLog.setDayWorkout(gymDayWorkout);
+        GymDayWorkout dayWorkout = gymDayWorkoutRepository.findById(workoutId).get();
+
+        //add the new workout log
+        workoutLog.setDayWorkout(dayWorkout);
+        workoutLog.setLogDate(new Date());
         gymWorkoutLogRepository.save(workoutLog);
 
+        //update the progress only when the first set is logged
+        if(workoutLog.getSetNumber() == 1){
+            //set the progress of that workout of the day to 100%
+            dayWorkout.setProgress(100);
+            gymDayWorkoutRepository.save(dayWorkout);
+
+            //update the overall progress of that day
+            GymDay day = gymDayRepository.findById(dayId).get();
+            day.setProgress(Math.min(100, day.getProgress() + (int) Math.ceil(100.0 / day.getTotalWorkouts())));
+            gymDayRepository.save(day);
+        }
+
+
         return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + dayId;
+    }
+
+    @PostMapping("gym/plan/{planId}/week/{week}/day/{day}/workout/{workoutId}/add-workout-log")
+    public String addSingleWorkoutLog(@Valid GymWorkoutLog workoutLog,
+                                      @PathVariable Long planId, @PathVariable Long week,
+                                      @PathVariable Long day, @PathVariable Long workoutId,
+                                      BindingResult result, RedirectAttributes redirectAttributes, ModelMap model) {
+
+        if (result.hasErrors()) {
+            model.put("error", result.getAllErrors());
+            return "/gym";
+        }
+
+        GymDayWorkout dayWorkout = gymDayWorkoutRepository.findById(workoutId).get();
+        GymPlanWeekDay pwd = gymplanWeekDayRepository.findAllByPlanIdAndWeekNumberAndDayNumber(planId, week, day).get();
+
+        //add the new workout log
+        workoutLog.setPwd(pwd);
+        workoutLog.setDayWorkout(dayWorkout);
+        workoutLog.setLogDate(new Date());
+        gymWorkoutLogRepository.save(workoutLog);
+
+        /*
+        //update the progress only when the first set is logged
+        if(workoutLog.getSetNumber() == 1){
+            //set the progress of that workout of the day to 100%
+            dayWorkout.setProgress(100);
+            gymDayWorkoutRepository.save(dayWorkout);
+
+            //update the overall progress of that day
+            GymDay day = gymDayRepository.findById(dayId).get();
+            day.setProgress(Math.min(100, day.getProgress() + (int) Math.ceil(100.0 / day.getTotalWorkouts())));
+            gymDayRepository.save(day);
+        }
+        */
+
+        return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + day;
     }
 
 }

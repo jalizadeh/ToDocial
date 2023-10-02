@@ -22,7 +22,14 @@
 								
 								<c:forEach items="${days}" var="day">
 									<p class="card-text">
-										<span class="badge rounded-pill bg-secondary">${day.dayNumber}</span> <a href="${plan.id}/week/${i}/day/${day.id}">${day.focus}</a>
+										<c:choose>
+											<c:when test="${day.progress == 100}">
+												<span class="badge rounded-pill bg-success">${day.dayNumber}</span> <a href="${plan.id}/week/${i}/day/${day.dayNumber}">${day.focus}</a>
+											</c:when>    
+											<c:otherwise>
+												<span class="badge rounded-pill bg-secondary">${day.dayNumber}</span> <a href="${plan.id}/week/${i}/day/${day.dayNumber}">${day.focus}</a>
+											</c:otherwise>
+										</c:choose>
 									</p>
 								</c:forEach>
 							</div>

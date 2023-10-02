@@ -17,7 +17,7 @@ public class ApiGym {
     private GymPlanRepository gymRepository;
 
     @Autowired
-    private GymWeekRepository gymWeekRepository;
+    private GymPlanWeekDayRepository gymWeekRepository;
 
     @Autowired
     private GymDayRepository gymDayRepository;
@@ -34,7 +34,7 @@ public class ApiGym {
     }
 
     @GetMapping("/api/v1/gym/plan/{planId}/week")
-    public List<GymWeek> getAllWeeksOfPlan(@PathVariable("planId") Long planId){
+    public List<GymPlanWeekDay> getAllWeeksOfPlan(@PathVariable("planId") Long planId){
         return gymWeekRepository.findAllByPlanId(planId);
     }
 
@@ -69,7 +69,8 @@ public class ApiGym {
         }
 
         GymDayWorkout foundWorkout = workout.get();
-        return gymWorkoutLogRepository.findAllByWeekAndDayWorkout(week, foundWorkout);
+        //return gymWorkoutLogRepository.findAllByWeekAndDayWorkout(week, foundWorkout);
+        return null;
     }
 
 }

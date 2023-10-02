@@ -16,8 +16,10 @@ public class GymWorkoutLog {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @Min(1)
-    private long week;
+    @ManyToOne
+    @JoinColumn(name = "pwd_id")
+    @JsonIgnore
+    private GymPlanWeekDay pwd;
 
     @ToString.Exclude
     @ManyToOne

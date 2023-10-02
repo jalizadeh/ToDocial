@@ -1,6 +1,7 @@
 package com.jalizadeh.todocial.web.repository;
 
 import com.jalizadeh.todocial.web.model.gym.GymDayWorkout;
+import com.jalizadeh.todocial.web.model.gym.GymPlanWeekDay;
 import com.jalizadeh.todocial.web.model.gym.GymWorkoutLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +11,7 @@ public interface GymWorkoutLogRepository extends JpaRepository<GymWorkoutLog, Lo
 
     List<GymWorkoutLog> findAllByDayWorkout(Long workoutId);
 
-    List<GymWorkoutLog>  findAllByWeekAndDayWorkout(Long week, GymDayWorkout workout);
+    List<GymWorkoutLog>  findAllByPwdAndDayWorkout(GymPlanWeekDay pwd, GymDayWorkout workout);
+
+    List<GymWorkoutLog>  findAllByPwd(GymPlanWeekDay pwd);
 }

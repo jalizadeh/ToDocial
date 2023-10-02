@@ -42,16 +42,15 @@
 						<div class="col-4">
 							<div class="card-body">
 								<c:forEach items="${dayWorkout.workoutLogs}" var="wlog" varStatus="loop">
-											<c:if test="${wlog.week == week}">
-												<div class="row">
-													<div class="col-3"><p class="card-text">Set ${wlog.setNumber}:</p></div>
-													<div class="col"><p class="card-text">${wlog.weight} kg - ${wlog.reps} reps</p></div>
-												</div>
-											</c:if>
-										</c:forEach>
-
-								<div id="myTable"></table>
-								<button type="button" id="addWorkout" class="btn btn-primary" onclick="addRow('${day.id}','${dayWorkout}', '${dayWorkout.id}')">Add Row</button>
+									<c:if test="${wlog.pwd.id == pwdId}">
+										<div class="row" id="dayWorkout-${dayWorkout.id}">
+											<div class="col-3"><p class="card-text">Set ${wlog.setNumber}:</p></div>
+											<div class="col"><p class="card-text">${wlog.weight} kg - ${wlog.reps} reps</p></div>
+										</div>
+									</c:if>
+								</c:forEach>
+								<div id="newLogPlaceholder${dayWorkout.id}"></div>
+								<button type="button" id="addWorkout${dayWorkout.id}" class="btn btn-primary" onclick="addRow(${day.dayNumber},'${dayWorkout}', '${dayWorkout.id}')">Add set</button>
 							</div>
 						</div>
 					</div>
@@ -62,35 +61,39 @@
 
 
 	<script>
-		function addRow(dayId, workout, workoutId) {
-			console.log(workout);
-			let counter = 1;
+		function addRow(dayNumber, workout, workoutId) {
 
-			// Create the form elements
+			//find the total number of sets logged for that workout, so the next will be +1
+			var lastSetNumber = document.querySelectorAll('[id*="dayWorkout-' + workoutId + '"]').length;
+
+			// Create the dynamic form elements
 			let form = document.createElement('form');
             form.id = 'workoutLog';
-            form.action = dayId + '/workout/' + workoutId + '/add-workout-log';
+            form.action = dayNumber + '/workout/' + workoutId + '/add-workout-log';
             form.method = 'post';
 
 			let setInput = document.createElement('input');
             setInput.id = 'setNumber';
             setInput.name = 'setNumber';
-            setInput.type = 'text';
-            //setInput.className = 'form-control';
+            setInput.type = 'number';
+			setInput.value = lastSetNumber + 1;
+            setInput.className = 'form-control';
             setInput.required = true;
 
 			let weightInput = document.createElement('input');
             weightInput.id = 'weight';
             weightInput.name = 'weight';
             weightInput.type = 'text';
-            //weightInput.className = 'form-control';
+            weightInput.className = 'form-control';
+			weightInput.placeholder = 'KG';
             weightInput.required = true;
 
 			let repsInput = document.createElement('input');
             repsInput.id = 'reps';
             repsInput.name = 'reps';
             repsInput.type = 'text';
-            //repsInput.className = 'form-control';
+            repsInput.className = 'form-control';
+			repsInput.placeholder = 'Reps';
             repsInput.required = true;
 			
             let input1 = document.createElement('input');
@@ -101,7 +104,7 @@
 			// Create the submit button
             let submitButton = document.createElement('button');
             submitButton.type = 'submit';
-            submitButton.textContent = 'Submit';
+            submitButton.textContent = 'Save';
 
             // Set attributes and values
             cancelButton.textContent = 'Cancel';
@@ -110,7 +113,7 @@
             // Add event listeners to buttons
             cancelButton.addEventListener('click', function() {
                 form.remove();
-				$('#addWorkout').show();
+				$('#addWorkout'+workoutId).show();
             });
             saveButton.addEventListener('click', function() {
                 // Add your save logic here
@@ -126,8 +129,8 @@
             form.appendChild(submitButton);
 
             // Append the form to the table
-            document.getElementById('myTable').appendChild(form);
-			$('#addWorkout').hide();
+            document.getElementById('newLogPlaceholder' + workoutId).appendChild(form);
+			$('#addWorkout' + workoutId).hide();
         }
 	</script>
 
