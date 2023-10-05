@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class GymDay {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

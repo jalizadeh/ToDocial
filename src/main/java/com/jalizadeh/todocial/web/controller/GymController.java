@@ -60,7 +60,7 @@ public class GymController {
         return "gym/home";
     }
 
-    @RequestMapping(value = "/gym/plan/new", method = RequestMethod.GET)
+    @GetMapping(value = "/gym/plan/new")
     public String addNewPlan(ModelMap model, @RequestParam Long step, RedirectAttributes redirectAttributes) {
         model.put("settings", settings);
         model.put("PageTitle", "Gym - New Plan");
