@@ -4,12 +4,15 @@ package com.jalizadeh.todocial.web.controller;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.todocial.web.model.FlashMessage;
 import com.jalizadeh.todocial.web.model.gym.*;
+import com.jalizadeh.todocial.web.model.gym.dto.GymWorkoutLogSetRep_DTO;
 import com.jalizadeh.todocial.web.model.gym.types.GymMainGoal;
 import com.jalizadeh.todocial.web.model.gym.types.GymTrainingLevel;
 import com.jalizadeh.todocial.web.model.gym.types.GymWorkoutType;
 import com.jalizadeh.todocial.web.repository.*;
+import com.jalizadeh.todocial.web.utils.GymUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -259,7 +262,7 @@ public class GymController {
     }
 
 
-    //@PostMapping("gym/plan/{planId}/week/{week}/day/{dayId}/workout/{workoutId}/add-workout-log")
+    //@PostMapping("gym/plan/{planId}/week/{week}/day/{dayId}/workout/{workoutId}/add-single-workout-log")
     public String addSingleWorkoutLogXXXX(@Valid GymWorkoutLog workoutLog,
                                   @PathVariable Long planId, @PathVariable Long week,
                                   @PathVariable Long dayId, @PathVariable Long workoutId,
@@ -293,7 +296,7 @@ public class GymController {
         return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + dayId;
     }
 
-    @PostMapping("gym/plan/{planId}/week/{week}/day/{day}/workout/{workoutId}/add-workout-log")
+    @PostMapping("gym/plan/{planId}/week/{week}/day/{day}/workout/{workoutId}/add-single-workout-log")
     public String addSingleWorkoutLog(@Valid GymWorkoutLog workoutLog,
                                       @PathVariable Long planId, @PathVariable Long week,
                                       @PathVariable Long day, @PathVariable Long workoutId,
@@ -312,6 +315,53 @@ public class GymController {
         workoutLog.setDayWorkout(dayWorkout);
         workoutLog.setLogDate(new Date());
         gymWorkoutLogRepository.save(workoutLog);
+
+        /*
+        //update the progress only when the first set is logged
+        if(workoutLog.getSetNumber() == 1){
+            //set the progress of that workout of the day to 100%
+            dayWorkout.setProgress(100);
+            gymDayWorkoutRepository.save(dayWorkout);
+
+            //update the overall progress of that day
+            GymDay day = gymDayRepository.findById(dayId).get();
+            day.setProgress(Math.min(100, day.getProgress() + (int) Math.ceil(100.0 / day.getTotalWorkouts())));
+            gymDayRepository.save(day);
+        }
+        */
+
+        return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + day;
+    }
+
+
+    @PostMapping("gym/plan/{planId}/week/{week}/day/{day}/workout/{workoutId}/add-workout-log-note")
+    public String addSingleWorkoutLogByNote(@RequestBody String lognote,
+                                      @PathVariable Long planId, @PathVariable Long week,
+                                      @PathVariable Long day, @PathVariable Long workoutId,
+                                      BindingResult result, RedirectAttributes redirectAttributes, ModelMap model) {
+
+        if (result.hasErrors()) {
+            model.put("error", result.getAllErrors());
+            return "/gym";
+        }
+
+        GymDayWorkout dayWorkout = gymDayWorkoutRepository.findById(workoutId).get();
+        GymPlanWeekDay pwd = gymplanWeekDayRepository.findAllByPlanIdAndWeekNumberAndDayNumber(planId, week, day).get();
+
+
+        String note = GymUtils.parseRawInput(lognote.split("=")[1]);
+        List<GymWorkoutLogSetRep_DTO> listWorkoutLogs = GymUtils.workoutLogNoteParser(note);
+
+        for (int i = 0; i < listWorkoutLogs.size(); i++) {
+            GymWorkoutLog workoutLog = new GymWorkoutLog();
+            workoutLog.setPwd(pwd);
+            workoutLog.setDayWorkout(dayWorkout);
+            workoutLog.setSetNumber(i + 1);
+            workoutLog.setWeight(listWorkoutLogs.get(i).getWeight());
+            workoutLog.setReps(listWorkoutLogs.get(i).getRep());
+            workoutLog.setLogDate(new Date());
+            gymWorkoutLogRepository.save(workoutLog);
+        }
 
         /*
         //update the progress only when the first set is logged

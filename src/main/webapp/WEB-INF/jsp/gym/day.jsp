@@ -50,7 +50,9 @@
 									</c:if>
 								</c:forEach>
 								<div id="newLogPlaceholder${dayWorkout.id}"></div>
-								<button type="button" id="addWorkout${dayWorkout.id}" class="btn btn-primary" onclick="addRow(${day.dayNumber},'${dayWorkout}', '${dayWorkout.id}')">Add set</button>
+								<button type="button" id="addSingleWorkoutLog${dayWorkout.id}" class="btn btn-primary" onclick="addSingleWorkoutLog(${day.dayNumber},'${dayWorkout}', '${dayWorkout.id}')">Add set</button>
+								or
+								<button type="button" id="addWorkoutLogByNote${dayWorkout.id}" class="btn btn-primary" onclick="addWorkoutLogByNote(${day.dayNumber},'${dayWorkout}', '${dayWorkout.id}')">Add by log note</button>
 							</div>
 						</div>
 					</div>
@@ -61,15 +63,14 @@
 
 
 	<script>
-		function addRow(dayNumber, workout, workoutId) {
-
+		function addSingleWorkoutLog(dayNumber, workout, workoutId) {
 			//find the total number of sets logged for that workout, so the next will be +1
 			var lastSetNumber = document.querySelectorAll('[id*="dayWorkout-' + workoutId + '"]').length;
 
 			// Create the dynamic form elements
 			let form = document.createElement('form');
             form.id = 'workoutLog';
-            form.action = dayNumber + '/workout/' + workoutId + '/add-workout-log';
+            form.action = dayNumber + '/workout/' + workoutId + '/add-single-workout-log';
             form.method = 'post';
 
 			let setInput = document.createElement('input');
@@ -113,7 +114,8 @@
             // Add event listeners to buttons
             cancelButton.addEventListener('click', function() {
                 form.remove();
-				$('#addWorkout'+workoutId).show();
+				$('#addSingleWorkoutLog'+workoutId).show();
+				$('#addWorkoutLogByNote'+workoutId).show();
             });
             saveButton.addEventListener('click', function() {
                 // Add your save logic here
@@ -130,8 +132,66 @@
 
             // Append the form to the table
             document.getElementById('newLogPlaceholder' + workoutId).appendChild(form);
-			$('#addWorkout' + workoutId).hide();
+			$('#addSingleWorkoutLog' + workoutId).hide();
+			$('#addWorkoutLogByNote' + workoutId).hide();
         }
+
+
+		function addWorkoutLogByNote(dayNumber, workout, workoutId) {
+			//find the total number of sets logged for that workout, so the next will be +1
+			var lastSetNumber = document.querySelectorAll('[id*="dayWorkout-' + workoutId + '"]').length;
+
+			// Create the dynamic form elements
+			let form = document.createElement('form');
+            form.id = 'workoutLog';
+            form.action = dayNumber + '/workout/' + workoutId + '/add-workout-log-note';
+            form.method = 'post';
+
+			let noteInput = document.createElement('input');
+            noteInput.id = 'lognote';
+            noteInput.name = 'lognote';
+            noteInput.type = 'text';
+			noteInput.value = "";
+            noteInput.className = 'form-control';
+            noteInput.required = true;
+
+			
+			// Create the submit button
+            let submitButton = document.createElement('button');
+            submitButton.type = 'submit';
+            submitButton.textContent = 'Save';
+			
+            // Set attributes and values
+            let cancelButton = document.createElement('button');
+            cancelButton.textContent = 'Cancel';
+            let saveButton = document.createElement('button');
+            saveButton.textContent = 'Save';
+
+            // Add event listeners to buttons
+            cancelButton.addEventListener('click', function() {
+                form.remove();
+				$('#addWorkoutLogByNote' + workoutId).show();
+				$('#addSingleWorkoutLog' + workoutId).show();
+            });
+            saveButton.addEventListener('click', function() {
+                // Add your save logic here
+                form.remove();
+            });
+
+            // Append elements to the form
+			form.appendChild(noteInput);
+            form.appendChild(document.createElement('br'));
+            form.appendChild(cancelButton);
+            form.appendChild(submitButton);
+
+            // Append the form to the table
+            document.getElementById('newLogPlaceholder' + workoutId).appendChild(form);
+			$('#addSingleWorkoutLog' + workoutId).hide();
+			$('#addWorkoutLogByNote' + workoutId).hide();
+        }
+
+
+		
 	</script>
 
 

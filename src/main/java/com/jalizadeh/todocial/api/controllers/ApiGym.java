@@ -1,12 +1,13 @@
 package com.jalizadeh.todocial.api.controllers;
 
 import com.jalizadeh.todocial.web.model.gym.*;
+import com.jalizadeh.todocial.web.model.gym.dto.GymWorkoutLogSetRep_DTO;
 import com.jalizadeh.todocial.web.repository.*;
+import com.jalizadeh.todocial.web.utils.GymUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,6 +72,12 @@ public class ApiGym {
         GymDayWorkout foundWorkout = workout.get();
         //return gymWorkoutLogRepository.findAllByWeekAndDayWorkout(week, foundWorkout);
         return null;
+    }
+
+
+    @PostMapping("/api/v1/gym/workoutLogNoteParser")
+    public List<GymWorkoutLogSetRep_DTO> logParser(@RequestBody String log){
+        return GymUtils.workoutLogNoteParser(log);
     }
 
 }
