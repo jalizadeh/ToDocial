@@ -12,7 +12,6 @@ import com.jalizadeh.todocial.web.repository.*;
 import com.jalizadeh.todocial.web.utils.GymUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -168,10 +167,13 @@ public class GymController {
         GymPlan foundPlan = plan.get();
         List<GymDay> daysOfPlan = gymDayRepository.findAllByPlanIdOrderByDayNumber(planId);
 
+        List<GymPlanWeekDay> pwd = gymplanWeekDayRepository.findAllByPlanId(planId);
+
         model.put("settings", settings);
         model.put("PageTitle", "Gym - Plan: " + foundPlan.getTitle());
         model.put("plan", foundPlan);
         model.put("days", daysOfPlan);
+        model.put("pwd", pwd);
 
         return "gym/plan";
     }
@@ -224,9 +226,11 @@ public class GymController {
         if(!pwd.isPresent()){
             gymplanWeekDayRepository.save(new GymPlanWeekDay(foundPlan, week, day, 0));
             model.put("pwdId", -1);
+            model.put("pwd", null);
         } else {
             GymPlanWeekDay foundPWD = pwd.get();
             model.put("pwdId", foundPWD.getId());
+            model.put("pwd", foundPWD);
         }
 
 
@@ -262,40 +266,6 @@ public class GymController {
     }
 
 
-    //@PostMapping("gym/plan/{planId}/week/{week}/day/{dayId}/workout/{workoutId}/add-single-workout-log")
-    public String addSingleWorkoutLogXXXX(@Valid GymWorkoutLog workoutLog,
-                                  @PathVariable Long planId, @PathVariable Long week,
-                                  @PathVariable Long dayId, @PathVariable Long workoutId,
-                                  BindingResult result, RedirectAttributes redirectAttributes, ModelMap model) {
-
-        if (result.hasErrors()) {
-            model.put("error", result.getAllErrors());
-            return "/gym";
-        }
-
-        GymDayWorkout dayWorkout = gymDayWorkoutRepository.findById(workoutId).get();
-
-        //add the new workout log
-        workoutLog.setDayWorkout(dayWorkout);
-        workoutLog.setLogDate(new Date());
-        gymWorkoutLogRepository.save(workoutLog);
-
-        //update the progress only when the first set is logged
-        if(workoutLog.getSetNumber() == 1){
-            //set the progress of that workout of the day to 100%
-            dayWorkout.setProgress(100);
-            gymDayWorkoutRepository.save(dayWorkout);
-
-            //update the overall progress of that day
-            GymDay day = gymDayRepository.findById(dayId).get();
-            day.setProgress(Math.min(100, day.getProgress() + (int) Math.ceil(100.0 / day.getTotalWorkouts())));
-            gymDayRepository.save(day);
-        }
-
-
-        return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + dayId;
-    }
-
     @PostMapping("gym/plan/{planId}/week/{week}/day/{day}/workout/{workoutId}/add-single-workout-log")
     public String addSingleWorkoutLog(@Valid GymWorkoutLog workoutLog,
                                       @PathVariable Long planId, @PathVariable Long week,
@@ -316,19 +286,7 @@ public class GymController {
         workoutLog.setLogDate(new Date());
         gymWorkoutLogRepository.save(workoutLog);
 
-        /*
-        //update the progress only when the first set is logged
-        if(workoutLog.getSetNumber() == 1){
-            //set the progress of that workout of the day to 100%
-            dayWorkout.setProgress(100);
-            gymDayWorkoutRepository.save(dayWorkout);
-
-            //update the overall progress of that day
-            GymDay day = gymDayRepository.findById(dayId).get();
-            day.setProgress(Math.min(100, day.getProgress() + (int) Math.ceil(100.0 / day.getTotalWorkouts())));
-            gymDayRepository.save(day);
-        }
-        */
+        updateProgessInDB(planId, day, pwd, dayWorkout, workoutLog);
 
         return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + day;
     }
@@ -348,7 +306,6 @@ public class GymController {
         GymDayWorkout dayWorkout = gymDayWorkoutRepository.findById(workoutId).get();
         GymPlanWeekDay pwd = gymplanWeekDayRepository.findAllByPlanIdAndWeekNumberAndDayNumber(planId, week, day).get();
 
-
         String note = GymUtils.parseRawInput(lognote.split("=")[1]);
         List<GymWorkoutLogSetRep_DTO> listWorkoutLogs = GymUtils.workoutLogNoteParser(note);
 
@@ -361,23 +318,36 @@ public class GymController {
             workoutLog.setReps(listWorkoutLogs.get(i).getRep());
             workoutLog.setLogDate(new Date());
             gymWorkoutLogRepository.save(workoutLog);
+
+            updateProgessInDB(planId, day, pwd, dayWorkout, workoutLog);
         }
 
-        /*
-        //update the progress only when the first set is logged
+        return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + day;
+    }
+
+    private void updateProgessInDB(Long planId, Long day, GymPlanWeekDay pwd, GymDayWorkout dayWorkout, GymWorkoutLog workoutLog) {
+        //update the progress only when the first set is logged, the other sets wont count
         if(workoutLog.getSetNumber() == 1){
             //set the progress of that workout of the day to 100%
             dayWorkout.setProgress(100);
             gymDayWorkoutRepository.save(dayWorkout);
 
-            //update the overall progress of that day
-            GymDay day = gymDayRepository.findById(dayId).get();
-            day.setProgress(Math.min(100, day.getProgress() + (int) Math.ceil(100.0 / day.getTotalWorkouts())));
-            gymDayRepository.save(day);
-        }
-        */
+            //update the overall progress of that PWD
+            long totalWorkoutsOfDay = gymDayRepository.findByPlanIdAndDayNumber(planId, day).getTotalWorkouts();
+            int weekProgress = Math.min(100, pwd.getProgress() + (int) Math.ceil(100.0 / totalWorkoutsOfDay));
+            pwd.setProgress(weekProgress);
+            gymplanWeekDayRepository.save(pwd);
 
-        return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + day;
+            if(weekProgress == 100){
+                GymPlan plan = pwd.getPlan();
+                plan.setCompletedDays(plan.getCompletedDays() + 1);
+                if(plan.getCompletedDays() == plan.getNumberOfWeeks() * plan.getNumberOfDays())
+                    plan.setProgress(100);
+                else
+                    plan.setProgress((int)((plan.getCompletedDays() * 100) / (plan.getNumberOfWeeks() * plan.getNumberOfDays())));
+                gymPlanRepository.save(plan);
+            }
+        }
     }
 
 }

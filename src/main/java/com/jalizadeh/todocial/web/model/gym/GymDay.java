@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 public class GymDay {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

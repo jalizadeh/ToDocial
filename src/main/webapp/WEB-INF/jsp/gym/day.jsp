@@ -7,8 +7,8 @@
 			<h3>Focus: ${day.focus}</h3>
 			<p>
 				<div class="progress">
-					<div class="progress-bar" role="progressbar" style="width: ${day.progress}%;" 
-						aria-valuenow="${day.progress}" aria-valuemin="0" aria-valuemax="100">${day.progress}%</div>
+					<div class="progress-bar" role="progressbar" style="width: ${pwd.progress}%;" 
+						aria-valuenow="${pwd.progress}" aria-valuemin="0" aria-valuemax="100">${pwd.progress}%</div>
 				</div>
 			</p>
 		</div>

@@ -62,10 +62,16 @@
 				  	<h5 class="card-title">
 						<span class="badge rounded-pill bg-success">&nbsp;</span> ${plan.title}
 					</h5>
-				  <h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
-				  <p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
-				  <a href="/gym/plan/${plan.id}" class="card-link">View details</a>
-				  <a href="/gym/plan?edit=${plan.id}" class="card-link">Edit plan</a>
+					<h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
+					<p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
+					
+					<h5 class="card-title">
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: ${plan.progress}%;" aria-valuenow="${plan.progress}" aria-valuemin="0" aria-valuemax="100">${plan.progress}%</div>
+						</div>	
+					</h5>
+					<a href="/gym/plan/${plan.id}" class="card-link">View details</a>
+					<a href="/gym/plan?edit=${plan.id}" class="card-link">Edit plan</a>
 				</div>
 			  </div>
 		</c:forEach>

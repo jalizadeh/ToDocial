@@ -32,6 +32,9 @@ public class GymPlan {
     @Max(7)
     private int numberOfDays;
 
+    @Min(0)
+    private long completedDays;
+
     private boolean active;
 
     private Date startDate;
