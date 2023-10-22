@@ -26,7 +26,7 @@
 										<c:set var="totalProgress" value="${totalProgress + singlePWD.progress}" />
 									</c:if>
 								</c:forEach>
-								<c:set var="totalProgress" value="${totalProgress / plan.numberOfDays}" />
+								<fmt:parseNumber var="totalProgress" value="${totalProgress / plan.numberOfDays}" integerOnly="true"/>
 
 								<h5 class="card-title">
 									<div class="progress">

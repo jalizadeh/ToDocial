@@ -1,5 +1,7 @@
 package com.jalizadeh.todocial.web.model.gym;
 
+import com.jalizadeh.todocial.web.model.gym.types.GymEquipment;
+import com.jalizadeh.todocial.web.model.gym.types.GymMuscleCategory;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +22,10 @@ public class GymWorkout {
     private String img;
 
     private String suggestion;
+
+    private GymMuscleCategory muscleCategory;
+
+    private GymEquipment equipment;
 
     //used for custom item label in the page's Options tag
     public String getFullLabel(){
