@@ -43,8 +43,8 @@
 								<li class="nav-item ">
 									<a class="nav-link ${i==1 ? 'active' : ''}" id="day${i}-tab" data-toggle="tab" 
 										href="#day${i}" role="tab" aria-controls="day${i}" aria-selected="false">Day ${i}
-										<span class="badge badge-pill badge-secondary" id="labelTotalWorkouts">1</span></a>
-										<input type="hidden" id="totalWorkouts" name="days[${i-1}].totalWorkouts" value="1"/>
+										<span class="badge badge-pill badge-secondary" id="labelTotalWorkouts_${i-1}">1</span></a>
+										<input type="hidden" id="totalWorkouts_${i-1}" name="days[${i-1}].totalWorkouts" value="1"/>
 								</li>
 							</c:forEach>
 						</ul>
@@ -79,26 +79,25 @@
 											<div class="col">
 												<fieldset class="form-group">
 													<form:label path="days[${i-1}].dayWorkouts[0].sets">Sets</form:label>
-													<form:input path="days[${i-1}].dayWorkouts[0].sets" type="text" class="form-control" required="required" />
+													<form:input path="days[${i-1}].dayWorkouts[0].sets" type="number" class="form-control" required="required" min="1"/>
 													<form:errors path="days[${i-1}].dayWorkouts[0].sets" cssClass="text-warning" />
 												</fieldset>
-	
-												<fieldset class="form-group input-group flex-nowrap my-1">
-													<span class="input-group-text" id="addon-wrapping">Reps</span>
-													<form:input path="days[${i-1}].dayWorkouts[0].repsMin" type="text" class="form-control" placeholder="min" aria-label="reps_min" aria-describedby="addon-wrapping" required="required" />
-													<form:input path="days[${i-1}].dayWorkouts[0].repsMax" type="text" class="form-control" placeholder="max" aria-label="reps_max" aria-describedby="addon-wrapping" required="required" />
+											</div>
+											<div class="col">
+												<fieldset class="form-group">
+													<form:label path="days[${i-1}].dayWorkouts[0].repsMin">Reps min</form:label>
+													<form:input path="days[${i-1}].dayWorkouts[0].repsMin" type="number" class="form-control" placeholder="min" aria-label="reps_min" aria-describedby="addon-wrapping" required="required" min="1"/>
 												</fieldset>
-	
-												<fieldset class="form-group input-group flex-nowrap my-1">
-													<span class="input-group-text" id="addon-wrapping">Rest</span>
-													<form:input path="days[${i-1}].dayWorkouts[0].restMin" type="text" class="form-control" placeholder="min" aria-label="reps_min" aria-describedby="addon-wrapping" required="required" />
-													<form:input path="days[${i-1}].dayWorkouts[0].restMax" type="text" class="form-control" placeholder="max" aria-label="reps_max" aria-describedby="addon-wrapping" required="required" />
+											</div>
+											<div class="col">
+												<fieldset class="form-group">
+													<form:label path="days[${i-1}].dayWorkouts[0].repsMax">Reps max</form:label>
+													<form:input path="days[${i-1}].dayWorkouts[0].repsMax" type="number" class="form-control" placeholder="max" aria-label="reps_max" aria-describedby="addon-wrapping" required="required" min="1"/>
 												</fieldset>
 											</div>
 										</div>
-										<div id="newWorkoutContainer"></div>
+										<div id="newWorkoutContainer_day${i-1}"></div>
 
-									<button type="button" id="addWorkout" class="btn btn-primary">Add Workout</button>
 								</div>
 							</c:forEach>
 						</div>
@@ -137,6 +136,8 @@
 		</div>
 
 		<div class="mt-2">
+			<button type="button" id="addWorkout" class="btn btn-primary">Add Workout</button>
+
 			<a class="btn btn-primary" href="?step=1" role="button">Back</a>
 			<button type="submit" class="btn btn-success">Save new plan</button>
 		</div>
@@ -145,55 +146,58 @@
 
 	<script type="text/javascript" async defer>
 		$(document).ready(function() {
+			var activeTab = 0;
+
+			$('#myTab a').on('shown.bs.tab', function (e) {
+				activeTab = $(e.target).attr('id').match(/\d+/)[0] - 1;
+				//console.log('Active Tab ID:', activeTab);
+			});
+
 			$('#addWorkout').click(function() {
 				// Get the value from the span element with ID 'totalWorkouts'
-				var totalWorkoutsValue = document.getElementById('labelTotalWorkouts').textContent;
+				var totalWorkoutsValue = document.getElementById('labelTotalWorkouts_' + activeTab).textContent;
 				var totalWorkoutsNumber = parseInt(totalWorkoutsValue, 10);
 
-				var i = 0;
+				var i = activeTab;
 				var j = totalWorkoutsNumber;
 
 				var htmlCode = `
 					<div class="row my-1" id="workoutContainer">
 						<div class="col-6">
 							<fieldset class="form-group">
-								<label for="workoutDay0_workout` + j + `">Workout #` + j + `</label>
-								<select id="workoutDay0_workout` + j + `" name="days[0].dayWorkouts[` + j + `].workout" rows="3" class="form-control" required="required"><option value="1">1 - Bench Press</option><option value="2">2 - Incline Dumbbell Bench Press</option><option value="3">3 - Chest Dips</option><option value="4">4 - Pull-up</option><option value="5">5 - Barbell Bent Over Row</option><option value="6">6 - Lat Pulldown</option></select>
+								<label for="workoutDay` + activeTab + `_workout` + j + `">Workout #` + (j+1) + `</label>
+								<select id="workoutDay` + activeTab + `_workout` + j + `" name="days[` + i + `].dayWorkouts[` + j + `].workout" rows="3" class="form-control" required="required"><option value="1">1 - Bench Press</option><option value="2">2 - Incline Dumbbell Bench Press</option><option value="3">3 - Chest Dips</option><option value="4">4 - Pull-up</option><option value="5">5 - Barbell Bent Over Row</option><option value="6">6 - Lat Pulldown</option></select>
 							</fieldset>
 						</div>
 						<div class="col">
 							<fieldset class="form-group">
-								<label for="days0.dayWorkouts` + j + `.sets">Sets</label>
-								<input id="days0.dayWorkouts` + j + `.sets" name="days[0].dayWorkouts[` + j + `].sets" type="text" class="form-control" required="required" value="0">
-								
-							</fieldset>
-
-							<fieldset class="form-group input-group flex-nowrap my-1">
-								<span class="input-group-text" id="addon-wrapping">Reps</span>
-								<input id="days0.dayWorkouts` + j + `.repsMin" name="days[0].dayWorkouts[` + j + `].repsMin" aria-describedby="addon-wrapping" placeholder="min" type="text" class="form-control" aria-label="reps_min" required="required" value="0">
-								<input id="days0.dayWorkouts` + j + `.repsMax" name="days[0].dayWorkouts[` + j + `].repsMax" aria-describedby="addon-wrapping" placeholder="max" type="text" class="form-control" aria-label="reps_max" required="required" value="0">
-							</fieldset>
-
-							<fieldset class="form-group input-group flex-nowrap my-1">
-								<span class="input-group-text" id="addon-wrapping">Rest</span>
-								<input id="days0.dayWorkouts` + j + `.restMin" name="days[0].dayWorkouts[` + j + `].restMin" aria-describedby="addon-wrapping" placeholder="min" type="text" class="form-control" aria-label="reps_min" required="required" value="0">
-								<input id="days0.dayWorkouts` + j + `.restMax" name="days[0].dayWorkouts[` + j + `].restMax" aria-describedby="addon-wrapping" placeholder="max" type="text" class="form-control" aria-label="reps_max" required="required" value="0">
+								<label for="days` + activeTab + `.dayWorkouts` + j + `.sets">Sets</label>
+								<input id="days` + activeTab + `.dayWorkouts` + j + `.sets" name="days[` + i + `].dayWorkouts[` + j + `].sets" type="number" class="form-control" required="required" value="3" min="1">
 							</fieldset>
 						</div>
+						<div class="col">
+							<fieldset class="form-group">
+								<label for="days` + activeTab + `.dayWorkouts[` + j + `].repsMin">Reps min</label>
+								<input id="days` + activeTab + `.dayWorkouts[` + j + `].repsMin" name="days[` + i + `].dayWorkouts[` + j + `].repsMin" type="number" class="form-control" placeholder="min" aria-label="reps_min" aria-describedby="addon-wrapping" required="required" value="12" min="1"/>
+							</fieldset>
+						</div>
+						<div class="col">
+							<fieldset class="form-group">
+								<label for="days` + activeTab + `.dayWorkouts[` + j + `].repsMin">Reps min</label>
+								<input id="days` + activeTab + `.dayWorkouts[` + j + `].repsMax" name="days[` + i + `].dayWorkouts[` + j + `].repsMax" type="number" class="form-control" placeholder="min" aria-label="reps_max" aria-describedby="addon-wrapping" required="required" value="12" min="1"/>
+							</fieldset>
+						</div>
+						
 					</div>
 				`;
 
-				//console.log(htmlCode); // Print the generated HTML to the console
-
-
 				// Increment the counter for the next row
-				i++;
 				j++;
 
 				// Append the new row to the container
-				$('#newWorkoutContainer').append(htmlCode);
-				$('#labelTotalWorkouts').text(j);
-				$('#totalWorkouts').val(j);
+				$('#newWorkoutContainer_day' + activeTab).append(htmlCode);
+				$('#labelTotalWorkouts_' + activeTab).text(j);
+				$('#totalWorkouts_' + activeTab).val(j);
 			});
 		});
 		</script>

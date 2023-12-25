@@ -33,10 +33,7 @@
 									<div class="col-3"><p class="card-text">Reps:</p></div>
 									<div class="col"><p class="card-text">${dayWorkout.repsMin}-${dayWorkout.repsMax} reps</p></div>
 								</div>
-								<div class="row">
-									<div class="col-3"><p class="card-text">Rest:</p></div>
-									<div class="col"><p class="card-text">${dayWorkout.restMin}-${dayWorkout.restMax} sec</p></div>
-								</div>
+								
 							</div>
 						</div>
 						<div class="col-4">

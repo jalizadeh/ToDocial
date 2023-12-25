@@ -13,7 +13,7 @@
 			<div class="card-body">
 				<form:form method="post" modelAttribute="plan">
 					<fieldset class="form-group">
-						<form:label path="title">title</form:label>
+						<form:label path="title">Workout title</form:label>
 						<form:input path="title" type="text" class="form-control" required="required" />
 						<form:errors path="title" cssClass="text-warning" />
 					</fieldset>

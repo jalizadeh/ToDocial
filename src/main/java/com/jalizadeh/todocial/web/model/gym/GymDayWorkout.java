@@ -1,7 +1,9 @@
 package com.jalizadeh.todocial.web.model.gym;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Data;
+import lombok.ToString;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -30,13 +32,14 @@ public class GymDayWorkout {
 
     private int workoutNumber;
 
-    private int sets;
+    @Min(0)
+    private int sets = 3;
 
-    private int repsMin;
-    private int repsMax;
+    @Min(0)
+    private int repsMin = 12;
 
-    private int restMin;
-    private int restMax;
+    @Min(0)
+    private int repsMax = 12;
 
     @Min(0)
     @Max(100)
