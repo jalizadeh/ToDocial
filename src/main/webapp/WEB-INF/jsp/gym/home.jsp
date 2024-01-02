@@ -109,6 +109,37 @@
 
 	<div class="row mt-2">
 		<div class="col border-bottom">
+			<h2>Completed Plans</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<c:forEach items="${completedPlans}" var="plan">
+			<div class="card p-2" >
+				<div class="card-body">
+				  	<h5 class="card-title">
+						<c:choose>
+							<c:when test="${plan.active == true}">
+								<span class="badge rounded-pill bg-success">&nbsp;</span> 
+							</c:when>    
+							<c:otherwise>
+								<span class="badge rounded-pill bg-secondary">&nbsp;</span> 
+							</c:otherwise>
+						</c:choose>
+						${plan.title}
+					</h5>
+				  <h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
+				  <p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
+				  <a href="/gym/plan/${plan.id}" class="card-link">View details</a>
+				  <a href="/gym/plan/${plan.id}/delete" class="card-link">Delete plan</a>
+				</div>
+			  </div>
+		</c:forEach>
+	</div>
+
+
+	<div class="row mt-2">
+		<div class="col border-bottom">
 			New To The Gym?
 		</div>
 	</div>

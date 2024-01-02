@@ -54,6 +54,14 @@
 			</div>
 		</div>
 		<div class="col-4">
+
+			<c:if test="${plan.active == false and plan.startDate ne null and plan.completeDate ne null}">
+				<div class="row">
+					<p>Started at: ${plan.startDate}</p>
+					<p>Completed at: ${plan.completeDate}</p>
+				</div>
+			</c:if>
+
 			<div class="row mt-2">
 				<div class="col border-bottom">
 					<h2>Summary</h2>
@@ -84,6 +92,18 @@
 					</c:forEach>
 				</div>
 			</div>
+
+			<c:if test="${plan.active == false and plan.startDate == null and plan.completeDate == null}">
+				<div class="row">
+					<a class="btn btn-success" href="${plan.id}/start-plan" role="button">Start plan</a>
+				</div>
+			</c:if>
+
+			<c:if test="${plan.active == true and plan.startDate ne null and plan.completeDate == null}">
+				<div class="row">
+					<a class="btn btn-success" href="${plan.id}/end-plan" role="button">End plan</a>
+				</div>
+			</c:if>
 		</div>
 	</div>
 

@@ -57,6 +57,7 @@ public class GymController {
         model.put("settings", settings);
         model.put("PageTitle", "Gym");
         model.put("activePlans", gymPlanRepository.findAllByActiveTrue());
+        model.put("completedPlans", gymPlanRepository.findAllCompletedPlans());
         model.put("allPlans", gymPlanRepository.findAll());
 
         return "gym/home";
@@ -150,6 +151,43 @@ public class GymController {
     public String deletePlan(@PathVariable Long id, RedirectAttributes redirectAttributes, ModelMap model) {
         //TODO: if only the plan is not active
         gymPlanRepository.deleteById(id);
+
+        return "redirect:/gym";
+    }
+
+
+    @GetMapping("/gym/plan/{id}/start-plan")
+    public String startPlan(@PathVariable Long id, RedirectAttributes redirectAttributes, ModelMap model) {
+        Optional<GymPlan> plan = gymPlanRepository.findById(id);
+        if(!plan.isPresent())
+            return "redirect:/gym";
+
+        GymPlan foundPlan = plan.get();
+        if(foundPlan.isActive())
+            return "redirect:/gym";
+
+        foundPlan.setActive(true);
+        foundPlan.setStartDate(new Date());
+        gymPlanRepository.save(foundPlan);
+
+        return "redirect:/gym";
+    }
+
+
+    //mark plan as completed
+    @GetMapping("/gym/plan/{id}/end-plan")
+    public String endPlan(@PathVariable Long id, RedirectAttributes redirectAttributes, ModelMap model) {
+        Optional<GymPlan> plan = gymPlanRepository.findById(id);
+        if(!plan.isPresent())
+            return "redirect:/gym";
+
+        GymPlan foundPlan = plan.get();
+        if(!foundPlan.isActive())
+            return "redirect:/gym";
+
+        foundPlan.setActive(false);
+        foundPlan.setCompleteDate(new Date());
+        gymPlanRepository.save(foundPlan);
 
         return "redirect:/gym";
     }
