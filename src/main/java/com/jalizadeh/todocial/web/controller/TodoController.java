@@ -374,7 +374,7 @@ public class TodoController {
 	}
 	
 	
-	@GetMapping("/search")
+	@GetMapping("/search-dep")
 	public String SearchTodo(ModelMap model, 
 			@RequestParam(defaultValue="") String q) {
 		model.put("settings", settings);

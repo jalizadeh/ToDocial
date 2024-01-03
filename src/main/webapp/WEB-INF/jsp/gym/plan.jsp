@@ -65,10 +65,11 @@
 			<div class="row mt-2">
 				<div class="col border-bottom">
 					<h2>Summary</h2>
+					<br/>
 				</div>
 			</div>
 
-			<div class="row">
+			<div class="row p-2">
 				<div>
 					<p>${plan.gymPlanIntroduction.moreInfo}</p>
 					<p>Main Goal: ${plan.gymPlanIntroduction.mainGoal}</p>

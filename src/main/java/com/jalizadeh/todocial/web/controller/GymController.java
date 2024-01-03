@@ -388,4 +388,17 @@ public class GymController {
         }
     }
 
+
+    @GetMapping("/gym/filter-plan")
+    public String filterPlanByLevel(ModelMap model, @RequestParam String level){
+
+        GymTrainingLevel trainingLevel = GymTrainingLevel.valueOf(level.toUpperCase());
+        if(trainingLevel == null)
+            return "/gym";
+
+        model.put("plans", gymPlanRepository.findAllByTrainingLevel(trainingLevel));
+
+        return "gym/filtered";
+    }
+
 }

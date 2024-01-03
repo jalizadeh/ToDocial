@@ -15,6 +15,8 @@
 			</div>
 		</c:if>
 
+	<%@ include file="common/filter.jspf" %>
+
 	<div class="row">
 		<div class="col-3">
 			<p>Blood</p>
@@ -51,7 +53,7 @@
 
 	<div class="row mt-2">
 		<div class="col border-bottom">
-			<h2>Your Active Plans <a href="gym/plan/new?step=1" class="badge badge-success"><i class="fas fa-plus"></i> New</a></h2>
+			<h2><img src="/resources/img/status_active.gif" width="50px"> Your Active Plans <a href="gym/plan/new?step=1" class="badge badge-success"><i class="fas fa-plus"></i> New</a></h2>
 		</div>
 	</div>
 
@@ -60,7 +62,7 @@
 			<div class="card p-2" >
 				<div class="card-body">
 				  	<h5 class="card-title">
-						<span class="badge rounded-pill bg-success">&nbsp;</span> ${plan.title}
+						${plan.title}
 					</h5>
 					<h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
 					<p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
@@ -79,37 +81,7 @@
 
 	<div class="row mt-2">
 		<div class="col border-bottom">
-			<h2>All Plans</h2>
-		</div>
-	</div>
-
-	<div class="row">
-		<c:forEach items="${allPlans}" var="plan">
-			<div class="card p-2" >
-				<div class="card-body">
-				  	<h5 class="card-title">
-						<c:choose>
-							<c:when test="${plan.active == true}">
-								<span class="badge rounded-pill bg-success">&nbsp;</span> 
-							</c:when>    
-							<c:otherwise>
-								<span class="badge rounded-pill bg-secondary">&nbsp;</span> 
-							</c:otherwise>
-						</c:choose>
-						${plan.title}
-					</h5>
-				  <h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
-				  <p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
-				  <a href="/gym/plan/${plan.id}" class="card-link">View details</a>
-				  <a href="/gym/plan/${plan.id}/delete" class="card-link">Delete plan</a>
-				</div>
-			  </div>
-		</c:forEach>
-	</div>
-
-	<div class="row mt-2">
-		<div class="col border-bottom">
-			<h2>Completed Plans</h2>
+			<h2><img src="/resources/img/status_completed.gif" width="50px"> Completed Plans</h2>
 		</div>
 	</div>
 
@@ -118,9 +90,31 @@
 			<div class="card p-2" >
 				<div class="card-body">
 				  	<h5 class="card-title">
+						${plan.title}
+					</h5>
+				  <h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
+				  <p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
+				  <a href="/gym/plan/${plan.id}" class="card-link">View details</a>
+				  <a href="/gym/plan/${plan.id}/delete" class="card-link">Delete plan</a>
+				</div>
+			  </div>
+		</c:forEach>
+	</div>
+
+	<div class="row mt-2">
+		<div class="col border-bottom">
+			<h2>All Plans</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<c:forEach items="${allPlans}" var="plan">
+			<div class="card m-1 p-2" >
+				<div class="card-body">
+				  	<h5 class="card-title">
 						<c:choose>
 							<c:when test="${plan.active == true}">
-								<span class="badge rounded-pill bg-success">&nbsp;</span> 
+								<img src="/resources/img/status_active.gif" width="50px">
 							</c:when>    
 							<c:otherwise>
 								<span class="badge rounded-pill bg-secondary">&nbsp;</span> 
@@ -136,59 +130,5 @@
 			  </div>
 		</c:forEach>
 	</div>
-
-
-	<div class="row mt-2">
-		<div class="col border-bottom">
-			New To The Gym?
-		</div>
-	</div>
-
-	<div class="row mt-2">
-		<div class="col border-bottom">
-			Beginner
-			<br/>
-			Intermediate
-			<br/>
-			Advanced
-		</div>
-	</div>
-
-	<div class="row mt-2">
-		<div class="col border-bottom">
-			Days per week
-			<br/>
-			2 Days - 3 - 4 - 5 - 6
-		</div>
-	</div>
-
-	<div class="row mt-2">
-		<div class="col border-bottom">
-			Muscles Emphasized
-			<br/>
-			ABS - ARMS - CHEST - SHOULDER - LEG - BACK
-		</div>
-	</div>
-
-	<div class="row mt-2">
-		<div class="col border-bottom">
-			By Goal
-			<br/>
-			LOSE WEIGHT - Fitness - Mass Gain - Build Muscle - Power Lifting 
-		</div>
-	</div>
-
-	<div class="row mt-2">
-		<div class="col border-bottom">
-			Main Category
-		</div>
-	</div>
-
-	<div class="row mt-2">
-		<div class="col border-bottom">
-			<button>Find Workout plan</button>
-		</div>
-	</div>
-
 
 <%@ include file="../common/footer.jspf" %>

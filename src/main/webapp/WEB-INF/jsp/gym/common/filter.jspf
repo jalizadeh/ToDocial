@@ -1,0 +1,27 @@
+	<div class="row mt-2">
+		<div class="col border-bottom">New To The Gym? Find your plan</div>
+  	</div>
+  
+  	<div class="row mt-2 mb-2 border-bottom">
+		<div class="col">
+		<p>Training level</p>
+		<p><a href="/gym/filter-plan?level=beginner">Beginner</a></p>
+		<p><a href="/gym/filter-plan?level=intermediate">Intermediate</a></p>
+		<p><a href="/gym/filter-plan?level=advanced">Advanced</a></p>
+		</div>
+	
+		<div class="col">
+		<p>Days per week</p>
+		<p>2 Days - 3 - 4 - 5 - 6</p>
+		</div>
+	
+		<div class="col">
+		<P>Muscles Emphasized</P>
+		<p>ABS - ARMS - CHEST - SHOULDER - LEG - BACK</p>
+		</div>
+	
+		<div class="col">
+		<p>By Goal</p>
+		<p>LOSE WEIGHT - Fitness - Mass Gain - Build Muscle - Power Lifting</p>
+		</div>
+  	</div>
