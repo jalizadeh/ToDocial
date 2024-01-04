@@ -373,28 +373,7 @@ public class TodoController {
 		return "redirect:/@" + user.getUsername();
 	}
 	
-	
-	@GetMapping("/search-dep")
-	public String SearchTodo(ModelMap model, 
-			@RequestParam(defaultValue="") String q) {
-		model.put("settings", settings);
-		model.put("PageTitle", "Search for: " + q);
-		
-		List<Todo> todos = new ArrayList<Todo>();
-		for (Todo todo : todoRepository.findAllByLoggedinUser()) {
-			if(todo.getName().toLowerCase().contains(q))
-				todos.add(todo);
-		}
-		
-		model.put("todos", todos);
-		model.put("result", todos.size() + " results found for <mark>" + q + "</mark>");
-		return "search";
-	}
-	
-	
-	
-	
-	
+
 	//===============Methods==========================
 	private List<String>  allPriority() {
 		List<String> allPriority = new ArrayList<>();

@@ -23,11 +23,73 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- Selenium (Web pages)
 
 
+## REST API
+The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is `enabled` and credentials are fine, he will receive his own resources.
+
+
+| Test | Action  | Endpoint |
+| ------------- | ------------- | ------------- |
+| ✅ | Get all `User`\`s  | `GET /api/v1/user`  |
+| ✅ | Get one `User` by `username` | `GET /api/v1/user/{username}`  |
+| ✅ | Create a `User`  | `POST /api/v1/user`  |
+| ✅ | Get `User` activation token | `GET /api/v1/user/{username}/activation_token`  |
+| ✅ | Activate a `User`  | `POST /api/v1/user/{username}/activate?token={{token}}`  |
+| ✅ | Delete (deactivate) a `User`  | `DELETE /api/v1/user/{username}`  |
+| ✅ | Delete from DB a `User`  | `DELETE /api/v1/user/{username}/db`  |
+| ✅ | Get all `Todo`s  | `GET /api/v1/todo`  |
+| ✅ | Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
+|   | Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  |
+| ✅ | Create a `Todo` for `User` | `POST /api/v1/todo`  |
+|   | Get one `Todo`  | `GET /api/v1/todo/{id}`  |
+|   | Cancel (pause) a `Todo`  | `DELETE /api/v1/todo/{id}` |
+| ✅ | Delete a `Todo` and its `TodoLog`  | `DELETE /api/v1/todo/{id}/db` |
+| ✅ | Create a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
+|   | Get a `Todo Log`  | `GET /api/v1/todo/{id}/log/{id}` |
+|   | Get all `Todo Log`  | `GET /api/v1/todo/{id}/log` |
+| ✅ | Delete a `Todo Log`  | `DELETE /api/v1/todo/{id}/log/{id}` |
+
+
+
+## Run
+- Clone the project
+- In terminal run `mvn spring-boot:run`
+- Go to `http://localhost:8080`
+- Login:
+	- as `admin` with `admin:12345`
+    - as `javad` with `javad:12345`
+	- as `user`  with `alexfergosen:12345`
+	
+
+## Run Tests
+- mvn clean test
+	- Run and generate report
+- mvn clean site
+	- Run and generate styled report
+- mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=12345
+
+
+## Simulation Scenario [TODO]
+In simulation mode, a list of random users are created and they interact with each other. You, as an admin, can observe what is happening inside the ecosystem
+
+
+### Images
+
+Public page of a registered user
+![](assets/public-page.png)
+
+List of all todos, with full access
+![](assets/my-todos.png)
+
+Todos over time for a better visualization
+![](assets/chart-todo.png)
+
+Settings of the system
+![](assets/settings.png)
 
 ## TODO
 - [x] Initialize Spring project
 - [x] Database
-	- Currently data is stored using SQLite in `todo.db` file in root folder
+	- Currently, data is stored using SQLite in `todo.db` file in root folder
 	- User
 		- users_roles (many-to-many)
 		- Role (high-level roles)
@@ -56,30 +118,32 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- [ ] Multi-language (English / Italian)
 		- Currently `user-session` based
 		- [ ] Change static texts to `<spring:message code="key"/>`
-- [ ] Search in todos
+- [x] Search
+  - [x] in Todos
+  - [x] in Gym
 - [x] Todos
 	- [x] All user&#39;s todos
 	- [x] Public / Private
-    - [x] Management
-      - [x] Add new
-      - [x] Modify
-      - [x] Complete & Archive
-      - [x] Cancel/Resume (todo is never deleted, but kept forever, can be resumed)
+	- [x] Management
+		- [x] Add new
+		- [x] Modify
+		- [x] Complete & Archive
+		- [x] Cancel/Resume (todo is never deleted, but kept forever, can be resumed)
 	- [x] Log
 		- During working on the todo, user might need to comment some thoughts
 		- Not editable, only removable
-    - [ ] Type
+	- [ ] Type
 		- [x] 1-time
 		- [ ] Repeatable
-		  - [ ] Reminder
-        - [ ] mini-Task
-    - [ ] Subtasks
+			- [ ] Reminder
+		- [ ] mini-Task
+	- [ ] Subtasks
 	- [x] Progress bar
 - [ ] Wishes
 	- Todos that will be taken care later, at unknown time. When the user wants, he can turn a `wish` into a todo
 	- Other users can comment on his wishes, or help with appropriate advices
 - [ ] Log in
-	- Spring Security 
+	- Spring Security
 	- There are two roles `ROLE_USER` and `ROLE_ADMIN`
 	- Everyone can access `Log in` or `Sign up`, but for accessing the todos, the user must log in or sign up first.
 	- User can not login on multiple clients at the same time
@@ -191,69 +255,14 @@ This project is a combination of the features in Github and Wordpress that I cou
 	- [x] Test report
 		- with `mvn clean test` or `mvn site -DgenerateReports=false`
 	- [x] Test coverage report
-
-
-
-## REST API
-The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is `enabled` and credentials are fine, he will receive his own resources.
-
-
-| Test | Action  | Endpoint |
-| ------------- | ------------- | ------------- |
-| ✅ | Get all `User`\`s  | `GET /api/v1/user`  |
-| ✅ | Get one `User` by `username` | `GET /api/v1/user/{username}`  |
-| ✅ | Create a `User`  | `POST /api/v1/user`  |
-| ✅ | Get `User` activation token | `GET /api/v1/user/{username}/activation_token`  |
-| ✅ | Activate a `User`  | `POST /api/v1/user/{username}/activate?token={{token}}`  |
-| ✅ | Delete (deactivate) a `User`  | `DELETE /api/v1/user/{username}`  |
-| ✅ | Delete from DB a `User`  | `DELETE /api/v1/user/{username}/db`  |
-| ✅ | Get all `Todo`s  | `GET /api/v1/todo`  |
-| ✅ | Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
-|   | Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  |
-| ✅ | Create a `Todo` for `User` | `POST /api/v1/todo`  |
-|   | Get one `Todo`  | `GET /api/v1/todo/{id}`  |
-|   | Cancel (pause) a `Todo`  | `DELETE /api/v1/todo/{id}` |
-| ✅ | Delete a `Todo` and its `TodoLog`  | `DELETE /api/v1/todo/{id}/db` |
-| ✅ | Create a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
-|   | Get a `Todo Log`  | `GET /api/v1/todo/{id}/log/{id}` |
-|   | Get all `Todo Log`  | `GET /api/v1/todo/{id}/log` |
-| ✅ | Delete a `Todo Log`  | `DELETE /api/v1/todo/{id}/log/{id}` |
-
-
-
-## Run
-- Clone the project
-- In terminal run `mvn spring-boot:run`
-- Go to `http://localhost:8080`
-- Login:
-	- as `admin` with `admin:12345`
-    - as `javad` with `javad:12345`
-	- as `user`  with `alexfergosen:12345`
-	
-
-## Run Tests
-- mvn clean test
-	- Run and generate report
-- mvn clean site
-	- Run and generate styled report
-- mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=12345
-
-
-## Simulation Scenario
-In simulation mode, a list of random users are created and they interact with each other. You, as an admin, can observe what is happening inside the ecosystem
-
-
-
-### Images
-
-Public page of a registered user
-![](assets/public-page.png)
-
-List of all todos, with full access
-![](assets/my-todos.png)
-
-Todos over time for a better visualization
-![](assets/chart-todo.png)
-
-Settings of the system
-![](assets/settings.png)
+- [ ] Gym
+  - [x] Gym homepage
+    - [x] All plans
+    - [x] Active plans
+    - [x] Completed plans
+  - [ ] Record management
+    - [x] Plan
+    - [ ] Workout
+    - [x] Workout log
+  - [ ] Search plans
+  - [ ] Filter plans

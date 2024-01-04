@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.jalizadeh.todocial.web.model.Todo;
+import org.springframework.data.repository.query.Param;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
@@ -27,5 +28,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 	
 	@Query("select t from Todo t where t.user.id=:#{principal.id} and t.canceled = true")
 	List<Todo> getAllCanceled();
+
+	@Query("select t from Todo t where t.user.id=:#{principal.id} and (t.name LIKE %:query% OR t.description LIKE %:query% OR t.reason LIKE %:query%)")
+	List<Todo> searchAllByLoggedinUser(@Param("query") String query);
 
 }

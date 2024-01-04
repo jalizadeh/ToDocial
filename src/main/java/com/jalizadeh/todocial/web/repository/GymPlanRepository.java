@@ -15,6 +15,9 @@ public interface GymPlanRepository extends JpaRepository<GymPlan, Long>{
     @Query("select p from GymPlan p where p.active = False and p.completeDate is not null")
     List<GymPlan> findAllCompletedPlans();
 
+    @Query("SELECT p FROM GymPlan p JOIN p.gymPlanIntroduction pi WHERE p.title like %:query% or pi.moreInfo like %:query%")
+    List<GymPlan> searchAll(@Param("query") String query);
+
     @Query("SELECT p FROM GymPlan p JOIN p.gymPlanIntroduction pi WHERE pi.trainingLevel = :trainingLevel")
     List<GymPlan> findAllByTrainingLevel(@Param("trainingLevel") GymTrainingLevel level);
 }

@@ -50,15 +50,22 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<sec:authorize access="isAuthenticated()">
-					<form class="form-inline" action="/search">
+					<form class="form-inline" id="searchForm" action="/search" method="get">
 						<div class="input-group">
-							<input class="form-control" aria-label="Text input with segmented dropdown button"
-								type="text" placeholder="<spring:message code="header.search"/>" name="q">
+							<input class="form-control" id="searchInput" aria-label="Text input with segmented dropdown button" type="text"
+								placeholder="<spring:message code='header.search'/>" name="q">
+
+							<select class="form-control" id="searchTarget" name="target" >
+								<option value="todo">Todos</option>
+								<option value="gym">Gym</option>
+							<select>
+							
 							<div class="input-group-append">
 								<button class="btn btn-outline-secondary" type="submit">
 									<i class="fas fa-search"></i>
 								</button>
 							</div>
+							
 						</div>
 					</form>
 

@@ -35,6 +35,17 @@
 			document.getElementById("langEN").href= url + "?lang=en_US";
 			document.getElementById("langIT").href= url + "?lang=it_IT";		
 		}
+
+
+		//search panel
+		$(document).ready(function () {
+			$('#searchForm').submit(function () {
+				var selectedTarget = $('#searchTarget').val();
+				var queryString = 'target=' + selectedTarget + '&q=' + encodeURIComponent($('input[name="q"]').val());
+				$(this).attr('action', '/search?' + queryString);
+			});
+		});
+
 	</script>
 </body>
 </html>
