@@ -11,6 +11,7 @@
 				<div class="row">
 					<div class="col">
 						<h3>${todo.name}</h3>
+						<p>by <a href="/@${todo.user.username}">@${todo.user.username}</a></p>
 					</div>
 
 					<div class="col-auto">
@@ -20,7 +21,6 @@
 					</div>
 				</div>
 
-
 				<hr />
 
 				<p class="font-weight-bold"><spring:message code="completedTodo.description" /></p>
@@ -28,9 +28,6 @@
 
 				<p class="font-weight-bold"><spring:message code="completedTodo.why" /></p>
 				<p class="font-weight-normal">${todo.reason}</p>
-
-
-
 
 				<p class="font-weight-bold"><spring:message code="completedTodo.closingNote" /></p>
 				<p class="font-weight-normal">${todo.completion_note}</p>
@@ -67,20 +64,25 @@
 				</div>
 			</div>
 
-			<button type="button" class="btn btn-success btn-lg btn-block mt-2">
-				<i class="fas fa-clipboard-check"></i>
-				<fmt:formatDate value="${todo.completion_date}" pattern="yyyy/MM/dd" />
-			</button>
+			<!-- completion date -->
+			<div class="row my-2">
+				<div class="col">
+					<div class="card bg-success text-white">
+						<div class="card-body text-center">
+							<i class="fas fa-clipboard-check"></i>
+							<fmt:formatDate value="${todo.completion_date}" pattern="yyyy/MM/dd" />
+						</div>
+					</div>
+				</div>
+			</div>
 
 			<div class="card mt-2">
 				<h5 class="card-header">Logs</h5>
 				<div class="card-body">
 					<c:forEach items="${todo.logs}" var="log">
 						<p>
-							<a href="/delete-todo-log?id=${log.id}"> <i
-								class="fas fa-times btn-delete-todo"></i>
-							</a> <span class="badge badge-secondary"> <fmt:formatDate
-									value="${log.logDate}" pattern="yyyy/MM/dd" />
+							<span class="badge badge-secondary"> 
+								<fmt:formatDate value="${log.logDate}" pattern="yyyy/MM/dd" />
 							</span> ${log.log}
 						</p>
 					</c:forEach>

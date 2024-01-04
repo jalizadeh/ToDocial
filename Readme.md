@@ -60,14 +60,20 @@ This project is a combination of the features in Github and Wordpress that I cou
 - [x] Todos
 	- [x] All user&#39;s todos
 	- [x] Public / Private
-	- [x] Add new
-	- [x] Modify
-	- [x] Complete & Archive
-	- [x] Cancel/Resume (todo is never deleted, but kept forever, can be resumed)
+    - [x] Management
+      - [x] Add new
+      - [x] Modify
+      - [x] Complete & Archive
+      - [x] Cancel/Resume (todo is never deleted, but kept forever, can be resumed)
 	- [x] Log
 		- During working on the todo, user might need to comment some thoughts
 		- Not editable, only removable
-	- [ ] mini-Task
+    - [ ] Type
+		- [x] 1-time
+		- [ ] Repeatable
+		  - [ ] Reminder
+        - [ ] mini-Task
+    - [ ] Subtasks
 	- [x] Progress bar
 - [ ] Wishes
 	- Todos that will be taken care later, at unknown time. When the user wants, he can turn a `wish` into a todo
@@ -221,6 +227,7 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
 - Go to `http://localhost:8080`
 - Login:
 	- as `admin` with `admin:12345`
+    - as `javad` with `javad:12345`
 	- as `user`  with `alexfergosen:12345`
 	
 
@@ -229,6 +236,7 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
 	- Run and generate report
 - mvn clean site
 	- Run and generate styled report
+- mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=12345
 
 
 ## Simulation Scenario

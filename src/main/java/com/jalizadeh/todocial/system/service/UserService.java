@@ -16,11 +16,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.jalizadeh.todocial.system.repository.UserRepository;
 import com.jalizadeh.todocial.web.exception.EmailExistsException;
 import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.repository.RoleRepository;
-import com.jalizadeh.todocial.system.repository.UserRepository;
 
 @Service
 //@Transactional
@@ -149,9 +149,10 @@ public class UserService implements UserDetailsService {
 	
 	public List<String> getAllLoggedinUsersAsString(){
 		List<Object> principals = sessionRegistry.getAllPrincipals();
-		
-		User[] users = principals.toArray(new User[principals.size()]);
-		return Arrays.stream(users)
+		//User[] users = principals.toArray(new User[principals.size()]);
+		return principals.stream()
+				.filter(User.class::isInstance)
+                .map(User.class::cast)
 				.filter(u -> !sessionRegistry.getAllSessions(u, false).isEmpty())
 				.map(u -> u.getFirstname() + " " + u.getLastname() + " [" + u.getUsername() + "]")
 				.collect(Collectors.toList());

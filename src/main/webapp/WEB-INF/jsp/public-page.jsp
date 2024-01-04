@@ -82,7 +82,7 @@
 										<c:choose>
 											<c:when test="${todos[j.index].completed == true}">
 												<i class="fas fa-clipboard-check text-success"></i>
-												<a href="#"> ${todos[j.index].name}</a>
+												<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
 
 												<div class="row mt-3">
 													<div class="col">
@@ -99,7 +99,7 @@
 											</c:when>
 											<c:otherwise>
 												<i class="fas fa-clipboard text-warning"></i>
-												<a href="#"> ${todos[j.index].name}</a>
+												<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
 
 												<div class="row mt-3">
 													<div class="col">
@@ -130,7 +130,7 @@
 										<c:choose>
 											<c:when test="${todos[j.index].completed == true}">
 												<i class="fas fa-clipboard-check text-success"></i>
-												<a href="#"> ${todos[j.index].name}</a>
+												<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
 
 												<div class="row mt-3">
 													<div class="col">
@@ -147,7 +147,7 @@
 											</c:when>
 											<c:otherwise>
 												<i class="fas fa-clipboard text-warning"></i>
-												<a href="#"> ${todos[j.index].name}</a>
+												<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
 
 												<div class="row mt-3">
 													<div class="col">

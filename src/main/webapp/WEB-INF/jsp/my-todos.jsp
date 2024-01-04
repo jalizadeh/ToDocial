@@ -34,8 +34,7 @@
 						</div>
 					</div>
 
-					<div id="collapseActive" class="collapse" aria-labelledby="headingActive"
-						data-parent="#accordionStatus">
+					<div id="collapseActive" class="collapse show" aria-labelledby="headingActive" data-parent="#accordionStatus">
 						<div class="card-body" style="padding: 0px;">
 							<ul class="list-group list-group-flush">
 								<c:forEach items="${todosNotCompleted}" var="todo">
@@ -107,7 +106,7 @@
 							<ul class="list-group list-group-flush">
 								<c:forEach items="${todosCanceled}" var="todo">
 									<li class="list-group-item">
-										<a href="/update-todo?id=${todo.id}" data-toggle="tooltip"
+										<a href="/todo?id=${todo.id}" data-toggle="tooltip"
 											title="${todo.name}" > <i
 											class="fas fa-clipboard text-danger"></i>
 											${fn:substring(todo.name, 0, 20)}...
@@ -261,7 +260,7 @@
 									<span class="sr-only">Toggle Dropdown</span>
 								</button>
 								<div class="dropdown-menu">
-									<a class="dropdown-item" href="/update-todo?id=${todo.id}"><i
+									<a class="dropdown-item" href="/todo?id=${todo.id}"><i
 										class="fas fa-edit"></i> <spring:message code="mytodos.modify" /></a>
 									<a class="dropdown-item" href="/complete-todo?id=${todo.id}"><i
 										class="fas fa-archive"></i> <spring:message

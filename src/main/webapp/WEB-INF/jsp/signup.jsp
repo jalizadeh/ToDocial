@@ -16,7 +16,7 @@
 		</div>
 	</c:if>
 
-	<form:form method="post" action="/signup" modelAttribute="user" enctype="multipart/form-data">
+	<form:form class="col-6" method="post" action="/signup" modelAttribute="user" enctype="multipart/form-data">
 		<div class="form-group">
 		    <label for="firstname">Firstname</label>
 		    <form:input path="firstname" type="text" class="form-control" id="firstname" required="required"/>

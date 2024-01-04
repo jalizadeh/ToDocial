@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class VerificationToken {
 	
 	//24 hours in milliseconds
-	private static final long EXPIRATION = 1000 * 60 * 60 * 24;
+	private static final long EXPIRATION = 1000L * 60 * 60 * 24;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
