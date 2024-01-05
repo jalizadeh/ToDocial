@@ -193,19 +193,19 @@ public class GymController {
     }
 
 
-    @GetMapping(value = "gym/plan/{planId}")
-    public String showPlan(ModelMap model, @PathVariable Long planId, RedirectAttributes redirectAttributes) {
-        Optional<GymPlan> plan = gymPlanRepository.findById(planId);
+    @GetMapping(value = "gym/plan/{id}")
+    public String showPlan(ModelMap model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Optional<GymPlan> plan = gymPlanRepository.findById(id);
 
         if (!plan.isPresent()) {
-            redirectAttributes.addFlashAttribute("exception", "The requested plan with id " + planId + " doesn't exist");
+            redirectAttributes.addFlashAttribute("exception", "The requested plan with id " + id + " doesn't exist");
             return "redirect:/error";
         }
 
         GymPlan foundPlan = plan.get();
-        List<GymDay> daysOfPlan = gymDayRepository.findAllByPlanIdOrderByDayNumber(planId);
+        List<GymDay> daysOfPlan = gymDayRepository.findAllByPlanIdOrderByDayNumber(id);
 
-        List<GymPlanWeekDay> pwd = gymplanWeekDayRepository.findAllByPlanId(planId);
+        List<GymPlanWeekDay> pwd = gymplanWeekDayRepository.findAllByPlanId(id);
 
         model.put("settings", settings);
         model.put("PageTitle", "Gym - Plan: " + foundPlan.getTitle());
@@ -399,6 +399,37 @@ public class GymController {
         model.put("plans", gymPlanRepository.findAllByTrainingLevel(trainingLevel));
 
         return "gym/filtered";
+    }
+
+
+    @GetMapping(value = "/gym/workouts")
+    public String showWorkouts(ModelMap model) {
+        model.put("workouts", gymWorkoutRepository.findAll());
+        return "gym/workouts";
+    }
+
+    @GetMapping(value = "/gym/workouts/{id}")
+    public String showWorkout(ModelMap model, RedirectAttributes redirectAttributes,
+                              @PathVariable Long id) {
+
+        Optional<GymWorkout> workout = gymWorkoutRepository.findById(id);
+
+        if (!workout.isPresent()) {
+            redirectAttributes.addFlashAttribute("exception", "The requested workout with id " + id + " doesn't exist");
+            return "redirect:/error";
+        }
+
+        GymWorkout foundWorkout = workout.get();
+
+        List<Long> planIdsByWorkoutId = gymDayWorkoutRepository.findPlanIdsByWorkoutId(foundWorkout.getId());
+        List<GymPlan> allPlans = gymPlanRepository.findAllById(planIdsByWorkoutId);
+
+        model.put("settings", settings);
+        model.put("PageTitle", "Gym - Workout: " + foundWorkout.getName());
+        model.put("workout", foundWorkout);
+        model.put("plans", allPlans);
+
+        return "gym/workout";
     }
 
 }

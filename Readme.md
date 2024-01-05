@@ -199,7 +199,7 @@ Settings of the system
 	- [x] User&#39;s Public Page
 	- [x] Follower / Following
 		- [ ] Follow / Unfollow
-			- 🟡 a user can follow any user, mulitple times
+			- 🟡 a user can follow any user, multiple times
 - [ ] Admin panel
 	- [ ] General
 		- [x] Site name & description
@@ -262,7 +262,13 @@ Settings of the system
     - [x] Completed plans
   - [ ] Record management
     - [x] Plan
+      - [x] View
+      - [x] Add
+      - [x] Delete
     - [ ] Workout
+      - [x] View
+      - [ ] Add
+      - [ ] Delete
     - [x] Workout log
   - [ ] Search plans
   - [ ] Filter plans
