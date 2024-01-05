@@ -3,7 +3,7 @@
 		<%@ include file="common/result.jspf" %>
 		
 		<div class="row">
-			<c:forEach items="${plans}" var="plan">
+			<c:forEach items="${items}" var="plan">
 				<div class="card m-1 p-2" >
 					<div class="card-body">
 						<h5 class="card-title">

@@ -414,20 +414,19 @@ public class GymController {
 
         Optional<GymWorkout> workout = gymWorkoutRepository.findById(id);
 
+        model.put("settings", settings);
+
         if (!workout.isPresent()) {
             redirectAttributes.addFlashAttribute("exception", "The requested workout with id " + id + " doesn't exist");
             return "redirect:/error";
         }
 
         GymWorkout foundWorkout = workout.get();
+        List<GymPlan> plansByWorkoutId = gymDayWorkoutRepository.findPlansByWorkoutId(foundWorkout.getId());
 
-        List<Long> planIdsByWorkoutId = gymDayWorkoutRepository.findPlanIdsByWorkoutId(foundWorkout.getId());
-        List<GymPlan> allPlans = gymPlanRepository.findAllById(planIdsByWorkoutId);
-
-        model.put("settings", settings);
         model.put("PageTitle", "Gym - Workout: " + foundWorkout.getName());
         model.put("workout", foundWorkout);
-        model.put("plans", allPlans);
+        model.put("plans", plansByWorkoutId);
 
         return "gym/workout";
     }

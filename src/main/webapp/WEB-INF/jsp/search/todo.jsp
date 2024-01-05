@@ -12,7 +12,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${todos}" var="todo">
+				<c:forEach items="${items}" var="todo">
 					<tr>
 						<th>
 							<p><a href="/todo?id=${todo.id}">${todo.name}</a></p>

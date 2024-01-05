@@ -24,12 +24,12 @@
 	<div class="row">
 		<c:forEach items="${workouts}" var="workout">
 			<div class="card m-1 p-2" style="width: 18rem;" >
-				<a href="/gym/workouts/${workout.id}" class="card-link"><img src="/resources/img/gym/${workout.img}" class="card-img-top" alt="${workout.name}"></a>
+				<a href="/gym/workouts/${workout.id}" class="card-link"><img src="/resources/img/gym/${workout.img}" class="card-img-top" alt="${workout.name}" loading="lazy"></a>
 				<div class="card-body">
 				  	<h5 class="card-title">
 						${workout.name}
 					</h5>
-				  <a class="btn btn-success btn-sm" href="/gym/?filter=workout&muscle=${workout.muscleCategory}" role="button">${workout.muscleCategory}</a>
+				  <a class="btn btn-success btn-sm" href="/gym/workouts?filter=workout&muscle=${workout.muscleCategory}" role="button">${workout.muscleCategory}</a>
 				  <p class="card-text">${fn:substring(workout.suggestion, 0, 90)}...</p>
 				</div>
 			  </div>

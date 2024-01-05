@@ -2,6 +2,7 @@ package com.jalizadeh.todocial.web.controller;
 
 
 import com.jalizadeh.todocial.system.repository.TodoRepository;
+import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.todocial.web.model.Todo;
 import com.jalizadeh.todocial.web.model.gym.GymPlan;
@@ -30,9 +31,11 @@ public class SearchController {
 
 
     @GetMapping("/search")
-    public String SearchTodo(ModelMap model, RedirectAttributes redirectAttributes,
+    public String search(ModelMap model, RedirectAttributes redirectAttributes,
                              @RequestParam(name="target", defaultValue="todo") String target,
-                             @RequestParam(name="q", defaultValue="") String q) {
+                             @RequestParam(name="q", defaultValue="") String query) {
+
+        String q = DataUtils.sanitizeQuery(query);
 
         model.put("settings", settings);
         model.put("PageTitle", "Search in " + target.toUpperCase());
@@ -42,13 +45,11 @@ public class SearchController {
         switch (target){
             case "todo":
                 List<Todo> todos = todoRepository.searchAllByLoggedinUser(q);
-                model.put("todos", todos);
-                model.put("result_size", todos.size());
+                model.put("items", todos);
                 break;
             case "gym":
                 List<GymPlan> gymPlans = gymPlanRepository.searchAll(q);
-                model.put("plans", gymPlans);
-                model.put("result_size", gymPlans.size());
+                model.put("items", gymPlans);
                 break;
             default:
                 redirectAttributes.addFlashAttribute("exception", "The search criteria is not correct");
