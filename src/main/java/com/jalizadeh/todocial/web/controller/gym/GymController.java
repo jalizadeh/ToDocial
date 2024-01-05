@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.web.controller;
+package com.jalizadeh.todocial.web.controller.gym;
 
 
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
@@ -391,7 +391,6 @@ public class GymController {
 
     @GetMapping("/gym/filter-plan")
     public String filterPlanByLevel(ModelMap model, @RequestParam String level){
-
         GymTrainingLevel trainingLevel = GymTrainingLevel.valueOf(level.toUpperCase());
         if(trainingLevel == null)
             return "/gym";
@@ -399,36 +398,6 @@ public class GymController {
         model.put("plans", gymPlanRepository.findAllByTrainingLevel(trainingLevel));
 
         return "gym/filtered";
-    }
-
-
-    @GetMapping(value = "/gym/workouts")
-    public String showWorkouts(ModelMap model) {
-        model.put("workouts", gymWorkoutRepository.findAll());
-        return "gym/workouts";
-    }
-
-    @GetMapping(value = "/gym/workouts/{id}")
-    public String showWorkout(ModelMap model, RedirectAttributes redirectAttributes,
-                              @PathVariable Long id) {
-
-        Optional<GymWorkout> workout = gymWorkoutRepository.findById(id);
-
-        model.put("settings", settings);
-
-        if (!workout.isPresent()) {
-            redirectAttributes.addFlashAttribute("exception", "The requested workout with id " + id + " doesn't exist");
-            return "redirect:/error";
-        }
-
-        GymWorkout foundWorkout = workout.get();
-        List<GymPlan> plansByWorkoutId = gymDayWorkoutRepository.findPlansByWorkoutId(foundWorkout.getId());
-
-        model.put("PageTitle", "Gym - Workout: " + foundWorkout.getName());
-        model.put("workout", foundWorkout);
-        model.put("plans", plansByWorkoutId);
-
-        return "gym/workout";
     }
 
 }

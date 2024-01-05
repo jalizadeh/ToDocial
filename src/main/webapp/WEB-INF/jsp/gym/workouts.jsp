@@ -15,9 +15,23 @@
 			</div>
 		</c:if>
 
-	<div class="row mt-2">
-		<div class="col border-bottom">
+	<div class="row mt-2 border-bottom"">
+		<div class="col">
 			<h2>${workouts.size()} Workouts</h2>
+		</div>
+
+		<div class="col">
+			<a class="btn btn-outline-primary btn-sm" href="/gym/workouts" role="button">All</a>
+			<c:forEach items="${muscleCategories}" var="mc">
+				<c:choose>
+					<c:when test="${mc == value}">
+						<a class="btn btn-success btn-sm" href="/gym/workouts?filter=muscle&value=${mc}" role="button">${mc}</a>
+					</c:when>    
+					<c:otherwise>
+						<a class="btn btn-secondary btn-sm" href="/gym/workouts?filter=muscle&value=${mc}" role="button">${mc}</a>
+					</c:otherwise>
+				</c:choose>	
+			</c:forEach>
 		</div>
 	</div>
 
@@ -29,7 +43,7 @@
 				  	<h5 class="card-title">
 						${workout.name}
 					</h5>
-				  <a class="btn btn-success btn-sm" href="/gym/workouts?filter=workout&muscle=${workout.muscleCategory}" role="button">${workout.muscleCategory}</a>
+				  <a class="btn btn-success btn-sm" href="/gym/workouts?filter=muscle&value=${workout.muscleCategory}" role="button">${workout.muscleCategory}</a>
 				  <p class="card-text">${fn:substring(workout.suggestion, 0, 90)}...</p>
 				</div>
 			  </div>
