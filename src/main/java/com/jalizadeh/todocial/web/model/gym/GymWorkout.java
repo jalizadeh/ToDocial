@@ -19,9 +19,9 @@ public class GymWorkout {
 
     private String name;
 
-    private String img;
+    private String photo;
 
-    private String suggestion;
+    private String description;
 
     private GymMuscleCategory muscleCategory;
 

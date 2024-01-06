@@ -1,5 +1,6 @@
 package com.jalizadeh.todocial.web.service.storage;
 
+import com.jalizadeh.todocial.system.service.ServiceTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -31,15 +32,13 @@ public class FileController {
 	}
 
 	
-	@GetMapping("/user-avatar/{filename:.+}")
+	@GetMapping("/photo/{service}/{filename:.+}")
 	@ResponseBody
-	public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+	public ResponseEntity<Resource> serveFile(@PathVariable String service, @PathVariable String filename) {
+		Resource file = storageService.loadAsResource(ServiceTypes.valueOf(service), filename);
 
-		Resource file = storageService.loadAsResource(filename);
-		
-		if (file == null) {
-			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=\"" + "default.jpg" + "\"").body(file);
+		if (file == null){
+			return null;
 		}
 		
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,

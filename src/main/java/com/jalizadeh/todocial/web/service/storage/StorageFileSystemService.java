@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+import com.jalizadeh.todocial.system.service.ServiceTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -20,16 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class StorageFileSystemService implements StorageService {
 
-	private final Path rootLocation;
-
-	@Autowired
-	public StorageFileSystemService(StorageProperties properties) {
-		this.rootLocation = Paths.get(properties.getLocation());
-	}
+	private final Path ROOT_LOCATION = Paths.get("upload-dir");
 
 	@Override
-	public void store(MultipartFile file, String optionalFilename) {
+	public void store(MultipartFile file, ServiceTypes service, String optionalFilename) {
 		String filename;
+		Path rootLocation = Paths.get(this.ROOT_LOCATION + "/" + service.name());
 		
 		if (optionalFilename == null) {
 			filename = StringUtils.cleanPath(file.getOriginalFilename());
@@ -48,7 +45,7 @@ public class StorageFileSystemService implements StorageService {
 								+ filename);
 			}
 			try (InputStream inputStream = file.getInputStream()) {
-				Files.copy(inputStream, this.rootLocation.resolve(filename),
+				Files.copy(inputStream, rootLocation.resolve(filename),
 					StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
@@ -60,9 +57,9 @@ public class StorageFileSystemService implements StorageService {
 	@Override
 	public Stream<Path> loadAll() {
 		try {
-			return Files.walk(this.rootLocation, 1)
-				.filter(path -> !path.equals(this.rootLocation))
-				.map(this.rootLocation::relativize);
+			return Files.walk(this.ROOT_LOCATION, 1)
+				.filter(path -> !path.equals(this.ROOT_LOCATION))
+				.map(this.ROOT_LOCATION::relativize);
 		}
 		catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);
@@ -72,22 +69,22 @@ public class StorageFileSystemService implements StorageService {
 
 	@Override
 	public Path load(String filename) {
-		return rootLocation.resolve(filename);
+		return ROOT_LOCATION.resolve(filename);
 	}
 
 	
 	// if the `username.jpg` is not found, it will return `default.jpg`
 	@Override
-	public Resource loadAsResource(String filename) {
+	public Resource loadAsResource(ServiceTypes service, String filename) {
 		Resource resource = null;
 		try {
-			resource =  new UrlResource(load(filename).toUri());
+			resource =  new UrlResource(load(service.name() + "/" + filename).toUri());
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
 			}
 			else {
 				//throw new StorageFileNotFoundException("Could not read file: " + filename);
-				return new UrlResource(load("default.jpg").toUri());
+				return new UrlResource(load(service.name() + "/" + "default.jpg").toUri());
 			}
 		}
 		catch (MalformedURLException e) {
@@ -97,13 +94,13 @@ public class StorageFileSystemService implements StorageService {
 
 	@Override
 	public void deleteAll() {
-		FileSystemUtils.deleteRecursively(rootLocation.toFile());
+		FileSystemUtils.deleteRecursively(ROOT_LOCATION.toFile());
 	}
 
 	@Override
 	public void init() {
 		try {
-			Files.createDirectories(rootLocation);
+			Files.createDirectories(ROOT_LOCATION);
 		}
 		catch (IOException e) {
 			throw new StorageException("Could not initialize storage", e);

@@ -1,21 +1,29 @@
 package com.jalizadeh.todocial.web.controller.gym;
 
+import com.jalizadeh.todocial.system.service.ServiceTypes;
 import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
-import com.jalizadeh.todocial.web.model.Todo;
+import com.jalizadeh.todocial.web.model.FlashMessage;
 import com.jalizadeh.todocial.web.model.gym.GymPlan;
 import com.jalizadeh.todocial.web.model.gym.GymWorkout;
+import com.jalizadeh.todocial.web.model.gym.types.GymEquipment;
 import com.jalizadeh.todocial.web.model.gym.types.GymMuscleCategory;
 import com.jalizadeh.todocial.web.repository.GymDayWorkoutRepository;
 import com.jalizadeh.todocial.web.repository.GymWorkoutRepository;
+import com.jalizadeh.todocial.web.service.storage.StorageFileSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +38,9 @@ public class GymWorkoutContoller {
 
     @Autowired
     private GymDayWorkoutRepository gymDayWorkoutRepository;
+
+    @Autowired
+    private StorageFileSystemService storageService;
 
     @GetMapping(value = "/gym/workouts")
     public String showWorkouts(ModelMap model) {
@@ -84,4 +95,61 @@ public class GymWorkoutContoller {
 
         return "gym/workout";
     }
+
+
+    @GetMapping("/gym/workouts/new")
+    public String newWorkout(ModelMap model){
+        model.put("settings", settings);
+        model.put("PageTitle", "Add new workout");
+
+        model.addAttribute("workout",new GymWorkout());
+        model.addAttribute("equipments",GymEquipment.values());
+        model.addAttribute("muscleCategories",GymMuscleCategory.values());
+        return "gym/workouts-new";
+    }
+
+
+    @PostMapping("/gym/workouts/new")
+    public String addNewWorkout(@Valid GymWorkout workout,
+                                ModelMap model, BindingResult result, RedirectAttributes redirectAttributes,
+                                @RequestParam(value="file", required=false) MultipartFile file){
+
+        model.put("settings", settings);
+
+        if(result.hasErrors()) {
+            model.put("error", result.getAllErrors());
+            model.addAttribute("equipments",GymEquipment.values());
+            model.addAttribute("muscleCategories",GymMuscleCategory.values());
+            return "gym/workouts-new";
+        }
+
+        if (!file.isEmpty()) {
+            String photoname = preparePhotoName(workout.getName(), file.getOriginalFilename());
+            storageService.store(file, ServiceTypes.gym, photoname);
+            workout.setPhoto(photoname);
+        }
+
+        workout.setName(DataUtils.sanitizeQuery(workout.getName()));
+        workout.setDescription(DataUtils.sanitizeQuery(workout.getDescription()));
+        gymWorkoutRepository.save(workout);
+
+        redirectAttributes.addFlashAttribute("flash",
+                new FlashMessage("Workout created successfully", FlashMessage.Status.success));
+        return "redirect:/gym/workouts";
+    }
+
+    private String preparePhotoName(String name, String originalFilename) {
+        String wName = DataUtils.sanitizeQuery(name);
+        wName = wName.replace(" ", "_");
+
+        String fileExtension = "";
+        // If the originalFilename is null or doesn't contain a dot, there's no extension
+        if (originalFilename == null || !originalFilename.contains(".")) {
+            return wName + ".jpg";
+        }
+
+        // Get the substring after the last dot in the filename
+        return wName + "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+    }
+
 }

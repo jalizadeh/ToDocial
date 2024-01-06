@@ -131,15 +131,19 @@
 
 					</div>
 				</div>
+
+				<div class="mt-2">
+					<a class="btn btn-primary" href="?step=1" role="button">Back</a>
+					<button type="submit" class="btn btn-success">Save new plan</button>
+				</div>
 			</div>
+
+			
 
 		</div>
 
 		<div class="mt-2">
 			<button type="button" id="addWorkout" class="btn btn-primary">Add Workout</button>
-
-			<a class="btn btn-primary" href="?step=1" role="button">Back</a>
-			<button type="submit" class="btn btn-success">Save new plan</button>
 		</div>
 
 	</form:form>

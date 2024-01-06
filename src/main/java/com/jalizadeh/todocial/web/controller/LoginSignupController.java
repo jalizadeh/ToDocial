@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.jalizadeh.todocial.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,10 +47,6 @@ import com.jalizadeh.todocial.web.registration.OnPasswordResetEvent;
 import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.todocial.web.repository.SecurityQuestionDefinitionRepository;
 import com.jalizadeh.todocial.web.repository.SecurityQuestionRepository;
-import com.jalizadeh.todocial.system.service.CommonServices;
-import com.jalizadeh.todocial.system.service.PasswordResetTokenService;
-import com.jalizadeh.todocial.system.service.TokenService;
-import com.jalizadeh.todocial.system.service.UserService;
 import com.jalizadeh.todocial.web.service.storage.StorageFileSystemService;
 
 @Controller
@@ -294,7 +291,7 @@ public class LoginSignupController{
     		if (file.isEmpty()) {
     			user.setPhoto("default.jpg");
 			} else {
-				storageService.store(file, user.getUsername() + ".jpg");
+				storageService.store(file, ServiceTypes.todo, user.getUsername() + ".jpg");
 				user.setPhoto(user.getUsername() + ".jpg");    			
 			}
             

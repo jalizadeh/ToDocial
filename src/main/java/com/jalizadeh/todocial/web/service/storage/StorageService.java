@@ -1,5 +1,6 @@
 package com.jalizadeh.todocial.web.service.storage;
 
+import com.jalizadeh.todocial.system.service.ServiceTypes;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,13 +11,13 @@ public interface StorageService {
 
 	void init();
 
-	void store(MultipartFile file, String optionalFilename);
+	void store(MultipartFile file, ServiceTypes service, String optionalFilename);
 
 	Path load(String filename);
 
 	Stream<Path> loadAll();
 
-	Resource loadAsResource(String filename);
+	Resource loadAsResource(ServiceTypes service, String filename);
 
 	void deleteAll();
 

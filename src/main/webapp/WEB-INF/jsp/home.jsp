@@ -11,7 +11,7 @@
 			<c:forEach items="${users}" var="user">
 				<div class="my-2">
 					<a href="/@${user.username}">
-						<img class="img-profile rounded-circle" width="32px" height="32px" src="/user-avatar/${user.photo}">
+						<img class="img-profile rounded-circle" width="32px" height="32px" src="/photo/user/${user.photo}">
 					</a>
 					<a href="/@${user.username}">${user.firstname} ${user.lastname}</a>
 				</div>
