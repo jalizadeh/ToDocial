@@ -21,8 +21,9 @@
 			<img src="/photo/gym/${workout.photo}" class="d-block mx-lg-auto img-fluid" alt="${workout.name}" width="400" height="400" loading="lazy">
 		</div>
 		<div class="col-lg-6">
-		  <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">${workout.name}</h1>
-		  <p class="lead">${workout.description}</p>
+			<a href="/gym/workouts/${workout.id}/edit" class="icon-link">Edit</a> | <a href="/gym/workouts/${workout.id}/delete" class="icon-link text-danger">Delete</a>
+			<h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">${workout.name}</h1>
+			<p class="lead">${workout.description}</p>
 		</div>
 	  </div>
 
@@ -33,12 +34,14 @@
 				<h2 class="pb-2 border-bottom">Muscle Group</h2>
 			
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
-				  <div class="col d-flex align-items-start">
-					<div>
-					  <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">${workout.muscleCategory}</h3>
-					  <p>Paragraph of text beneath the heading to explain the heading.</p>
-					</div>
-				  </div>
+					<c:forEach items="${workout.muscleCategory}" var="mc">
+					  <div class="col d-flex align-items-start">
+						<div>
+						  <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">${mc}</h3>
+						  <p>Paragraph of text beneath the heading to explain the heading.</p>
+						</div>
+					  </div>
+					</c:forEach>
 				</div>
 			</div>
 		</div>
@@ -48,19 +51,21 @@
 				<h2 class="pb-2 border-bottom">Equipment</h2>
 			
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
-				  <div class="col d-flex align-items-start">
-					<div>
-					  <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">${workout.equipment}</h3>
-					  <p>Paragraph of text beneath the heading to explain the heading.</p>
-					</div>
-				  </div>
+					<c:forEach items="${workout.equipment}" var="e">
+					  <div class="col d-flex align-items-start">
+						<div>
+						  <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">${e}</h3>
+						  <p>Paragraph of text beneath the heading to explain the heading.</p>
+						</div>
+					  </div>
+					</c:forEach>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<div class="container px-4 py-5" id="featured-3">
-		<h2 class="pb-2 border-bottom">In Plans</h2>
+		<h2 class="pb-2 border-bottom">In Your Plans</h2>
 
 		<c:choose>
 			<c:when test="${plans.size() > 0}">
@@ -81,7 +86,11 @@
 				  </div>
 			</c:otherwise>
 		</c:choose>
-		
+	</div>
+
+	<div class="container px-4 py-5" id="featured-3">
+		<h2 class="pb-2 border-bottom">Your Workout History</h2>
+
 	</div>
 
 

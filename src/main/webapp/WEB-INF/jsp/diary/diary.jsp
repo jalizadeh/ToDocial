@@ -5,7 +5,7 @@
 		<div class="col">
 			<div class="card-group">
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -13,7 +13,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -21,7 +21,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -29,7 +29,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -37,7 +37,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -45,7 +45,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -53,66 +53,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
-			    <div class="card-body">
-			      <h5 class="card-title">2020.04.2</h5>
-			      <p class="card-text">3/4</p>
-			      <p class="card-text"><small class="text-muted">view</small></p>
-			    </div>
-			  </div>
-			</div>
-			
-			<div class="card-group">
-			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
-			    <div class="card-body">
-			      <h5 class="card-title">2020.04.2</h5>
-			      <p class="card-text">3/4</p>
-			      <p class="card-text"><small class="text-muted">view</small></p>
-			    </div>
-			  </div>
-			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
-			    <div class="card-body">
-			      <h5 class="card-title">2020.04.2</h5>
-			      <p class="card-text">3/4</p>
-			      <p class="card-text"><small class="text-muted">view</small></p>
-			    </div>
-			  </div>
-			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
-			    <div class="card-body">
-			      <h5 class="card-title">2020.04.2</h5>
-			      <p class="card-text">3/4</p>
-			      <p class="card-text"><small class="text-muted">view</small></p>
-			    </div>
-			  </div>
-			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
-			    <div class="card-body">
-			      <h5 class="card-title">2020.04.2</h5>
-			      <p class="card-text">3/4</p>
-			      <p class="card-text"><small class="text-muted">view</small></p>
-			    </div>
-			  </div>
-			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
-			    <div class="card-body">
-			      <h5 class="card-title">2020.04.2</h5>
-			      <p class="card-text">3/4</p>
-			      <p class="card-text"><small class="text-muted">view</small></p>
-			    </div>
-			  </div>
-			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
-			    <div class="card-body">
-			      <h5 class="card-title">2020.04.2</h5>
-			      <p class="card-text">3/4</p>
-			      <p class="card-text"><small class="text-muted">view</small></p>
-			    </div>
-			  </div>
-			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -123,7 +64,7 @@
 			
 			<div class="card-group">
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -131,7 +72,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -139,7 +80,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -147,7 +88,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -155,7 +96,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -163,7 +104,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -171,7 +112,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -182,7 +123,7 @@
 			
 			<div class="card-group">
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -190,7 +131,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -198,7 +139,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -206,7 +147,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -214,7 +155,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -222,7 +163,7 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>
@@ -230,7 +171,66 @@
 			    </div>
 			  </div>
 			  <div class="card">
-			    <img src="/user-avatar/sun.jpg" class="card-img-top" alt="...">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
+			    <div class="card-body">
+			      <h5 class="card-title">2020.04.2</h5>
+			      <p class="card-text">3/4</p>
+			      <p class="card-text"><small class="text-muted">view</small></p>
+			    </div>
+			  </div>
+			</div>
+			
+			<div class="card-group">
+			  <div class="card">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
+			    <div class="card-body">
+			      <h5 class="card-title">2020.04.2</h5>
+			      <p class="card-text">3/4</p>
+			      <p class="card-text"><small class="text-muted">view</small></p>
+			    </div>
+			  </div>
+			  <div class="card">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
+			    <div class="card-body">
+			      <h5 class="card-title">2020.04.2</h5>
+			      <p class="card-text">3/4</p>
+			      <p class="card-text"><small class="text-muted">view</small></p>
+			    </div>
+			  </div>
+			  <div class="card">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
+			    <div class="card-body">
+			      <h5 class="card-title">2020.04.2</h5>
+			      <p class="card-text">3/4</p>
+			      <p class="card-text"><small class="text-muted">view</small></p>
+			    </div>
+			  </div>
+			  <div class="card">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
+			    <div class="card-body">
+			      <h5 class="card-title">2020.04.2</h5>
+			      <p class="card-text">3/4</p>
+			      <p class="card-text"><small class="text-muted">view</small></p>
+			    </div>
+			  </div>
+			  <div class="card">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
+			    <div class="card-body">
+			      <h5 class="card-title">2020.04.2</h5>
+			      <p class="card-text">3/4</p>
+			      <p class="card-text"><small class="text-muted">view</small></p>
+			    </div>
+			  </div>
+			  <div class="card">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
+			    <div class="card-body">
+			      <h5 class="card-title">2020.04.2</h5>
+			      <p class="card-text">3/4</p>
+			      <p class="card-text"><small class="text-muted">view</small></p>
+			    </div>
+			  </div>
+			  <div class="card">
+			    <img src="/photo/diary/sun.jpg" class="card-img-top" alt="...">
 			    <div class="card-body">
 			      <h5 class="card-title">2020.04.2</h5>
 			      <p class="card-text">3/4</p>

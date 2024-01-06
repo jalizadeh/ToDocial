@@ -15,7 +15,7 @@
 			</div>
 		</c:if>
 
-	<div class="row mt-2 border-bottom"">
+	<div class="row mt-2 border-bottom">
 		<div class="col">
 			<h2>${workouts.size()} Workouts</h2>
 		</div>
@@ -45,7 +45,9 @@
 				  	<h5 class="card-title">
 						${workout.name}
 					</h5>
-				  <a class="btn btn-success btn-sm" href="/gym/workouts?filter=muscle&value=${workout.muscleCategory}" role="button">${workout.muscleCategory}</a>
+					<c:forEach items="${workout.muscleCategory}" var="mc">
+						<a class="btn btn-success btn-sm" href="/gym/workouts?filter=muscle&value=${mc}" role="button">${mc}</a>
+					</c:forEach>
 				  <p class="card-text">${fn:substring(workout.description, 0, 90)}...</p>
 				</div>
 			  </div>

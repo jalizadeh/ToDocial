@@ -4,6 +4,8 @@ import com.jalizadeh.todocial.system.service.ServiceTypes;
 import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.todocial.web.model.FlashMessage;
+import com.jalizadeh.todocial.web.model.Todo;
+import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.model.gym.GymPlan;
 import com.jalizadeh.todocial.web.model.gym.GymWorkout;
 import com.jalizadeh.todocial.web.model.gym.types.GymEquipment;
@@ -24,8 +26,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import javax.xml.crypto.Data;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class GymWorkoutContoller {
@@ -96,6 +100,67 @@ public class GymWorkoutContoller {
         return "gym/workout";
     }
 
+
+    @GetMapping(value = "/gym/workouts/{id}/edit")
+    public String editWorkout(ModelMap model, RedirectAttributes redirectAttributes, @PathVariable Long id) {
+        Optional<GymWorkout> workout = gymWorkoutRepository.findById(id);
+
+        //if requested to-do id doesnt exists
+        if(!workout.isPresent()){
+            redirectAttributes.addFlashAttribute("exception", "The requested workout with id "+ id + " doesn't exist");
+            return "redirect:/error";
+        }
+
+        GymWorkout foundWorkout = workout.get();
+        model.put("PageTitle", foundWorkout.getName());
+        model.put("settings", settings);
+        model.put("workout", foundWorkout);
+        model.addAttribute("equipments",GymEquipment.values());
+        model.addAttribute("muscleCategories",GymMuscleCategory.values());
+
+        return "gym/workouts-new";
+    }
+
+    @PostMapping(value = "/gym/workouts/{id}/edit")
+    public String editWorkout(@Valid GymWorkout workout,
+                              ModelMap model, BindingResult result, RedirectAttributes redirectAttributes,
+                              @RequestParam(value="file", required=false) MultipartFile file){
+
+        Optional<GymWorkout> w = gymWorkoutRepository.findById(workout.getId());
+
+        if(!w.isPresent() || w.get().getId() != workout.getId()){
+            redirectAttributes.addFlashAttribute("exception", "The requested workout with id "+ workout.getId() + " doesn't exist");
+            return "redirect:/error";
+        }
+
+
+        GymWorkout foundWorkout = w.get();
+        foundWorkout.setName(workout.getName());
+        foundWorkout.setDescription(workout.getDescription());
+        //TODO: impl new photo
+        foundWorkout.setEquipment(workout.getEquipment());
+        foundWorkout.setMuscleCategory(workout.getMuscleCategory());
+
+        gymWorkoutRepository.save(foundWorkout);
+
+        redirectAttributes.addFlashAttribute("flash",
+                new FlashMessage("Workout updated successfully", FlashMessage.Status.success));
+        return "redirect:/gym/workouts";
+    }
+
+
+    @GetMapping(value = "/gym/workouts/{id}/delete")
+    public String deleteWorkout(ModelMap model, RedirectAttributes redirectAttributes, @PathVariable Long id) {
+        Optional<GymWorkout> workout = gymWorkoutRepository.findById(id);
+
+        if(workout.isPresent()){
+           gymWorkoutRepository.delete(workout.get());
+        }
+
+        redirectAttributes.addFlashAttribute("flash",
+                new FlashMessage("Workout deleted successfully", FlashMessage.Status.warning));
+        return "redirect:/gym/workouts";
+    }
 
     @GetMapping("/gym/workouts/new")
     public String newWorkout(ModelMap model){
