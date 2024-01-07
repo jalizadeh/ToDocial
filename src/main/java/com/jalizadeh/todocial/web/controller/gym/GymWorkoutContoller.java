@@ -4,13 +4,14 @@ import com.jalizadeh.todocial.system.service.ServiceTypes;
 import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.todocial.web.model.FlashMessage;
-import com.jalizadeh.todocial.web.model.Todo;
-import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.model.gym.GymPlan;
 import com.jalizadeh.todocial.web.model.gym.GymWorkout;
+import com.jalizadeh.todocial.web.model.gym.GymWorkoutLog;
+import com.jalizadeh.todocial.web.model.gym.dto.GymWorkoutStats;
 import com.jalizadeh.todocial.web.model.gym.types.GymEquipment;
 import com.jalizadeh.todocial.web.model.gym.types.GymMuscleCategory;
 import com.jalizadeh.todocial.web.repository.GymDayWorkoutRepository;
+import com.jalizadeh.todocial.web.repository.GymWorkoutLogRepository;
 import com.jalizadeh.todocial.web.repository.GymWorkoutRepository;
 import com.jalizadeh.todocial.web.service.storage.StorageFileSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import javax.xml.crypto.Data;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -42,6 +43,9 @@ public class GymWorkoutContoller {
 
     @Autowired
     private GymDayWorkoutRepository gymDayWorkoutRepository;
+
+    @Autowired
+    private GymWorkoutLogRepository gymWorkoutLogRepository;
 
     @Autowired
     private StorageFileSystemService storageService;
@@ -93,9 +97,20 @@ public class GymWorkoutContoller {
         GymWorkout foundWorkout = workout.get();
         List<GymPlan> plansByWorkoutId = gymDayWorkoutRepository.findPlansByWorkoutId(foundWorkout.getId());
 
+        List<GymWorkoutLog> allLogsForWorkout = gymWorkoutLogRepository.findAllLogsForWorkout(id);
+
+        Map<Date, List<GymWorkoutLog>> logsByDate = groupLogsByDate(allLogsForWorkout);
+
+        List<GymWorkoutStats> logStats = logsByDate.entrySet().stream()
+                .map(e -> calculateAverage(e.getValue()))
+                .collect(Collectors.toList());
+
         model.put("PageTitle", "Gym - Workout: " + foundWorkout.getName());
         model.put("workout", foundWorkout);
         model.put("plans", plansByWorkoutId);
+        model.put("history", allLogsForWorkout);
+        model.put("logsByDate", logsByDate);
+        model.put("logStats", logStats);
 
         return "gym/workout";
     }
@@ -217,4 +232,32 @@ public class GymWorkoutContoller {
         return wName + "." + originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
     }
 
+
+    public Map<Date, List<GymWorkoutLog>> groupLogsByDate(List<GymWorkoutLog> logs) {
+        return logs.stream()
+                .collect(Collectors.groupingBy(GymWorkoutLog::getLogDate, LinkedHashMap::new, Collectors.toList()));
+    }
+
+    private GymWorkoutStats calculateAverage(List<GymWorkoutLog> logs) {
+        if (logs.isEmpty()) {
+            return new GymWorkoutStats(0.0, 0.0, 0.0);
+        }
+
+        // Format the average with a maximum of 2 decimal places
+        DecimalFormat df = new DecimalFormat("#.##", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+
+
+        // Calculate the average, maximum, and minimum of log values
+        double sum = logs.stream()
+                .mapToDouble(log -> log.getWeight())
+                .sum();
+
+        double average = sum / logs.size();
+        average = Double.valueOf(df.format(average));
+
+        double max = logs.stream().mapToDouble(l -> l.getWeight()).max().orElse(0.0);
+        double min = logs.stream().mapToDouble(l -> l.getWeight()).min().orElse(0.0);
+
+        return new GymWorkoutStats(average, max, min);
+    }
 }

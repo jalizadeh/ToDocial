@@ -18,7 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class GymController {
@@ -167,7 +172,7 @@ public class GymController {
             return "redirect:/gym";
 
         foundPlan.setActive(true);
-        foundPlan.setStartDate(new Date());
+        foundPlan.setStartDate(Date.valueOf(LocalDate.now()));
         gymPlanRepository.save(foundPlan);
 
         return "redirect:/gym";
@@ -186,7 +191,7 @@ public class GymController {
             return "redirect:/gym";
 
         foundPlan.setActive(false);
-        foundPlan.setCompleteDate(new Date());
+        foundPlan.setCompleteDate(Date.valueOf(LocalDate.now()));
         gymPlanRepository.save(foundPlan);
 
         return "redirect:/gym";
@@ -321,7 +326,7 @@ public class GymController {
         //add the new workout log
         workoutLog.setPwd(pwd);
         workoutLog.setDayWorkout(dayWorkout);
-        workoutLog.setLogDate(new Date());
+        workoutLog.setLogDate(Date.valueOf(LocalDate.now()));
         gymWorkoutLogRepository.save(workoutLog);
 
         updateProgessInDB(planId, day, pwd, dayWorkout, workoutLog);
@@ -354,7 +359,7 @@ public class GymController {
             workoutLog.setSetNumber(i + 1);
             workoutLog.setWeight(listWorkoutLogs.get(i).getWeight());
             workoutLog.setReps(listWorkoutLogs.get(i).getRep());
-            workoutLog.setLogDate(new Date());
+            workoutLog.setLogDate(Date.valueOf(LocalDate.now()));
             gymWorkoutLogRepository.save(workoutLog);
 
             updateProgessInDB(planId, day, pwd, dayWorkout, workoutLog);

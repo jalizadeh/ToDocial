@@ -5,9 +5,8 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Data

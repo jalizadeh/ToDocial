@@ -1,5 +1,12 @@
 <%@ include file="../common/header.jspf" %>
 
+	<style type="text/css">
+		#container {
+			max-width: 800px;
+			margin: 1em auto;
+		}
+	</style>
+
 	<c:if test="${error != null}">
 		<div class="alert alert-danger" role="alert">${error}</div>
 	</c:if>
@@ -89,9 +96,170 @@
 	</div>
 
 	<div class="container px-4 py-5" id="featured-3">
-		<h2 class="pb-2 border-bottom">Your Workout History</h2>
+		<c:choose>
+			<c:when test="${logsByDate.size() > 0}">
+				<h2 class="pb-2 border-bottom">Your workout history for <mark>${logsByDate.size()}</mark> days</h2>
 
+				<div id="container-chart-fullhistory"></div>
+				<div id="container-chart-overall"></div>
+				
+				<!--
+				<table class="table table-striped table-hover mt-3">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Set Number</th>
+							<th>Weight</th>
+							<th>Reps</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${history}" var="hi">
+							<tr>
+								<th>
+									<p>${hi.logDate}</p>
+								</th>
+								<th>
+									<p>${hi.setNumber}</p>
+								</th>
+								<th>
+									<p>${hi.weight}</p>
+								</th>
+								<th>${hi.reps}</th>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+				-->
+			</c:when>    
+			<c:otherwise>
+				<h2 class="pb-2 border-bottom">Your workout history</h2>
+				<div class="p-5 text-center bg-body-tertiary rounded-3">
+					<h1 class="text-body-emphasis"><i class="fa fa-exclamation text-warning"></i></h1>
+					<p class="lead">No history found</p>
+					</div>
+			</c:otherwise>
+		</c:choose>
 	</div>
 
+	<script type="text/javascript">
+		Highcharts.chart('container-chart-fullhistory', {
+			chart: {
+				type: 'line'
+			},
+			title: {
+				text: 'Workout progress',
+				align: 'left'
+			},
+			subtitle: {
+				text: 'Based on your workout history',
+				align: 'left'
+			},
+			xAxis: {
+				categories: ['rep 1', 'rep 2', 'rep 3']
+			},
+			yAxis: {
+				title: {
+					text: 'Weight (KG)'
+				}
+			},
+			plotOptions: {
+				line: {
+					dataLabels: {
+						enabled: true
+					},
+					enableMouseTracking: true
+				}
+			},
+			series: [
+				<c:forEach var="entry" items="${logsByDate}">
+				{
+					name : '<c:out value="${entry.key}" />',
+					data: [
+						<c:forEach var="log" items="${entry.value}">
+							<c:out value="${log.weight}" />,
+						</c:forEach>
+					]
+				},
+				</c:forEach>	
+			]
+		});
+	</script>
+
+	<script type="text/javascript">
+		const ranges = [
+			<c:forEach var="stat" items="${logStats}">
+				[<c:out value="${stat.min}"/>, <c:out value="${stat.max}"/>],
+			</c:forEach>
+		],
+		averages = [
+			<c:forEach var="stat" items="${logStats}">
+				[<c:out value="${stat.average}" />],
+			</c:forEach>
+		];
+
+
+		Highcharts.chart('container-chart-overall', {
+			title: {
+				text: 'Progress trend',
+				align: 'left'
+			},
+			subtitle: {
+				text: 'Min, max and average of your workouts',
+				align: 'left'
+			},
+			xAxis: {
+				categories: [
+					<c:forEach var="entry" items="${logsByDate}">
+						'<c:out value="${entry.key}" />',
+					</c:forEach>
+				]
+			},
+			yAxis: {
+				title: {
+					text: 'Weight (kg)'
+				}
+			},
+
+			tooltip: {
+				crosshairs: true,
+				shared: true,
+				valueSuffix: 'Kg'
+			},
+
+			plotOptions: {
+				line: {
+					dataLabels: {
+						enabled: true
+					},
+					enableMouseTracking: true
+				}
+			},
+
+			series: [{
+				name: 'Average',
+				data: averages,
+				zIndex: 1,
+				marker: {
+					fillColor: 'white',
+					lineWidth: 2,
+					lineColor: Highcharts.getOptions().colors[0]
+				}
+			}, {
+				name: 'Min - Max',
+				data: ranges,
+				type: 'arearange',
+				lineWidth: 0,
+				linkedTo: ':previous',
+				color: Highcharts.getOptions().colors[0],
+				fillOpacity: 0.3,
+				zIndex: 0,
+				marker: {
+					enabled: false
+				}
+			}]
+		});
+
+	</script>
 
 <%@ include file="../common/footer.jspf" %>

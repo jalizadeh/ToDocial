@@ -20,7 +20,7 @@
 				<div class="card mb-3">
 					<div class="row g-0">
 						<div class="col-md-4">
-							<img src="/photo/gym/${dayWorkout.workout.photo}" class="mx-auto d-block" alt="${dayWorkout.workout.name}" style="max-width: 30%;">
+							<a href="/gym/workouts/${dayWorkout.workout.id}"><img src="/photo/gym/${dayWorkout.workout.photo}" class="mx-auto d-block" alt="${dayWorkout.workout.name}" style="max-width: 30%;"></a>
 						</div>
 						<div class="col-4">
 							<div class="card-body">
