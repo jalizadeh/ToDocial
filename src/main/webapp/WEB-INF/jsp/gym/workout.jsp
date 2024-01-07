@@ -89,7 +89,7 @@
 			<c:otherwise>
 				<div class="p-5 text-center bg-body-tertiary rounded-3">
 					<h1 class="text-body-emphasis"><i class="fa fa-exclamation text-warning"></i></h1>
-					<p class="lead">This workout has never been added to any plan</p>
+					<p class="lead">No plan found</p>
 				  </div>
 			</c:otherwise>
 		</c:choose>

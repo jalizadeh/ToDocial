@@ -52,7 +52,7 @@ public class GymWorkoutContoller {
 
     @GetMapping(value = "/gym/workouts")
     public String showWorkouts(ModelMap model) {
-        model.put("workouts", gymWorkoutRepository.findAll());
+        model.put("workouts", gymWorkoutRepository.findAllByOrderByName());
         model.put("muscleCategories", GymMuscleCategory.values());
         return "gym/workouts";
     }
@@ -72,7 +72,7 @@ public class GymWorkoutContoller {
 
         switch (filter){
             case "muscle":
-                List<GymWorkout> workouts = gymWorkoutRepository.findAllByMuscleCategory(GymMuscleCategory.valueOf(value));
+                List<GymWorkout> workouts = gymWorkoutRepository.findAllByMuscleCategoryOrderByName(GymMuscleCategory.valueOf(value));
                 model.put("workouts", workouts);
                 break;
             default:

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface GymWorkoutRepository extends JpaRepository<GymWorkout, Long>{
 
-    List<GymWorkout> findAllByMuscleCategory(GymMuscleCategory mc);
+    List<GymWorkout> findAllByMuscleCategoryOrderByName(GymMuscleCategory mc);
 
+    List<GymWorkout> findAllByOrderByName();
 }

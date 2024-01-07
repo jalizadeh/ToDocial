@@ -1,7 +1,7 @@
 package com.jalizadeh.todocial.web.model.gym.types;
 
 public enum GymEquipment {
-    Barbel,
+    Barbell,
     EZ_Bar,
     Dumbbell,
     Gym_Mat,
@@ -10,5 +10,8 @@ public enum GymEquipment {
     Body_Weight,
     Bench,
     Incline_Bench,
-    Kettlebell
+    Kettlebell,
+    Full_Gym,
+    Machine,
+    Cable
 }
