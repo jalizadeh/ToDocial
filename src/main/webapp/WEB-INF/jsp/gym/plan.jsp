@@ -3,7 +3,7 @@
 	<div class="row">
 		<div class="col-8">
 			<div class="row mt-2">
-				<div class="col border-bottom">
+				<div class="col">
 					<h2>${plan.title} <span class="badge rounded-pill bg-light text-dark">${plan.numberOfWeeks} weeks</span> <span class="badge rounded-pill bg-light text-dark">${plan.numberOfDays} days</span></h2>
 					<h5 class="card-title">
 						<div class="progress">
@@ -53,8 +53,9 @@
 				</c:forEach>
 			</div>
 		</div>
-		<div class="col-4">
 
+		<!-- right pane -->
+		<div class="col-4">
 			<c:if test="${plan.active == false and plan.startDate ne null and plan.completeDate ne null}">
 				<div class="row">
 					<p>Started at: ${plan.startDate}</p>
@@ -87,10 +88,6 @@
 							<p>Target Gender: Women</p>
 						</c:otherwise>
 					</c:choose>
-					
-					<c:forEach items="${days}" var="day">
-						<p>Day ${day.dayNumber}: ${day.focus}</p>
-					</c:forEach>
 				</div>
 			</div>
 

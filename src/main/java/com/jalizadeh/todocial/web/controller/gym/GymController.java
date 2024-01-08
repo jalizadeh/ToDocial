@@ -154,9 +154,32 @@ public class GymController {
 
     @GetMapping("/gym/plan/{id}/delete")
     public String deletePlan(@PathVariable Long id, RedirectAttributes redirectAttributes, ModelMap model) {
-        //TODO: if only the plan is not active
+        Optional<GymPlan> plan = gymPlanRepository.findById(id);
+
+        if (!plan.isPresent()) {
+            redirectAttributes.addFlashAttribute("exception", "The requested plan with id " + id + " doesn't exist");
+            return "redirect:/error";
+        }
+
+        GymPlan foundPlan = plan.get();
+        if(foundPlan.isActive()){
+            redirectAttributes.addFlashAttribute("flash",
+                    new FlashMessage("The workout is active and can not be deleted. First end it and try again", FlashMessage.Status.danger));
+            return "redirect:/gym";
+        }
+
+        //at first, remove its associated day_workouts
+        List<GymDay> plansDays = foundPlan.getDays();
+        plansDays.stream()
+                .forEach(day -> {
+                    List<GymDayWorkout> allDayWorkouts = gymDayWorkoutRepository.findAllByDayId(day.getId());
+                    gymDayWorkoutRepository.deleteInBatch(allDayWorkouts);
+                });
+
         gymPlanRepository.deleteById(id);
 
+        redirectAttributes.addFlashAttribute("flash",
+                new FlashMessage("The workout deleted successfully", FlashMessage.Status.warning));
         return "redirect:/gym";
     }
 

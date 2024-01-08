@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -38,7 +39,20 @@ public class GymWorkout {
 
     //used for custom item label in the page's Options tag
     public String getFullLabel(){
-        return id + " - " + name;
+        StringBuilder fullLabel = new StringBuilder();
+
+        // Append muscle categories
+        if (muscleCategory != null && !muscleCategory.isEmpty()) {
+            fullLabel.append("[ ");
+            fullLabel.append(muscleCategory.stream()
+                    .map(GymMuscleCategory::name)
+                    .collect(Collectors.joining(", ")));
+            fullLabel.append(" ]");
+        }
+
+        fullLabel.append(" ").append(name);
+
+        return fullLabel.toString();
     }
 
 

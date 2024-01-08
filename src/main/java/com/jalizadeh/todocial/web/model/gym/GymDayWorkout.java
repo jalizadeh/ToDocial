@@ -17,7 +17,7 @@ public class GymDayWorkout {
     private Long id;
 
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "day_id")
     @JsonIgnore
     private GymDay day;

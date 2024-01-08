@@ -1,8 +1,8 @@
 <%@ include file="../common/header.jspf"%>
 
 <div class="row mt-2">
-	<div class="col border-bottom">
-		<h2>Add New Plan - Step 1</h2>
+	<div class="col">
+		<h2>Add new plan</h2>
 	</div>
 </div>
 

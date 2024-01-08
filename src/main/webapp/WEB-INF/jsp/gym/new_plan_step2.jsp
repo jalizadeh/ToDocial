@@ -1,8 +1,8 @@
 <%@ include file="../common/header.jspf" %>
 
 	<div class="row mt-2">
-		<div class="col border-bottom">
-			<h2>Add New Plan - Step 2 > ${plan.title} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h2>
+		<div class="col">
+			<h2>Add new plan: ${plan.title} [${plan.numberOfWeeks} weeks / ${plan.numberOfDays} days]</h2>
 		</div>
 	</div>
 
@@ -36,7 +36,7 @@
 					</div>
 				</div>
 
-				<div class="card">
+				<div class="card mt-2">
 					<div class="card-body">
 						<ul class="nav nav-tabs" id="myTab" role="tablist">
 							<c:forEach var = "i" begin = "1" end = "${plan.numberOfDays}">
@@ -170,7 +170,11 @@
 						<div class="col-6">
 							<fieldset class="form-group">
 								<label for="workoutDay` + activeTab + `_workout` + j + `">Workout #` + (j+1) + `</label>
-								<select id="workoutDay` + activeTab + `_workout` + j + `" name="days[` + i + `].dayWorkouts[` + j + `].workout" rows="3" class="form-control" required="required"><option value="1">1 - Bench Press</option><option value="2">2 - Incline Dumbbell Bench Press</option><option value="3">3 - Chest Dips</option><option value="4">4 - Pull-up</option><option value="5">5 - Barbell Bent Over Row</option><option value="6">6 - Lat Pulldown</option></select>
+									<select id="workoutDay` + activeTab + `_workout` + j + `" name="days[` + i + `].dayWorkouts[` + j + `].workout" rows="3" class="form-control" required="required">
+										<c:forEach var="workout" items="${workoutsList}">
+											<option value="${workout.id}">${workout.getFullLabel()}</option>
+										</c:forEach>	
+									</select>
 							</fieldset>
 						</div>
 						<div class="col">

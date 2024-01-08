@@ -21,7 +21,7 @@ public class GymDay {
     private String focus;
 
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "plan_id")
     @JsonIgnore
     private GymPlan plan;
