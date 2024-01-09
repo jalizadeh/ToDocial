@@ -100,8 +100,9 @@
 			<c:when test="${logsByDate.size() > 0}">
 				<h2 class="pb-2 border-bottom">Your workout history for <mark>${logsByDate.size()}</mark> days</h2>
 
-				<div id="container-chart-fullhistory"></div>
 				<div id="container-chart-overall"></div>
+
+				<div id="container-chart-fullhistory"></div>
 				
 				<!--
 				<table class="table table-striped table-hover mt-3">
@@ -148,15 +149,11 @@
 				type: 'line'
 			},
 			title: {
-				text: 'Workout progress',
-				align: 'left'
-			},
-			subtitle: {
-				text: 'Based on your workout history',
+				text: 'Workout progress by reps',
 				align: 'left'
 			},
 			xAxis: {
-				categories: ['rep 1', 'rep 2', 'rep 3']
+				categories: ['rep 1', 'rep 2', 'rep 3', 'rep 4', 'rep 5']
 			},
 			yAxis: {
 				title: {
@@ -202,10 +199,6 @@
 		Highcharts.chart('container-chart-overall', {
 			title: {
 				text: 'Progress trend',
-				align: 'left'
-			},
-			subtitle: {
-				text: 'Min, max and average of your workouts',
 				align: 'left'
 			},
 			xAxis: {
