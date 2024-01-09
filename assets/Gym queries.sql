@@ -79,3 +79,23 @@ from (
 		on dw.workout_id = w.id
 	group by pwd_id, day_workout_id )
 group by pwd_id;
+
+
+-- count trained muscles in a plan
+select 
+	p.id, p.title, 
+	d.id, d.focus,
+	dw.workout_id,
+	w.name,
+	wm.muscle_category,
+	count(*)
+from gym_plan p
+join gym_day d
+	on p.id = d.plan_id
+join gym_day_workout dw
+	on d.id = dw.day_id
+JOIN gym_workout w
+	on dw.workout_id = w.id
+join gym_workout_muscle wm
+	on w.id = wm.workout_id
+group by p.title, wm.muscle_category;

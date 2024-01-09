@@ -143,6 +143,9 @@
 		</c:choose>
 	</div>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+
 	<script type="text/javascript">
 		Highcharts.chart('container-chart-fullhistory', {
 			chart: {
@@ -178,12 +181,25 @@
 						</c:forEach>
 					]
 				},
-				</c:forEach>	
+				</c:forEach>
 			]
 		});
 	</script>
 
 	<script type="text/javascript">
+		var dates = [
+			<c:forEach var="entry" items="${logsByDate}">
+				'<c:out value="${entry.key}" />',
+			</c:forEach>
+		];
+
+		// Calculate distances between dates
+		var distances = [];
+		for (var i = 1; i < dates.length; i++) {
+			var distance = moment(dates[i], 'YYYY-MM-DD').diff(moment(dates[i - 1], 'YYYY-MM-DD'), 'days');
+			distances.push(distance);
+		}
+
 		const ranges = [
 			<c:forEach var="stat" items="${logStats}">
 				[<c:out value="${stat.min}"/>, <c:out value="${stat.max}"/>],
@@ -206,8 +222,15 @@
 					<c:forEach var="entry" items="${logsByDate}">
 						'<c:out value="${entry.key}" />',
 					</c:forEach>
-				]
-			},
+				],
+        		labels: {
+					useHTML: true,
+					formatter: function () {
+						var index = this.pos;
+						return dates[index] + '<br>' + (index > 0 ? distances[index - 1] + ' days' : '<a href="/gym/plan/#">Started plan</a>');
+					}
+				}
+        	},
 			yAxis: {
 				title: {
 					text: 'Weight (kg)'
@@ -252,7 +275,7 @@
 				}
 			}]
 		});
-
+		
 	</script>
 
 <%@ include file="../common/footer.jspf" %>
