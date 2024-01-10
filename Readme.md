@@ -260,15 +260,26 @@ Settings of the system
     - [x] All plans
     - [x] Active plans
     - [x] Completed plans
-  - [ ] Record management
+  - [x] Record management
     - [x] Plan
       - [x] View
       - [x] Add
       - [x] Delete
-    - [ ] Workout
+    - [x] Workout
       - [x] View
-      - [ ] Add
-      - [ ] Delete
+      - [x] Add
+      - [x] Delete
     - [x] Workout log
-  - [ ] Search plans
+  - [ ] Search
+    - [x] Plans
+    - [ ] Workouts
   - [ ] Filter plans
+  - [ ] Statistics
+    - [ ] Plan
+      - [ ] Workout days and distances
+      - [ ] Percentage of trained muscles
+	  - [ ] Numerical stats (start/end weight, difference, progress, total reps/weights) 
+    - [ ] Workout
+      - [x] Progress trend
+      - [x] Reps history
+      - [ ] Numerical stats (start/end weight, difference, progress, total reps/weights)

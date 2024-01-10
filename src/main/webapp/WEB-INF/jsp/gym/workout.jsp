@@ -100,6 +100,7 @@
 			<c:when test="${logsByDate.size() > 0}">
 				<h2 class="pb-2 border-bottom">Your workout history for <mark>${logsByDate.size()}</mark> days</h2>
 
+				<div id="container"></div>
 				<div id="container-chart-overall"></div>
 
 				<div id="container-chart-fullhistory"></div>
@@ -187,6 +188,14 @@
 	</script>
 
 	<script type="text/javascript">
+
+		function calculateOverallAverage(data) {
+			const flattenedData = data.flat(); // Flatten the array
+			const sum = flattenedData.reduce((acc, value) => acc + value, 0);
+			const average = sum / flattenedData.length;
+			return average;
+		}
+
 		var dates = [
 			<c:forEach var="entry" items="${logsByDate}">
 				'<c:out value="${entry.key}" />',
@@ -204,13 +213,15 @@
 			<c:forEach var="stat" items="${logStats}">
 				[<c:out value="${stat.min}"/>, <c:out value="${stat.max}"/>],
 			</c:forEach>
-		],
+		],	
 		averages = [
 			<c:forEach var="stat" items="${logStats}">
 				[<c:out value="${stat.average}" />],
 			</c:forEach>
 		];
 
+		// Calculate the average
+		var average = calculateOverallAverage(averages)
 
 		Highcharts.chart('container-chart-overall', {
 			title: {
@@ -234,7 +245,20 @@
 			yAxis: {
 				title: {
 					text: 'Weight (kg)'
-				}
+				},
+				plotLines: [{
+					value: average,
+					color: 'red',
+					dashStyle: 'shortdash',
+					width: 2,
+					label: {
+						text: 'Avg: ' + average.toFixed(2),
+						align: 'right',
+						x: 0,
+						y: 0
+					}
+					
+				}]
 			},
 
 			tooltip: {
@@ -251,7 +275,6 @@
 					enableMouseTracking: true
 				}
 			},
-
 			series: [{
 				name: 'Average',
 				data: averages,
@@ -277,5 +300,6 @@
 		});
 		
 	</script>
+
 
 <%@ include file="../common/footer.jspf" %>
