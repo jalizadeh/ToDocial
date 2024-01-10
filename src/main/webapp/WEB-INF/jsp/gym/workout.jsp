@@ -148,6 +148,7 @@
 
 
 	<script type="text/javascript">
+
 		Highcharts.chart('container-chart-fullhistory', {
 			chart: {
 				type: 'line'
@@ -238,10 +239,23 @@
 					useHTML: true,
 					formatter: function () {
 						var index = this.pos;
-						return dates[index] + '<br>' + (index > 0 ? distances[index - 1] + ' days' : '<a href="/gym/plan/#">Started plan</a>');
+						return dates[index] + '<br>' + (index > 0 ? distances[index - 1] + ' days' : '');
 					}
-				}
-        	},
+				},
+				plotBands: [
+					<c:forEach var="entry" items="${plansTimeline}">
+						{
+							color: 'red',
+							from: <c:out value="${entry.value[0]}"/>,
+							to: <c:out value="${entry.value[1]}"/>,
+							useHTML: true,
+							label: {
+								text: '<a href="/gym/plan/<c:out value="${entry.key.id}" />"><c:out value="${entry.key.title}"/><br><c:out value="${entry.value[1] - entry.value[0] + 1}"/> sessions</a>'
+							}
+						},
+					</c:forEach>	
+				]
+			},
 			yAxis: {
 				title: {
 					text: 'Weight (kg)'
@@ -284,7 +298,7 @@
 					lineWidth: 2,
 					lineColor: Highcharts.getOptions().colors[0]
 				}
-			}, {
+			},{
 				name: 'Min - Max',
 				data: ranges,
 				type: 'arearange',
@@ -298,8 +312,8 @@
 				}
 			}]
 		});
-		
-	</script>
+
+</script>
 
 
 <%@ include file="../common/footer.jspf" %>

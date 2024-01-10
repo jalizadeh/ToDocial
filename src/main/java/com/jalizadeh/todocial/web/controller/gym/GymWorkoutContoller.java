@@ -105,9 +105,12 @@ public class GymWorkoutContoller {
                 .map(e -> calculateAverage(e.getValue()))
                 .collect(Collectors.toList());
 
+        Map<GymPlan, List<Integer>> plansTimeline = planTimelineExtractor(logsByDate);
+
         model.put("PageTitle", "Gym - Workout: " + foundWorkout.getName());
         model.put("workout", foundWorkout);
         model.put("plans", plansByWorkoutId);
+        model.put("plansTimeline", plansTimeline);
         model.put("history", allLogsForWorkout);
         model.put("logsByDate", logsByDate);
         model.put("logStats", logStats);
@@ -259,5 +262,42 @@ public class GymWorkoutContoller {
         double min = logs.stream().mapToDouble(l -> l.getWeight()).min().orElse(0.0);
 
         return new GymWorkoutStats(average, max, min);
+    }
+
+
+    /**
+     * Extracts plans as timeline to be shown in the specific chart.
+     * The data will be "Map<Plan, <from index, to index>>"
+     */
+    private Map<GymPlan, List<Integer>> planTimelineExtractor(Map<Date, List<GymWorkoutLog>> logsByDate) {
+        List<GymPlan> planList = logsByDate.entrySet().stream()
+                .map(e -> e.getValue().get(0).getPwd().getPlan())
+                .collect(Collectors.toList());
+
+        Map<GymPlan, List<Integer>> plansTimeline = new HashMap<>();
+
+        int planCounter = 0;
+        int from = 0;
+        for(GymPlan p : planList){
+            List<Integer> fromTo;
+            if(!plansTimeline.containsKey(p)){
+                fromTo = new ArrayList<>();
+                from += planCounter;
+                fromTo.add(from);
+                fromTo.add(from++);
+                plansTimeline.put(p, fromTo);
+            } else {
+                fromTo = plansTimeline.get(p);
+                int f = fromTo.get(0);
+                int t = fromTo.get(1);
+                fromTo.clear();
+                fromTo.add(f);
+                fromTo.add(t+1);
+                plansTimeline.put(p, fromTo);
+                planCounter++;
+            }
+        }
+
+        return plansTimeline;
     }
 }
