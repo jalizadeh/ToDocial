@@ -12,6 +12,6 @@ public interface GymDayWorkoutRepository extends JpaRepository<GymDayWorkout, Lo
 
     List<GymDayWorkout> findAllByDayId(Long dayId);
 
-    @Query("SELECT dw.day.plan FROM GymDayWorkout dw WHERE dw.workout.id = :workoutId")
-    List<GymPlan> findPlansByWorkoutId(@Param("workoutId") Long workoutId);
+    @Query("SELECT DISTINCT dw.day.plan FROM GymDayWorkout dw WHERE dw.workout.id = :workoutId")
+    List<GymPlan> findDistinctPlansByWorkoutId(@Param("workoutId") Long workoutId);
 }

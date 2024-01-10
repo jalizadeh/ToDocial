@@ -95,7 +95,7 @@ public class GymWorkoutContoller {
         }
 
         GymWorkout foundWorkout = workout.get();
-        List<GymPlan> plansByWorkoutId = gymDayWorkoutRepository.findPlansByWorkoutId(foundWorkout.getId());
+        List<GymPlan> plansByWorkoutId = gymDayWorkoutRepository.findDistinctPlansByWorkoutId(foundWorkout.getId());
 
         List<GymWorkoutLog> allLogsForWorkout = gymWorkoutLogRepository.findAllLogsForWorkout(id);
 
