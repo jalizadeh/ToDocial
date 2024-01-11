@@ -235,9 +235,12 @@ public class GymController {
 
         List<GymPlanWeekDay> pwd = gymplanWeekDayRepository.findAllByPlanId(id);
 
+        List<GymWorkoutLog> allSessionsForPlan = gymWorkoutLogRepository.findAllSessionsForPlan(foundPlan.getId());
+
         model.put("settings", settings);
         model.put("PageTitle", "Gym - Plan: " + foundPlan.getTitle());
         model.put("plan", foundPlan);
+        model.put("allSessionsForPlan", allSessionsForPlan);
         model.put("days", daysOfPlan);
         model.put("pwd", pwd);
 

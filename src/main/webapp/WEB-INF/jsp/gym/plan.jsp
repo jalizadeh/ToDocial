@@ -201,8 +201,78 @@
 		</div>
 	</div>
 
-	<div id="container-chart"></div>
+	<div class="my-3">
+		<h2 class="border-bottom">Statistics</h2>
 
+		<div id="container-chart-planSessionsTimeline"></div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+	
+	<script type="text/javascript">
+
+		var dates = [
+			<c:forEach var="session" items="${allSessionsForPlan}">
+				'<c:out value="${session.logDate}" />',
+			</c:forEach>
+		];
+
+		// Calculate distances between dates
+		var distances = [];
+		for (var i = 1; i < dates.length; i++) {
+			var distance = moment(dates[i], 'YYYY-MM-DD').diff(moment(dates[i - 1], 'YYYY-MM-DD'), 'days');
+			distances.push(-1 * distance);
+		}
+		distances.push(0);
+
+		var sum = distances.reduce(function (accumulator, currentValue) { 
+			return accumulator + currentValue; 
+		}, 0);
+
+		Highcharts.chart('container-chart-planSessionsTimeline', {
+			chart: {
+				type: 'bar'
+			},
+			title: {
+				text: 'Sessions timeline<br><c:out value="${allSessionsForPlan.size()}" /> sessions in ' + sum + ' days',
+				align: 'left'
+			},
+			xAxis: {
+				tickInterval: 1,
+				categories: ['Days between']
+			},
+			yAxis: {
+				min: 0,
+				max: sum,
+				title: {
+					text: 'Accumulative days'
+				}
+			},
+			legend: {
+				reversed: true
+			},
+			plotOptions: {
+				series: {
+					stacking: 'normal',
+					dataLabels: {
+						enabled: true
+					}
+				}
+			},
+			series: [
+				<c:forEach items="${allSessionsForPlan}" var="session" varStatus="i">
+					{
+						name: '<c:out value="${session.logDate}" />',
+						data: [distances[<c:out value="${i.index}" />]],
+					},
+				</c:forEach>
+			]
+		});
+
+	</script>
+
+
+	<!-- <div id="container-chart"></div> -->
 
 	<pre id="data" style="display: none;">
 		[[

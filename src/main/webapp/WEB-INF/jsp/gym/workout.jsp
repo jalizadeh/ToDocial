@@ -100,7 +100,6 @@
 			<c:when test="${logsByDate.size() > 0}">
 				<h2 class="pb-2 border-bottom">Your workout history for <mark>${logsByDate.size()}</mark> days</h2>
 
-				<div id="container"></div>
 				<div id="container-chart-overall"></div>
 
 				<div id="container-chart-fullhistory"></div>
@@ -313,7 +312,7 @@
 			}]
 		});
 
-</script>
+	</script>
 
 
 <%@ include file="../common/footer.jspf" %>
