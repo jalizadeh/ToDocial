@@ -276,8 +276,8 @@ Settings of the system
   - [ ] Filter plans
   - [ ] Statistics
     - [ ] Plan
-      - [ ] Workout days and distances
-      - [ ] Percentage of trained muscles
+      - [x] Workout days and distances
+      - [x] Percentage of trained muscles
 	  - [ ] Numerical stats (start/end weight, difference, progress, total reps/weights) 
     - [ ] Workout
       - [x] Progress trend
