@@ -20,4 +20,16 @@ public interface GymPlanRepository extends JpaRepository<GymPlan, Long>{
 
     @Query("SELECT p FROM GymPlan p JOIN p.gymPlanIntroduction pi WHERE pi.trainingLevel = :trainingLevel")
     List<GymPlan> findAllByTrainingLevel(@Param("trainingLevel") GymTrainingLevel level);
+
+    @Query("SELECT mc, COUNT(*) as totalMC " +
+            "FROM GymPlan p, GymDay d, GymDayWorkout dw, GymWorkout w " +
+            "JOIN w.muscleCategory mc " +
+            "WHERE p.id = :planId " +
+            "AND p.id = d.plan.id " +
+            "AND d.id = dw.day.id " +
+            "AND dw.workout.id = w.id " +
+            "GROUP BY p.id, mc " +
+            "ORDER BY totalMC")
+    List<Object[]> muscleGroupsInPlan(@Param("planId") Long planId);
+
 }

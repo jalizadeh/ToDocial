@@ -237,10 +237,20 @@ public class GymController {
 
         List<GymWorkoutLog> allSessionsForPlan = gymWorkoutLogRepository.findAllSessionsForPlan(foundPlan.getId());
 
+        List<Object[]> workoutsByMuscleGroup = gymWorkoutLogRepository.workoutsByMuscleGroup(foundPlan.getId());
+
+        List<Object[]> muscleGroupsInPlan = gymPlanRepository.muscleGroupsInPlan(foundPlan.getId());
+        long countOfAllMuscleWorkouts = muscleGroupsInPlan.stream()
+                .mapToLong(o -> ((Number) o[1]).longValue())
+                .sum();
+
         model.put("settings", settings);
         model.put("PageTitle", "Gym - Plan: " + foundPlan.getTitle());
         model.put("plan", foundPlan);
         model.put("allSessionsForPlan", allSessionsForPlan);
+        model.put("workoutsByMuscleGroup", workoutsByMuscleGroup);
+        model.put("muscleGroupsInPlan", muscleGroupsInPlan);
+        model.put("countOfAllMuscleWorkouts", countOfAllMuscleWorkouts);
         model.put("days", daysOfPlan);
         model.put("pwd", pwd);
 

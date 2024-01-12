@@ -1,100 +1,5 @@
 <%@ include file="../common/header.jspf" %>
 
-	<style>
-		pre {
-    display: none;
-}
-
-.highcharts-figure {
-    min-width: 320px;
-    max-width: 800px;
-    margin: 1em auto;
-}
-
-.large-size {
-    font-size: 1.4em;
-    margin-bottom: 1.1em;
-}
-
-.mid-size {
-    font-size: 1.2em;
-    margin-bottom: 0.85em;
-}
-
-.small-size {
-    font-size: 1em;
-    margin-bottom: 0.6em;
-}
-
-.center {
-    display: grid;
-    place-items: center;
-    position: sticky;
-}
-
-.team-day {
-    width: 100%;
-    text-align: center;
-    color: #fff;
-}
-
-.team-salescount {
-    line-height: 3em;
-    width: 100%;
-    font-size: 2em;
-}
-
-.team-salescount-header {
-    width: 100%;
-    text-align: center;
-}
-
-.team-index {
-    font-size: 1.4em;
-    color: #000;
-}
-
-.team-name {
-    width: 100%;
-    margin-top: -130px;
-    background: transparent;
-    font-size: 2em;
-    padding: 0.8em;
-    border: 0 outset;
-}
-
-.team-points {
-    margin-top: 11em;
-    position: absolute;
-    font-size: 1em;
-}
-
-.team-header {
-    margin-bottom: 6em;
-}
-
-.col-display-fieldwrap {
-    font-size: 0.9em;
-    padding-inline: 2em;
-    padding-block: 0.2em;
-    width: 8em;
-    text-align: left;
-}
-
-.col-display-header {
-    padding: 0.4em;
-    font-size: 2em;
-    letter-spacing: 0.12em;
-    text-align: center;
-}
-
-.col-display-footer {
-    width: 80%;
-    text-align: center;
-}
-
-	</style>
-
 	<div class="row">
 		<div class="col-8">
 			<div class="row mt-2">
@@ -201,14 +106,25 @@
 		</div>
 	</div>
 
+
+	</style>
 	<div class="my-3">
 		<h2 class="border-bottom">Statistics</h2>
 
 		<div id="container-chart-planSessionsTimeline"></div>
+
+		<div class="row">
+			<div class="col">
+				<div id="container-chart-muscles"></div>
+			</div>
+			<div class="col">
+				<div id="container-chart-muscles-percentage"></div>
+			</div>
+		</div>
 	</div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-	
+
 	<script type="text/javascript">
 
 		var dates = [
@@ -269,6 +185,90 @@
 			]
 		});
 
+	</script>
+
+
+	<script type="text/javascript">
+		Highcharts.chart('container-chart-muscles', {
+			chart: {
+				type: 'column'
+			},
+			title: {
+				text: 'Workouts by muscle group',
+				align: 'left'
+			},
+			subtitle: {
+				text: '<c:out value="${muscleGroupsInPlan.size()}"/> muscle category / <c:out value="${countOfAllMuscleWorkouts}"/> muscles*<br>* some workouts may involve more than one muscle',
+				align: 'left'
+			},
+			xAxis: {
+				categories: ['Muscles'],
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: 'Workouts'
+				},
+				tickInterval: 1
+			},
+			plotOptions: {
+				column: {
+					pointPadding: 0,
+					borderWidth: 0
+				},
+				series: {
+					dataLabels: {
+						enabled: true
+					}
+				}
+			},
+			series: [
+				<c:forEach items="${muscleGroupsInPlan}" var="mc">
+					{
+						name: '<c:out value="${mc[0]}" />',
+						data: [<c:out value="${mc[1]}" />]
+					},
+				</c:forEach>
+			]
+		});
+
+
+		Highcharts.chart('container-chart-muscles-percentage', {
+			chart: {
+				type: 'pie'
+			},
+			title: {
+				text: 'Percentage of workouts by muscle group'
+			},
+			tooltip: {
+				valueSuffix: '%'
+			},
+			plotOptions: {
+				series: {
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: true,
+					}
+				}
+			},
+			series: [
+				{
+					name: 'Percentage',
+					colorByPoint: true,
+					data: [
+						<c:forEach items="${muscleGroupsInPlan}" var="mc">
+							{
+								name: '<c:out value="${mc[0]}" />',
+								y: <c:out value="Math.floor((${mc[1]} * 100) / ${countOfAllMuscleWorkouts})" />
+							},
+						</c:forEach>
+					]
+				}
+			]
+		});
+
+	
 	</script>
 
 
