@@ -82,8 +82,18 @@
 									<div class="card-body">
 										<c:choose>
 											<c:when test="${todos[j.index].completed == true}">
-												<i class="fas fa-clipboard-check text-success"></i>
-												<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
+												<p>
+													<i class="fas fa-clipboard-check text-success"></i>
+													<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
+													<c:choose>
+														<c:when test="${todos[j.index].isPublic == true}">
+															<span class="badge badge-secondary">Public</span>
+														</c:when>
+														<c:otherwise>
+															<span class="badge badge-secondary">Private</span>
+														</c:otherwise>
+													</c:choose>
+												</p>
 
 												<div class="row mt-3">
 													<div class="col">
@@ -99,9 +109,18 @@
 												</div>
 											</c:when>
 											<c:otherwise>
-												<i class="fas fa-clipboard text-warning"></i>
-												<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
-
+												<p>
+													<i class="fas fa-clipboard text-warning"></i>
+													<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
+													<c:choose>
+														<c:when test="${todos[j.index].isPublic == true}">
+															<span class="badge badge-secondary">Public</span>
+														</c:when>
+														<c:otherwise>
+															<span class="badge badge-secondary">Private</span>
+														</c:otherwise>
+													</c:choose>
+												</p>
 												<div class="row mt-3">
 													<div class="col">
 														<!-- date -->
@@ -130,8 +149,18 @@
 									<div class="card-body">
 										<c:choose>
 											<c:when test="${todos[j.index].completed == true}">
-												<i class="fas fa-clipboard-check text-success"></i>
-												<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
+												<p>
+													<i class="fas fa-clipboard-check text-success"></i>
+													<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
+													<c:choose>
+														<c:when test="${todos[j.index].isPublic == true}">
+															<span class="badge badge-secondary">Public</span>
+														</c:when>
+														<c:otherwise>
+															<span class="badge badge-secondary">Private</span>
+														</c:otherwise>
+													</c:choose>
+												</p>
 
 												<div class="row mt-3">
 													<div class="col">
@@ -147,8 +176,18 @@
 												</div>
 											</c:when>
 											<c:otherwise>
-												<i class="fas fa-clipboard text-warning"></i>
-												<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
+												<p>
+													<i class="fas fa-clipboard text-warning"></i>
+													<a href="/todo?id=${todos[j.index].id}"> ${todos[j.index].name}</a>
+													<c:choose>
+														<c:when test="${todos[j.index].isPublic == true}">
+															<span class="badge badge-secondary">Public</span>
+														</c:when>
+														<c:otherwise>
+															<span class="badge badge-secondary">Private</span>
+														</c:otherwise>
+													</c:choose>
+												</p>
 
 												<div class="row mt-3">
 													<div class="col">
@@ -181,7 +220,17 @@
 							<c:if test="${(j.index mod 2) eq 0}">
 								<div class="card mt-3">
 									<div class="card-body">
-										<p><a href="/gym/plan/${gym[j.index].id}">${gym[j.index].title}</a></p>
+										<p><a href="/gym/plan/${gym[j.index].id}">${gym[j.index].title}</a>
+											<c:choose>
+												<c:when test="${gym[j.index].isPublic == true}">
+													<span class="badge badge-secondary">Public</span>
+												</c:when>
+												<c:otherwise>
+													<span class="badge badge-secondary">Private</span>
+												</c:otherwise>
+											</c:choose>
+										</p>
+										<p>@${gym[j.index].user.username}</p>
 									</div>
 								</div>
 							</c:if>
@@ -194,7 +243,18 @@
 							<c:if test="${(j.index mod 2) ne 0}">
 								<div class="card mt-3">
 									<div class="card-body">
-										<p><a href="/gym/plan/${gym[j.index].id}">${gym[j.index].title}</a></p>
+										<p>
+											<a href="/gym/plan/${gym[j.index].id}">${gym[j.index].title}</a>
+											<c:choose>
+												<c:when test="${gym[j.index].isPublic == true}">
+													<span class="badge badge-secondary">Public</span>
+												</c:when>
+												<c:otherwise>
+													<span class="badge badge-secondary">Private</span>
+												</c:otherwise>
+											</c:choose>
+										</p>
+										<p>@${gym[j.index].user.username}</p>
 									</div>
 								</div>
 							</c:if>

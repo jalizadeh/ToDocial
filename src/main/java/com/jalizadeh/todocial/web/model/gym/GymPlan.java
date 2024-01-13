@@ -1,6 +1,8 @@
 package com.jalizadeh.todocial.web.model.gym;
 
+import com.jalizadeh.todocial.web.model.User;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -16,6 +18,10 @@ public class GymPlan {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private String title;
 
@@ -39,6 +45,15 @@ public class GymPlan {
 
     private boolean active;
 
+    /*
+     * Lombok generates getters based on the field names. In the case of a boolean field named isPublic,
+     * Lombok generates a getter method named isPublic(). However, when using EL (Expression Language) in JSP,
+     * it expects the getter method to follow the JavaBeans convention, and for boolean fields,
+     * the convention is to have a getter method named getPropertyName().
+     */
+    @Getter(AccessLevel.NONE)
+    private boolean isPublic;
+
     private Date startDate;
 
     private Date completeDate;
@@ -47,4 +62,7 @@ public class GymPlan {
     @Max(100)
     protected int progress;
 
+    public boolean getIsPublic() {
+        return isPublic;
+    }
 }

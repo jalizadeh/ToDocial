@@ -1,7 +1,9 @@
 package com.jalizadeh.todocial.web.model;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -42,7 +44,8 @@ public class Todo {
 	
 	private boolean canceled;
 
-	private boolean publicc;
+	@Getter(AccessLevel.NONE)
+	private boolean isPublic;
 	
 	private Long like;
 
@@ -67,4 +70,7 @@ public class Todo {
 		this.like = 0L;
 	}
 
+	public boolean getIsPublic() {
+		return isPublic;
+	}
 }

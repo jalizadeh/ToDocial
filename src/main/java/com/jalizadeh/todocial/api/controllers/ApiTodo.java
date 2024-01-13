@@ -146,7 +146,7 @@ public class ApiTodo {
 
 	private TodoDTO mapTodoToDTO(Todo t) {
 		return new TodoDTO(t.getId(), t.getName(), t.getDescription(), t.getReason(), new ArrayList<>(), t.getLike(),
-				t.isCompleted(), t.isCanceled(), t.isPublicc());
+				t.isCompleted(), t.isCanceled(), t.getIsPublic());
 	}
 
 	private TodoLogDTO mapTodoToLogDTO(TodoLog l) {

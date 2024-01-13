@@ -39,6 +39,9 @@
 
 	<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
 		<a class="navbar-brand" href="/"><li class="fas fa-home"></li></a>
+		<sec:authorize access="isAuthenticated()">
+			<a class="navbar-brand" href="/me"><li class="fas fa-seedling"></li></a>
+		</sec:authorize>
 
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
@@ -75,7 +78,7 @@
 							<spring:message code="header.todos"/> 
 						</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdownTodos">
-							<a class="dropdown-item" href="/@<sec:authentication property='principal.username'/>"><spring:message code="header.mytodos"/></a>
+							<a class="dropdown-item" href="/todos"><spring:message code="header.mytodos"/></a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="/chart-timeline-completed">Completed Timeline</a>
 							<a class="dropdown-item" href="/chart-timeline-todo">Not-completed Timeline</a>

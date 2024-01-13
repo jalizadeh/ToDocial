@@ -1,8 +1,10 @@
 package com.jalizadeh.todocial.web.controller.gym;
 
 
+import com.jalizadeh.todocial.system.service.UserService;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.todocial.web.model.FlashMessage;
+import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.model.gym.*;
 import com.jalizadeh.todocial.web.model.gym.dto.GymWorkoutLogSetRep_DTO;
 import com.jalizadeh.todocial.web.model.gym.types.GymMainGoal;
@@ -27,6 +29,9 @@ import java.util.Optional;
 
 @Controller
 public class GymController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private SettingsGeneralConfig settings;
@@ -58,12 +63,13 @@ public class GymController {
     @RequestMapping(value = "/gym", method = RequestMethod.GET)
     public String homepage(ModelMap model) {
         newPlan = null;
+        Long userId = userService.GetAuthenticatedUser().getId();
 
         model.put("settings", settings);
         model.put("PageTitle", "Gym");
-        model.put("activePlans", gymPlanRepository.findAllByActiveTrue());
-        model.put("completedPlans", gymPlanRepository.findAllCompletedPlans());
-        model.put("allPlans", gymPlanRepository.findAll());
+        model.put("activePlans", gymPlanRepository.findAllByUserIdAndActiveTrue(userId));
+        model.put("completedPlans", gymPlanRepository.findAllByUserIdAndCompletedPlans(userId));
+        model.put("allPlans", gymPlanRepository.findAllByUserId(userId));
 
         return "gym/home";
     }

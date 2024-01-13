@@ -10,10 +10,8 @@ import java.util.List;
 
 public interface GymPlanRepository extends JpaRepository<GymPlan, Long>{
 
-    List<GymPlan> findAllByActiveTrue();
-
-    @Query("select p from GymPlan p where p.active = False and p.completeDate is not null")
-    List<GymPlan> findAllCompletedPlans();
+    @Query("SELECT p FROM GymPlan p WHERE p.user.id=:userId and p.active = False and p.completeDate is not null")
+    List<GymPlan> findAllByUserIdAndCompletedPlans(@Param("userId") Long userId);
 
     @Query("SELECT p FROM GymPlan p JOIN p.gymPlanIntroduction pi WHERE p.title like %:query% or pi.moreInfo like %:query%")
     List<GymPlan> searchAll(@Param("query") String query);
@@ -32,4 +30,9 @@ public interface GymPlanRepository extends JpaRepository<GymPlan, Long>{
             "ORDER BY totalMC")
     List<Object[]> muscleGroupsInPlan(@Param("planId") Long planId);
 
+    List<GymPlan> findAllByUserId(Long id);
+
+    List<GymPlan> findAllByUserIdAndIsPublicTrue(Long userId);
+
+    List<GymPlan> findAllByUserIdAndActiveTrue(Long userId);
 }

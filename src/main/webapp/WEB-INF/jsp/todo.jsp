@@ -75,7 +75,7 @@
 
 					<fieldset class="form-group">
 						<div class="custom-control custom-checkbox my-1 mr-sm-2">
-							<form:checkbox path="publicc" value="${todo.publicc}"
+							<form:checkbox path="isPublic" value="${todo.isPublic}"
 								class="custom-control-input" id="ispublic" />
 							<label class="custom-control-label" for="ispublic">Set as
 								public (other users can see your Todo's progress)</label>

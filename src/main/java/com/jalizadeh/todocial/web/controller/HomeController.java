@@ -23,7 +23,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String ShowWelcomePage(ModelMap model) {
-		model.put("todos", todoRepository.findAllByPubliccTrue());
+		model.put("todos", todoRepository.findAllByIsPublicTrue());
 		model.put("users", userRepository.findByEnabled(true));
 		model.put("settings", settings);
 		model.put("PageTitle", "Home");

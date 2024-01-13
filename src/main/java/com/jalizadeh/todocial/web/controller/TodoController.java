@@ -64,79 +64,24 @@ public class TodoController {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
 	}
-	
 
-	
-	/**
-	 * If user is authenticated, he will be redirected to his personal page,
-	 * but if it is an anonymous user, can access the public area of
-	 * a registered user's page
-	 */
-	@GetMapping("/@{username}")
-	public String ShowTodosList(ModelMap model, @PathVariable String username,
-			RedirectAttributes redirectAttributes) {
-		
-		User currentUser = userService.GetAuthenticatedUser();
-		User targetUser = userRepository.findByUsername(username);
+	@GetMapping("/todos")
+	public String showTodos(ModelMap model) {
 		model.put("settings", settings);
-		
-		//if there is no mathcing account
-		if (targetUser == null) {
-			redirectAttributes.addFlashAttribute("exception", 
-					"There is no account matching '" + username + "'");
-			return "redirect:/error";
-		}
+		model.put("PageTitle", "My Todos");
 
-		//if the user is anonymous
-		if (utilites.isUserAnonymous()) {
-			model.put("user", targetUser); 
-			model.put("todos", todoRepository.findAllByUserIdAndPubliccTrue(targetUser.getId()));
-			String pageTitle = targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")";
-			model.put("PageTitle", pageTitle);
-			return "public-page";
-		}
-		
-		
-		User loggedinUser  =  userRepository.findByUsername(currentUser.getUsername());
-
-		//the user is logged in and is checking another profile
-		//but first check if current user is following the target or not
-		if(!currentUser.getUsername().equals(username)) {
-			List<String> listOfFollowings = loggedinUser.getFollowings().stream()
-						.map(u -> u.getUsername())
-						.collect(Collectors.toList());
-			
-			for (String following : listOfFollowings) {
-				if(following.equals(targetUser.getUsername())) {
-					model.put("isfollowing", true);
-					break;
-				}else {
-					model.put("isfollowing", false);
-				}
-			}
-			
-			
-			model.put("user", targetUser); 
-			model.put("todos", todoRepository.findAllByUserIdAndPubliccTrue(targetUser.getId()));
-			model.put("gym", gymPlanRepository.findAll());
-			model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")");
-			return "public-page";
-		}
-		
-
-		model.put("LoggedinUsers", userService.getAllLoggedinUsers());
-		model.put("user", targetUser);
+		User loggedinUser = userService.GetAuthenticatedUser();
+		model.put("user", loggedinUser);
 		model.put("todosCompleted", todoRepository.getAllCompleted());
 		model.put("todosNotCompleted", todoRepository.getAllNotCompleted());
 		model.put("todosCanceled", todoRepository.getAllCanceled());
-		model.put("PageTitle", "My Todos");
-		return "my-todos";
+
+		return "todos";
 	}
+
 	
-	
-	@PostMapping("/@{username}")
-	public String AddNewTodoLog(ModelMap model, @RequestParam Long todoId, 
-			@RequestParam String log) {
+	@PostMapping(value = "/todos", params = {"todoId", "log"})
+	public String addNewTodoLog(ModelMap model, @RequestParam Long todoId, @RequestParam String log) {
 
 		User user = userService.GetAuthenticatedUser();
 
@@ -150,7 +95,7 @@ public class TodoController {
 		
 		todoRepository.save(todo);
 		
-		return "redirect:/@" + user.getUsername();
+		return "redirect:/todos";
 	}
 	
 	
@@ -160,7 +105,7 @@ public class TodoController {
 		todo.setCanceled(true);
 		todo.setCancel_date(new Date());
 		todoRepository.save(todo);
-		return "redirect:/@" + todo.getUser().getUsername();
+		return "redirect:/todos";
 	}
 	
 	
@@ -170,7 +115,7 @@ public class TodoController {
 		todo.setCanceled(false);
 		//todo.setCancel_date(new Date());
 		todoRepository.save(todo);
-		return "redirect:/@" + todo.getUser().getUsername();
+		return "redirect:/todos";
 	}
 	
 	
@@ -178,7 +123,7 @@ public class TodoController {
 	public String DeleteTodoLog(ModelMap model, @RequestParam Long id) {
 		User user = userService.GetAuthenticatedUser();
 		todoLogRepository.deleteById(id);
-		return "redirect:/@" + user.getUsername();
+		return "redirect:/todos";
 	}
 	
 	
@@ -213,7 +158,7 @@ public class TodoController {
 		
 		redirectAttributes.addFlashAttribute("flash", 
 				new FlashMessage("Todo created successfully", FlashMessage.Status.success));
-		return "redirect:/@" + user.getUsername();
+		return "redirect:/todos";
 	}
 
 
@@ -274,7 +219,7 @@ public class TodoController {
 		
 		redirectAttributes.addFlashAttribute("flash", 
 				new FlashMessage("Todo updated successfully", FlashMessage.Status.success));
-		return "redirect:/@" + user.getUsername();
+		return "redirect:/todos";
 	}
 	
 	
@@ -344,7 +289,7 @@ public class TodoController {
 		
 		redirectAttributes.addFlashAttribute("flash", 
 				new FlashMessage("Todo completed successfully", FlashMessage.Status.success));
-		return "redirect:/@" + ref.getUser().getUsername();
+		return "redirect:/todos";
 	}
 	
 	
@@ -358,7 +303,7 @@ public class TodoController {
 		if(!todo.isCompleted()) {
 			redirectAttributes.addFlashAttribute("flash", 
 					new FlashMessage("Todo is not completed yet.", FlashMessage.Status.warning));
-			return "redirect:/@" + todo.getUser().getUsername();
+			return "redirect:/todos";
 		}
 		
 		model.put("todo", todo);
@@ -374,11 +319,10 @@ public class TodoController {
 		Todo todo = todoRepository.getOne(id);
 		todo.setCompleted(!todo.isCompleted());
 		todoRepository.save(todo);
-		return "redirect:/@" + user.getUsername();
+		return "redirect:/todos";
 	}
 	
 
-	//===============Methods==========================
 	private List<String>  allPriority() {
 		List<String> allPriority = new ArrayList<>();
 		allPriority.add("Emergency");
@@ -387,8 +331,6 @@ public class TodoController {
 		allPriority.add("Low");
 		return allPriority;
 	}
-
-
 
 	private List<String> allType() {
 		List<String> allType = new ArrayList<>();

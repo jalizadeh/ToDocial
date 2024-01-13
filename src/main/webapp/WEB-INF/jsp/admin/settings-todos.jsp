@@ -53,7 +53,7 @@
 							<th><fmt:formatDate value="${todo.target_date}"
 									pattern="yyyy/MM/dd" /></th>
 							<th>${todo.completed}</th>
-							<th>${todo.publicc}</th>
+							<th>${todo.isPublic}</th>
 							<th>${todo.like}</th>
 							<th><a href="/@${todo.user.username}">${todo.user.username}</a></th>
 							<th><a type="button" class="btn btn-warning"
