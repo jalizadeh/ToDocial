@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * For accessing images that are uploaded in "upload-image" directory,
  * you only need to use the following url where ever you need:
  * 
- * <img src="/user-avatar/${user.photo} />
+ * <img src="/photo/user/${user.photo} />
  * 
  * and the rest will be handled here, without exposing your storage folder's name
  */

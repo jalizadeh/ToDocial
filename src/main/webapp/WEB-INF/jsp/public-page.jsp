@@ -28,7 +28,7 @@
 <div class="row my-5">
 	<div class="col">
 		<div class="border-dark">
-			<img class="img-profile rounded-circle" width="200px" height="200px" src="/user-avatar/${user.photo}">
+			<img class="img-profile rounded-circle" width="200px" height="200px" src="/photo/user/${user.photo}">
 			<h3 class="mt-2">${user.firstname} ${user.lastname}</h3>
 			<h4 class="text-secondary">${user.username}</h4>
 			<sec:authorize access="isAuthenticated()">
@@ -180,7 +180,7 @@
 							<div class="row">
 								<div class="col">
 									<a href="/@${follower.username}">
-									<img class="img-profile rounded-circle" width="32px" height="32px" src="/user-avatar/${follower.photo}">
+									<img class="img-profile rounded-circle" width="32px" height="32px" src="/photo/user/${follower.photo}">
 									</a> <a
 										href="/@${follower.username}">${follower.firstname}
 										${follower.lastname}</a>
@@ -208,7 +208,7 @@
 							<div class="row">
 								<div class="col">
 									<a href="/@${following.username}">
-									<img class="img-profile rounded-circle" width="32px" height="32px" src="/user-avatar/${following.photo}">
+									<img class="img-profile rounded-circle" width="32px" height="32px" src="/photo/user/${following.photo}">
 									</a> <a
 										href="/@${following.username}">${following.firstname} 
 										${following.lastname}</a>

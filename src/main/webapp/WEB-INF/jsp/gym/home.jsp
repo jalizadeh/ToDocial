@@ -17,40 +17,6 @@
 
 	<%@ include file="common/filter.jspf" %>
 
-	<div class="row">
-		<div class="col-3">
-			<p>Blood</p>
-			<p>Stretching</p>
-			<p>Vitamines & Minerals</p>
-			<p>FAQ</p>
-			<p>Mr. Olympia</p>
-		</div>
-
-		<div class="col-3">
-			<p>Food Diary</p>
-			<p>Yoga</p>
-			<p>Best Foods</p>
-			<p>Selection</p>
-			<p>Quotes</p>
-		</div>
-
-		<div class="col-3">
-			<p>Diet & Recipes</p>
-			<p>Challenges</p>
-			<p>Supplements Guide</p>
-			<p>Equipments</p>
-			<p>Terms</p>
-		</div>
-
-		<div class="col-3">
-			<p>Notes</p>
-			<p>Height Increase</p>
-			<p>General Health Tips</p>
-			<p>BMI</p>
-			<p>BMR</p>
-		</div>
-	</div>
-
 	<div class="row mt-2">
 		<div class="col border-bottom">
 			<h2><img src="/resources/img/status_active.gif" width="50px"> Your Active Plans <a href="gym/plan/new?step=1" class="badge badge-success"><i class="fas fa-plus"></i> New</a></h2>
@@ -129,6 +95,40 @@
 				</div>
 			  </div>
 		</c:forEach>
+	</div>
+
+	<div class="row border-top">
+		<div class="col-3">
+			<p>Blood</p>
+			<p>Stretching</p>
+			<p>Vitamines & Minerals</p>
+			<p>FAQ</p>
+			<p>Mr. Olympia</p>
+		</div>
+
+		<div class="col-3">
+			<p>Food Diary</p>
+			<p>Yoga</p>
+			<p>Best Foods</p>
+			<p>Selection</p>
+			<p>Quotes</p>
+		</div>
+
+		<div class="col-3">
+			<p>Diet & Recipes</p>
+			<p>Challenges</p>
+			<p>Supplements Guide</p>
+			<p>Equipments</p>
+			<p>Terms</p>
+		</div>
+
+		<div class="col-3">
+			<p>Notes</p>
+			<p>Height Increase</p>
+			<p>General Health Tips</p>
+			<p>BMI</p>
+			<p>BMR</p>
+		</div>
 	</div>
 
 <%@ include file="../common/footer.jspf" %>

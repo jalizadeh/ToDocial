@@ -295,7 +295,7 @@
 		<c:forEach items="${user.followings}" var="following">
 			<a href="/@${following.username}"><img
 				class="img-profile rounded-circle" width="32px" height="32px"
-				src="/user-avatar/${following.photo}"></a>
+				src="/photo/user/${following.photo}"></a>
 			<a href="/@${following.username}">${following.firstname}
 				${following.lastname}</a>
 			<hr>
