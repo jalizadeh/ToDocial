@@ -88,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers(
 						"/resources/**", //it is easier to permit all files in this folder
 						"/WEB-INF/**",
-						"/user-avatar/*",
+						"/photo/*",
 						"/registration-confirm",
 						"/login",
 						"/signup",

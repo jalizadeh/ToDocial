@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.jalizadeh.todocial.web.repository.GymPlanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -53,6 +54,9 @@ public class TodoController {
 	
 	@Autowired
 	private SettingsGeneralConfig settings;
+
+	@Autowired
+	private GymPlanRepository gymPlanRepository;
 	
 	
 	@InitBinder
@@ -114,8 +118,8 @@ public class TodoController {
 			
 			model.put("user", targetUser); 
 			model.put("todos", todoRepository.findAllByUserIdAndPubliccTrue(targetUser.getId()));
-			String pageTitle = targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")";
-			model.put("PageTitle", pageTitle);
+			model.put("gym", gymPlanRepository.findAll());
+			model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")");
 			return "public-page";
 		}
 		

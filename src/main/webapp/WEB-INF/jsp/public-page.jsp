@@ -51,26 +51,27 @@
 	<div class="col-9">
 
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
-			<li class="nav-item "><a class="nav-link active" id="todos-tab"
-				data-toggle="tab" href="#todos" role="tab" aria-controls="todos"
-				aria-selected="false">Todos <span
-					class="badge badge-pill badge-secondary">${todos.size()}</span></a></li>
-			<li class="nav-item"><a class="nav-link" id="likes-tab"
-				data-toggle="tab" href="#likes" role="tab" aria-controls="likes"
-				aria-selected="false">Likes <span
-					class="badge badge-pill badge-secondary">0</span></a></li>
-			<li class="nav-item"><a class="nav-link" id="followers-tab"
-				data-toggle="tab" href="#followers" role="tab"
-				aria-controls="followers" aria-selected="false">Followers <span
-					class="badge badge-pill badge-secondary">${user.followers.size()}</span></a></li>
-			<li class="nav-item"><a class="nav-link" id="following-tab"
-				data-toggle="tab" href="#following" role="tab"
-				aria-controls="following" aria-selected="false">Following <span
-					class="badge badge-pill badge-secondary">${user.followings.size()}</span></a></li>
+			<li class="nav-item ">
+				<a class="nav-link active" id="todos-tab" data-toggle="tab" href="#todos" role="tab" aria-controls="todos"
+				aria-selected="false">Todos <span class="badge badge-pill badge-secondary">${todos.size()}</span></a>
+			</li>
+			<li class="nav-item ">
+				<a class="nav-link" id="gym-tab" data-toggle="tab" href="#gym" role="tab" aria-controls="gym"
+				aria-selected="false">Gym <span class="badge badge-pill badge-secondary">${gym.size()}</span></a>
+			</li>
+			<li class="nav-item"><a class="nav-link" id="likes-tab" data-toggle="tab" href="#likes" role="tab" aria-controls="likes"
+				aria-selected="false">Likes <span class="badge badge-pill badge-secondary">0</span></a>
+			</li>
+			<li class="nav-item"><a class="nav-link" id="followers-tab" data-toggle="tab" href="#followers" role="tab"
+				aria-controls="followers" aria-selected="false">Followers <span class="badge badge-pill badge-secondary">${user.followers.size()}</span></a>
+			</li>
+			<li class="nav-item"><a class="nav-link" id="following-tab" data-toggle="tab" href="#following" role="tab"
+				aria-controls="following" aria-selected="false">Following <span class="badge badge-pill badge-secondary">${user.followings.size()}</span></a>
+			</li>
 		</ul>
+
 		<div class="tab-content mt-2" id="myTabContent">
-			<div class="tab-pane fade show active" id="todos" role="tabpanel"
-				aria-labelledby="todos-tab">
+			<div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
 				<div class="row">
 
 					<!-- Left column -->
@@ -170,10 +171,41 @@
 					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="likes" role="tabpanel"
-				aria-labelledby="followers-tab"></div>
-			<div class="tab-pane fade" id="followers" role="tabpanel"
-				aria-labelledby="followers-tab">
+
+			<div class="tab-pane fade" id="gym" role="tabpanel" aria-labelledby="todos-tab">
+				<div class="row">
+
+					<!-- Left column -->
+					<div class="col">
+						<c:forEach items="${gym}" varStatus="j">
+							<c:if test="${(j.index mod 2) eq 0}">
+								<div class="card mt-3">
+									<div class="card-body">
+										<p><a href="/gym/plan/${gym[j.index].id}">${gym[j.index].title}</a></p>
+									</div>
+								</div>
+							</c:if>
+						</c:forEach>
+					</div>
+
+					<!-- Right column -->
+					<div class="col">
+						<c:forEach items="${gym}" varStatus="j">
+							<c:if test="${(j.index mod 2) ne 0}">
+								<div class="card mt-3">
+									<div class="card-body">
+										<p><a href="/gym/plan/${gym[j.index].id}">${gym[j.index].title}</a></p>
+									</div>
+								</div>
+							</c:if>
+						</c:forEach>
+					</div>
+				</div>
+			</div>
+			
+			<div class="tab-pane fade" id="likes" role="tabpanel" aria-labelledby="followers-tab"></div>
+
+			<div class="tab-pane fade" id="followers" role="tabpanel" aria-labelledby="followers-tab">
 				<c:forEach items="${user.followers}" var="follower">
 					<div class="card mt-3">
 						<div class="card-body">
@@ -200,8 +232,7 @@
 				</c:forEach>
 			</div>
 
-			<div class="tab-pane fade" id="following" role="tabpanel"
-				aria-labelledby="following-tab">
+			<div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
 				<c:forEach items="${user.followings}" var="following">
 					<div class="card mt-3">
 						<div class="card-body">
@@ -227,6 +258,8 @@
 					</div>
 				</c:forEach>
 			</div>
+
+
 		</div>
 	</div>
 </div>
