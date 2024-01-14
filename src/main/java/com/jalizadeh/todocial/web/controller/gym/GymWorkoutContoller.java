@@ -15,6 +15,9 @@ import com.jalizadeh.todocial.web.repository.GymWorkoutLogRepository;
 import com.jalizadeh.todocial.web.repository.GymWorkoutRepository;
 import com.jalizadeh.todocial.web.service.storage.StorageFileSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.validation.Valid;
 import java.text.DecimalFormat;
@@ -120,6 +124,7 @@ public class GymWorkoutContoller {
 
 
     @GetMapping(value = "/gym/workouts/{id}/edit")
+    @PreAuthorize("hasAuthority('PRIVILEGE_UPDATE')")
     public String editWorkout(ModelMap model, RedirectAttributes redirectAttributes, @PathVariable Long id) {
         Optional<GymWorkout> workout = gymWorkoutRepository.findById(id);
 
@@ -140,6 +145,7 @@ public class GymWorkoutContoller {
     }
 
     @PostMapping(value = "/gym/workouts/{id}/edit")
+    @PreAuthorize("hasAuthority('PRIVILEGE_UPDATE')")
     public String editWorkout(@Valid GymWorkout workout,
                               ModelMap model, BindingResult result, RedirectAttributes redirectAttributes,
                               @RequestParam(value="file", required=false) MultipartFile file){
@@ -168,6 +174,7 @@ public class GymWorkoutContoller {
 
 
     @GetMapping(value = "/gym/workouts/{id}/delete")
+    @PreAuthorize("hasAuthority('PRIVILEGE_DELETE')")
     public String deleteWorkout(ModelMap model, RedirectAttributes redirectAttributes, @PathVariable Long id) {
         Optional<GymWorkout> workout = gymWorkoutRepository.findById(id);
 
@@ -181,6 +188,7 @@ public class GymWorkoutContoller {
     }
 
     @GetMapping("/gym/workouts/new")
+    @PreAuthorize("hasAuthority('PRIVILEGE_WRITE')")
     public String newWorkout(ModelMap model){
         model.put("settings", settings);
         model.put("PageTitle", "Add new workout");
@@ -193,6 +201,7 @@ public class GymWorkoutContoller {
 
 
     @PostMapping("/gym/workouts/new")
+    @PreAuthorize("hasAuthority('PRIVILEGE_WRITE')")
     public String addNewWorkout(@Valid GymWorkout workout,
                                 ModelMap model, BindingResult result, RedirectAttributes redirectAttributes,
                                 @RequestParam(value="file", required=false) MultipartFile file){

@@ -115,13 +115,12 @@ public class LoginSignupController{
 	
 	
 	@RequestMapping("/logout")
-	public ModelAndView logout(HttpServletRequest request,
-			HttpServletResponse response,
-			RedirectAttributes redirectAttributes) {
+	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
+			SecurityContextHolder.clearContext();
 		}
 		
 		redirectAttributes.addFlashAttribute("message",

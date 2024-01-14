@@ -2,6 +2,7 @@ package com.jalizadeh.todocial.web.model;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -77,8 +78,7 @@ public class User implements UserDetails{
 	private String photo;
 	
 
-	@ManyToMany(fetch=FetchType.EAGER, //when the object is created , I need the roles
-			cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.EAGER) //when the object is created , I need the role
 	@JoinTable(name="users_roles",
 			joinColumns = @JoinColumn(name="user_id", referencedColumnName="id"),
 			inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName="id"))
@@ -242,10 +242,19 @@ public class User implements UserDetails{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		/*
 		return this.roles.stream()
 			.flatMap(role -> role.getPrivileges().stream())
 			.map(p -> new SimpleGrantedAuthority(p.getName()))
 			.collect(Collectors.toList());
+
+		 */
+		return this.roles.stream()
+				.flatMap(role -> Stream.concat(
+						Stream.of(new SimpleGrantedAuthority(role.getName())), // Include role name
+						role.getPrivileges().stream()
+								.map(privilege -> new SimpleGrantedAuthority(privilege.getName()))
+				)).collect(Collectors.toList());
 	}
 
 	

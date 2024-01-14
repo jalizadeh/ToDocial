@@ -98,7 +98,9 @@
 							<a class="dropdown-item" href="/gym/plan/new?step=1"><i class="fas fa-plus"></i> Add plan</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="/gym/workouts">Workouts</a>
-							<a class="dropdown-item" href="/gym/workouts/new"><i class="fas fa-plus"></i> Add workout</a>
+							<sec:authorize access="hasAuthority('PRIVILEGE_WRITE')">
+								<a class="dropdown-item" href="/gym/workouts/new"><i class="fas fa-plus"></i> Add workout</a>
+							</sec:authorize>
 						</div>
 					</li>
 
@@ -138,9 +140,7 @@
 								<img class="img-profile rounded-circle" width="32px" height="32px" src="/photo/user/<sec:authentication property="principal.username"/>.jpg">
 							</a>
 							<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-55">
-								<a class="dropdown-item" href="/@<sec:authentication property="principal.username"/>">
-									Logged in as <strong><sec:authentication property="principal.username" /></strong>
-								</a>
+								<a class="dropdown-item" href="/@<sec:authentication property="principal.username"/>">Logged in as <strong><sec:authentication property="principal.username" /></strong></a>
 								<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="/@<sec:authentication property="principal.username"/>"><spring:message code="header.yourprofile"/></a>
 									<a class="dropdown-item" href="/dashboard"><spring:message code="header.yourtodos"/></a>
@@ -154,13 +154,11 @@
 					</ul>
 				</div>
 
-				<sec:authorize access="hasAuthority('PRIVILEGE_WRITE')">
+				<sec:authorize access="hasAuthority('ROLE_ADMIN')">
 					<div>
 						<ul class="navbar-nav ml-auto nav-flex-icons">
 							<li class="nav-item avatar dropdown">
-								<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false"> <i class="fas fa-cog fa-2x"></i></a>
+								<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-cog fa-2x"></i></a>
 								<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-55">
 									<a class="dropdown-item" href="/admin/settings"><spring:message code="header.settings.general"/></a>
 									<a class="dropdown-item" href="/admin/settings/users"><spring:message code="header.settings.users"/></a>

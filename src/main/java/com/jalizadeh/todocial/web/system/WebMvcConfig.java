@@ -1,5 +1,6 @@
 package com.jalizadeh.todocial.web.system;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartResolver;
@@ -11,6 +12,9 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
+	@Autowired
+	GlobalSettingIntercepter globalSettingIntercepter;
 
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -26,6 +30,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		//registry.addInterceptor(globalSettingIntercepter);
 	    registry.addInterceptor(localeChangeInterceptor());
 	}
 	

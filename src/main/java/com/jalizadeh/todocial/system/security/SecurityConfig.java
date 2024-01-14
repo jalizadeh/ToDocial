@@ -120,7 +120,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 					.access("hasRole('ADMIN') and principal.username == 'user'")
 				*/
 				
-				.antMatchers("/admin/**").hasAuthority("PRIVILEGE_WRITE") //no more need to check logged in user in controllers
+				.antMatchers("/admin/**").hasRole("ADMIN") //no more need to check logged in user in controllers
 				.anyRequest().authenticated()
 			.and()
 			.formLogin()

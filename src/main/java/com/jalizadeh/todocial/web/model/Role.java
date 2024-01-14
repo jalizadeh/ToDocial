@@ -1,21 +1,17 @@
 package com.jalizadeh.todocial.web.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
 	
 	@Id
@@ -25,10 +21,15 @@ public class Role {
 	@Column(nullable=false)
 	private String name;
 	
-	@OneToMany(fetch= FetchType.EAGER)
+	//@OneToMany(fetch= FetchType.EAGER)
+	@ManyToMany(fetch= FetchType.EAGER)
 	@JoinTable(name="roles_privileges", 
 		joinColumns = @JoinColumn(name="role_id", referencedColumnName="id"),
 		inverseJoinColumns = @JoinColumn(name="privilege_id", referencedColumnName="id"))
 	private Collection<Privilege> privileges;
+
+	public Role(String name){
+		this.name = name;
+	}
 
 }

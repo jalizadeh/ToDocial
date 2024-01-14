@@ -28,7 +28,12 @@
 			<img src="/photo/gym/${workout.photo}" class="d-block mx-lg-auto img-fluid" alt="${workout.name}" width="400" height="400" loading="lazy">
 		</div>
 		<div class="col-lg-6">
-			<a href="/gym/workouts/${workout.id}/edit" class="icon-link">Edit</a> | <a href="/gym/workouts/${workout.id}/delete" class="icon-link text-danger">Delete</a>
+			<sec:authorize access="hasAuthority('PRIVILEGE_UPDATE')">
+				<a href="/gym/workouts/${workout.id}/edit" class="icon-link">Edit</a>
+			</sec:authorize>
+			<sec:authorize access="hasAuthority('PRIVILEGE_DELETE')">
+				| <a href="/gym/workouts/${workout.id}/delete" class="icon-link text-danger">Delete</a>
+			</sec:authorize>
 			<h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">${workout.name}</h1>
 			<p class="lead">${workout.description}</p>
 		</div>
