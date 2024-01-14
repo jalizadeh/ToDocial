@@ -11,6 +11,8 @@ import org.springframework.data.spel.spi.EvaluationContextExtension;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AuthenticatedVoter;
 import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.access.vote.UnanimousBased;
@@ -24,6 +26,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -121,6 +124,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				*/
 				
 				.antMatchers("/admin/**").hasRole("ADMIN") //no more need to check logged in user in controllers
+				.expressionHandler(customWebSecurityExpressionHandler())
 				.anyRequest().authenticated()
 			.and()
 			.formLogin()
@@ -172,7 +176,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		jdbcTokenRepository.setDataSource(dataSource);
 		return jdbcTokenRepository;
 	}
-	
+
+	@Bean
+	public RoleHierarchy roleHierarchy() {
+		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+		String hierarchy = "ROLE_ADMIN > ROLE_STAFF \n ROLE_STAFF > ROLE_EDITOR \n ROLE_EDITOR > ROLE_ANALYZER > \n ROLE_ANALYZER > ROLE_USER";
+		roleHierarchy.setHierarchy(hierarchy);
+		return roleHierarchy;
+	}
+
+	@Bean
+	public DefaultWebSecurityExpressionHandler customWebSecurityExpressionHandler() {
+		DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
+		expressionHandler.setRoleHierarchy(roleHierarchy());
+		return expressionHandler;
+	}
 	
 	public AuthenticationSuccessHandler loginSuccessHandler() {
         return (request, response, authentication) ->
