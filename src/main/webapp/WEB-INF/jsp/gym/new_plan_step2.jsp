@@ -71,7 +71,7 @@
 										<div class="row my-1" id="workoutContainer">
 											<div class="col-6">
 												<fieldset class="form-group">
-													<label for="workoutDay${i}">Workout #${j+1}</label>
+													<label for="workoutDay${i-1}_workout0">Workout #${j+1}</label>
 													<form:select multiple="single" path="days[${i-1}].dayWorkouts[0].workout" items="${workoutsList}" itemLabel="fullLabel" 
 														class="form-control" id="workoutDay${i-1}_workout0" rows="3" required="required"/>
 												</fieldset>
@@ -186,7 +186,7 @@
 						<div class="col">
 							<fieldset class="form-group">
 								<label for="days` + activeTab + `.dayWorkouts[` + j + `].repsMin">Reps min</label>
-								<input id="days` + activeTab + `.dayWorkouts[` + j + `].repsMin" name="days[` + i + `].dayWorkouts[` + j + `].repsMin" type="number" class="form-control" placeholder="min" aria-label="reps_min" aria-describedby="addon-wrapping" required="required" value="12" min="1"/>
+								<input id="days` + activeTab + `.dayWorkouts[` + j + `].repsMin" name="days[` + i + `].dayWorkouts[` + j + `].repsMin" type="number" class="form-control" placeholder="min" aria-label="reps_min" aria-describedby="addon-wrapping" required="required" value="10" min="1"/>
 							</fieldset>
 						</div>
 						<div class="col">

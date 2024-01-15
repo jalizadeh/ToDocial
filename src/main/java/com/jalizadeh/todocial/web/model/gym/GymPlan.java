@@ -9,6 +9,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -26,11 +27,11 @@ public class GymPlan {
     private String title;
 
     //on Gym homepage, I need to have quick access to Plan's details
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "gym_plan_introduction")
     private GymPlanIntroduction gymPlanIntroduction;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "plan")
+    @OneToMany(mappedBy = "plan", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<GymDay> days = new ArrayList<>();
 
     @Min(1)

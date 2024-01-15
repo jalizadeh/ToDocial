@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -21,12 +22,14 @@ public class GymDay {
     private String focus;
 
     @ToString.Exclude
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "plan_id")
     @JsonIgnore
     private GymPlan plan;
 
-    @Transient
+    @ToString.Exclude
+    @OneToMany(mappedBy = "day", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JsonIgnore
     private List<GymDayWorkout> dayWorkouts = new ArrayList<>();
 
     @Min(1)

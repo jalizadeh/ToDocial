@@ -129,8 +129,7 @@ public class GymController {
             return "redirect:/gym/plan/new?step=2";
         } else if (step == 2) {
             newPlan = plan;
-            //System.err.println(newPlan);
-
+            newPlan.setUser(userService.GetAuthenticatedUser());
             GymPlan savedPlan = gymPlanRepository.save(newPlan);
 
             newPlan.getDays().forEach(d -> {

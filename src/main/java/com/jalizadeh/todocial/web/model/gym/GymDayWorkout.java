@@ -17,7 +17,7 @@ public class GymDayWorkout {
     private Long id;
 
     @ToString.Exclude
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "day_id")
     @JsonIgnore
     private GymDay day;
@@ -26,7 +26,7 @@ public class GymDayWorkout {
     @JoinColumn(name = "workout_id")
     private GymWorkout workout;
 
-    @OneToMany(mappedBy = "dayWorkout")
+    @OneToMany(mappedBy = "dayWorkout", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<GymWorkoutLog> workoutLogs;
 
     private int workoutNumber;
@@ -35,7 +35,7 @@ public class GymDayWorkout {
     private int sets = 3;
 
     @Min(0)
-    private int repsMin = 12;
+    private int repsMin = 10;
 
     @Min(0)
     private int repsMax = 12;
