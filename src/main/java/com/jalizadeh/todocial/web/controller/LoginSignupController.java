@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.jalizadeh.todocial.system.service.*;
+import com.jalizadeh.todocial.utils.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -122,6 +123,8 @@ public class LoginSignupController{
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 			SecurityContextHolder.clearContext();
 		}
+
+		Log.info("User: " + auth.getName() + " signed out successfully");
 		
 		redirectAttributes.addFlashAttribute("message",
 				new FlashMessage("You logged out successfully.", FlashMessage.Status.success));
@@ -151,10 +154,14 @@ public class LoginSignupController{
 
     		String appUrl = request.getContextPath();
             eventPublisher.publishEvent(new OnPasswordResetEvent(prt, appUrl, request.getLocale()));
-			
+
+			Log.info("User: " + user.getUsername() + " successfully requested for forgot password process");
+
             redirectAttributes.addFlashAttribute("flash", 
             		new FlashMessage("An email is sent to you", FlashMessage.Status.success));
 		} else {
+			Log.error("Forgot password process for email " + email + " failed. The email does not exist.");
+
 			redirectAttributes.addFlashAttribute("flash", 
 					new FlashMessage("The email is not registered", FlashMessage.Status.danger));	
 		}
