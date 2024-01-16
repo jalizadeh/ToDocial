@@ -1,6 +1,7 @@
 package com.jalizadeh.todocial.web.controller.gym;
 
 import com.jalizadeh.todocial.system.service.ServiceTypes;
+import com.jalizadeh.todocial.system.service.UserService;
 import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.todocial.web.model.FlashMessage;
@@ -41,6 +42,9 @@ public class GymWorkoutContoller {
 
     @Autowired
     private SettingsGeneralConfig settings;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private GymWorkoutRepository gymWorkoutRepository;
@@ -99,25 +103,33 @@ public class GymWorkoutContoller {
         }
 
         GymWorkout foundWorkout = workout.get();
-        List<GymPlan> plansByWorkoutId = gymDayWorkoutRepository.findDistinctPlansByWorkoutId(foundWorkout.getId());
-
-        List<GymWorkoutLog> allLogsForWorkout = gymWorkoutLogRepository.findAllLogsForWorkout(id);
-
-        Map<Date, List<GymWorkoutLog>> logsByDate = groupLogsByDate(allLogsForWorkout);
-
-        List<GymWorkoutStats> logStats = logsByDate.entrySet().stream()
-                .map(e -> calculateAverage(e.getValue()))
-                .collect(Collectors.toList());
-
-        Map<GymPlan, List<Integer>> plansTimeline = planTimelineExtractor(logsByDate);
-
         model.put("PageTitle", "Gym - Workout: " + foundWorkout.getName());
         model.put("workout", foundWorkout);
-        model.put("plans", plansByWorkoutId);
-        model.put("plansTimeline", plansTimeline);
-        model.put("history", allLogsForWorkout);
-        model.put("logsByDate", logsByDate);
-        model.put("logStats", logStats);
+
+
+        // the rest is only visible to the owner, not anyone else
+        List<GymPlan> plansByWorkoutId = gymDayWorkoutRepository
+                .findDistinctPlansByUserIdAndWorkoutId(userService.GetAuthenticatedUser().getId(), foundWorkout.getId());
+
+        if(!plansByWorkoutId.isEmpty()) {
+            List<GymWorkoutLog> allLogsForWorkout = gymWorkoutLogRepository.findAllLogsForWorkout(id);
+
+            Map<Date, List<GymWorkoutLog>> logsByDate = groupLogsByDate(allLogsForWorkout);
+            List<GymWorkoutStats> logStats = logsByDate.entrySet().stream()
+                    .map(e -> calculateAverage(e.getValue()))
+                    .collect(Collectors.toList());
+
+            Map<GymPlan, List<Integer>> plansTimeline = planTimelineExtractor(logsByDate);
+
+            model.put("plans", plansByWorkoutId);
+            model.put("plansTimeline", plansTimeline);
+            model.put("history", allLogsForWorkout);
+            model.put("logsByDate", logsByDate);
+            model.put("logStats", logStats);
+            model.put("viewerIsOwner", true);
+        } else {
+            model.put("viewerIsOwner", false);
+        }
 
         return "gym/workout";
     }
