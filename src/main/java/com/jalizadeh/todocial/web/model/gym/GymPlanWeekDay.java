@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.sql.Date;
 
 @Entity
 @Data
@@ -33,6 +34,8 @@ public class GymPlanWeekDay {
     @Min(0)
     @Max(100)
     protected int progress;
+
+    private Date workoutDate;
 
 
     public GymPlanWeekDay(GymPlan plan, long weekNumber, long dayNumber, int progress) {

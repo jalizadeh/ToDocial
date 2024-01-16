@@ -364,11 +364,19 @@ public class GymController {
         GymDayWorkout dayWorkout = gymDayWorkoutRepository.findById(workoutId).get();
         GymPlanWeekDay pwd = gymplanWeekDayRepository.findAllByPlanIdAndWeekNumberAndDayNumber(planId, week, day).get();
 
+        Date logDate = Date.valueOf(LocalDate.now());
+
         //add the new workout log
         workoutLog.setPwd(pwd);
         workoutLog.setDayWorkout(dayWorkout);
-        workoutLog.setLogDate(Date.valueOf(LocalDate.now()));
+        workoutLog.setLogDate(logDate);
         gymWorkoutLogRepository.save(workoutLog);
+
+        //set the PWD workoutDate only once
+        if(pwd.getWorkoutDate() == null) {
+            pwd.setWorkoutDate(logDate);
+            gymplanWeekDayRepository.save(pwd);
+        }
 
         updateProgessInDB(planId, day, pwd, dayWorkout, workoutLog);
 
@@ -393,6 +401,8 @@ public class GymController {
         String note = GymUtils.parseRawInput(lognote.split("=")[1]);
         List<GymWorkoutLogSetRep_DTO> listWorkoutLogs = GymUtils.workoutLogNoteParser(note);
 
+        Date logDate = Date.valueOf(LocalDate.now());
+
         for (int i = 0; i < listWorkoutLogs.size(); i++) {
             GymWorkoutLog workoutLog = new GymWorkoutLog();
             workoutLog.setPwd(pwd);
@@ -400,10 +410,16 @@ public class GymController {
             workoutLog.setSetNumber(i + 1);
             workoutLog.setWeight(listWorkoutLogs.get(i).getWeight());
             workoutLog.setReps(listWorkoutLogs.get(i).getRep());
-            workoutLog.setLogDate(Date.valueOf(LocalDate.now()));
+            workoutLog.setLogDate(logDate);
             gymWorkoutLogRepository.save(workoutLog);
 
             updateProgessInDB(planId, day, pwd, dayWorkout, workoutLog);
+        }
+
+        //set the PWD workoutDate only once
+        if(pwd.getWorkoutDate() == null) {
+            pwd.setWorkoutDate(logDate);
+            gymplanWeekDayRepository.save(pwd);
         }
 
         return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + day;

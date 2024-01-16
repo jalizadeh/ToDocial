@@ -3,8 +3,23 @@
 
 	<div class="row mt-2">
 		<div class="col border-bottom">
-			<h2><a href="/gym/plan/${plan.id}">${plan.title} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</a> > Week #${week}</a> > Day #${day.dayNumber}</h2>
-			<h3>Focus: ${day.focus}</h3>
+			<h2><a href="/gym/plan/${plan.id}">${plan.title} [${plan.numberOfWeeks} weeks / ${plan.numberOfDays} days]</a></h2>
+			
+			<div class="row">
+				<div class="col-6">
+					<h3>Focus<br>${day.focus}</h3>
+				</div>
+				<div class="col">
+					<h3>Week<br>#${week}</h3>
+				</div>
+				<div class="col">
+					<h3>Day<br>#${day.dayNumber}</h3>
+				</div>
+				<div class="col">
+					<h3>Date<br>${pwd.workoutDate}</h3>
+				</div>
+			</div>
+			
 			<p>
 				<div class="progress">
 					<div class="progress-bar" role="progressbar" style="width: ${pwd.progress}%;" 
