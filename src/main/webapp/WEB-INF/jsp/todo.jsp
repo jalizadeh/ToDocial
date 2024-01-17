@@ -75,18 +75,15 @@
 
 					<fieldset class="form-group">
 						<div class="custom-control custom-checkbox my-1 mr-sm-2">
-							<form:checkbox path="isPublic" value="${todo.isPublic}"
-								class="custom-control-input" id="ispublic" />
-							<label class="custom-control-label" for="ispublic">Set as
-								public (other users can see your Todo's progress)</label>
+							<form:checkbox path="isPublic" value="${todo.isPublic}" class="custom-control-input" id="isPublic" />
+							<label class="custom-control-label" for="isPublic">Set as public (other users can see your Todo's progress)</label>
 						</div>
 					</fieldset>
 					
 					<c:if test="${todo.completed == true}">					
 						<fieldset class="form-group">
 							<label for="completion_note">Closing notes</label>
-							<form:textarea path="completion_note" class="form-control"
-								id="completion_note" rows="3"  required="required" ></form:textarea>
+							<form:textarea path="completion_note" class="form-control" id="completion_note" rows="3"  required="required" ></form:textarea>
 							<form:errors path="completion_note" cssClass="text-warning" />
 						</fieldset>
 					</c:if>

@@ -28,7 +28,7 @@
 			<div class="card p-2" >
 				<div class="card-body">
 				  	<h5 class="card-title">
-						${plan.title}
+						<a href="/gym/plan/${plan.id}" class="card-link">${plan.title}</a>
 					</h5>
 					<h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
 					<p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
@@ -38,8 +38,6 @@
 							<div class="progress-bar" role="progressbar" style="width: ${plan.progress}%;" aria-valuenow="${plan.progress}" aria-valuemin="0" aria-valuemax="100">${plan.progress}%</div>
 						</div>	
 					</h5>
-					<a href="/gym/plan/${plan.id}" class="card-link">View details</a>
-					<a href="/gym/plan?edit=${plan.id}" class="card-link">Edit plan</a>
 				</div>
 			  </div>
 		</c:forEach>
@@ -56,12 +54,10 @@
 			<div class="card p-2" >
 				<div class="card-body">
 				  	<h5 class="card-title">
-						${plan.title}
+						<a href="/gym/plan/${plan.id}" class="card-link">${plan.title}</a>
 					</h5>
 				  <h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
 				  <p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
-				  <a href="/gym/plan/${plan.id}" class="card-link">View details</a>
-				  <a href="/gym/plan/${plan.id}/delete" class="card-link">Delete plan</a>
 				</div>
 			  </div>
 		</c:forEach>
@@ -91,7 +87,7 @@
 				  <h6 class="card-subtitle mb-2 text-muted">${plan.gymPlanIntroduction.trainingLevel} [${plan.numberOfWeeks}W / ${plan.numberOfDays}D]</h6>
 				  <p class="card-text">${fn:substring(plan.gymPlanIntroduction.moreInfo, 0, 45)}...</p>
 				  <a href="/gym/plan/${plan.id}" class="card-link">View details</a>
-				  <a href="/gym/plan/${plan.id}/delete" class="card-link">Delete plan</a>
+				  <a href="/gym/plan/${plan.id}/edit" class="card-link">Edit</a>
 				</div>
 			  </div>
 		</c:forEach>

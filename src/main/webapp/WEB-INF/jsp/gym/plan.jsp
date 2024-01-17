@@ -95,6 +95,7 @@
 			<c:if test="${plan.active == false and plan.startDate == null and plan.completeDate == null}">
 				<div class="row">
 					<a class="btn btn-success" href="${plan.id}/start-plan" role="button">Start plan</a>
+					<a class="btn btn-warning" href="${plan.id}/edit" role="button">Edit plan</a>
 				</div>
 			</c:if>
 

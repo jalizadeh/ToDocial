@@ -1,5 +1,6 @@
 package com.jalizadeh.todocial.web.model.gym;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jalizadeh.todocial.web.model.User;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -44,6 +45,10 @@ public class GymPlan {
     @Min(0)
     private long completedDays;
 
+    @Min(0)
+    @Max(100)
+    protected int progress;
+
     private boolean active;
 
     /*
@@ -55,15 +60,38 @@ public class GymPlan {
     @Getter(AccessLevel.NONE)
     private boolean isPublic;
 
+    @Getter(AccessLevel.NONE)
+    private boolean isForSale;
+
+    private int price;
+
     private Date startDate;
 
     private Date completeDate;
 
-    @Min(0)
-    @Max(100)
-    protected int progress;
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    @JsonIgnore
+    private User createdBy;
+
+    private Date createdAt;
+
+    private Date updatedAt;
+
 
     public boolean getIsPublic() {
         return isPublic;
+    }
+
+    public void setIsPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public boolean getIsForSale() {
+        return isForSale;
+    }
+
+    public void setIsForSale(boolean forSale) {
+        isForSale = forSale;
     }
 }

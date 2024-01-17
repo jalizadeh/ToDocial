@@ -135,12 +135,74 @@ public class GymPlanController {
 
             redirectAttributes.addFlashAttribute("flash",
                     new FlashMessage("Plan " + newPlan.getTitle() + " with desc : " + newPlan.getGymPlanIntroduction().getMoreInfo(), FlashMessage.Status.success));
+
+            //reset already saved plan
+            newPlan = new GymPlan();
+
             return "redirect:/gym";
         }
 
         return "redirect:/gym";
     }
 
+    @GetMapping("/gym/plan/{id}/edit")
+    public String editPlan(@PathVariable Long id, RedirectAttributes redirectAttributes, ModelMap model) {
+        Optional<GymPlan> plan = gymPlanRepository.findById(id);
+
+        if (!plan.isPresent()) {
+            redirectAttributes.addFlashAttribute("exception", "The requested plan with id " + id + " doesn't exist");
+            return "redirect:/error";
+        }
+
+        GymPlan foundPlan = plan.get();
+        if(foundPlan.getUser().getId() != userService.GetAuthenticatedUser().getId()){
+            redirectAttributes.addFlashAttribute("exception", "This plan doesnt belong to you");
+            return "redirect:/error";
+        }
+
+        if(foundPlan.isActive()){
+            redirectAttributes.addFlashAttribute("flash",
+                    new FlashMessage("The workout is active and can not be edited. First end it and try again", FlashMessage.Status.danger));
+            return "redirect:/gym";
+        }
+
+        model.put("weeks", WEEKS);
+        model.put("mainGoals", GymMainGoal.values());
+        model.put("workoutTypes", GymWorkoutType.values());
+        model.put("trainingLevels", GymTrainingLevel.values());
+        model.put("workoutsList", gymWorkoutRepository.findAll());
+        model.addAttribute("plan", foundPlan);
+
+        return "gym/plan-edit";
+    }
+
+    @PostMapping("/gym/plan/{id}/edit")
+    public String editPlan(@Valid GymPlan plan, @PathVariable Long id,
+                                  BindingResult result, RedirectAttributes redirectAttributes, ModelMap model) {
+        model.put("settings", settings);
+        model.put("PageTitle", "Gym");
+
+        if (result.hasErrors()) {
+            model.put("error", result.getAllErrors());
+            return "/gym";
+        }
+
+        GymPlan foundPlan = gymPlanRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Plan not found with id: " + id));
+
+        foundPlan.setUser(userService.GetAuthenticatedUser());
+        foundPlan.setTitle(plan.getTitle());
+        foundPlan.setGymPlanIntroduction(plan.getGymPlanIntroduction());
+        //TODO: the rest
+        foundPlan.setIsPublic(plan.getIsPublic());
+        foundPlan.setIsForSale(plan.getIsForSale());
+        foundPlan.setPrice(plan.getPrice());
+        foundPlan.setUpdatedAt(Date.valueOf(LocalDate.now()));
+
+        gymPlanRepository.save(foundPlan);
+
+        return "redirect:/gym/plan/" + foundPlan.getId();
+    }
 
     @GetMapping("/gym/plan/{id}/delete")
     public String deletePlan(@PathVariable Long id, RedirectAttributes redirectAttributes, ModelMap model) {

@@ -2,7 +2,7 @@
 
 	<div class="row mt-2">
 		<div class="col">
-			<h2>Add new plan: ${plan.title} [${plan.numberOfWeeks} weeks / ${plan.numberOfDays} days]</h2>
+			<h2>Edit plan: ${plan.title} [${plan.numberOfWeeks} weeks / ${plan.numberOfDays} days]</h2>
 		</div>
 	</div>
 
@@ -69,32 +69,34 @@
 									</div>
 
 									<div class="row my-1" id="workoutContainer">
-										<div class="col-6">
-											<fieldset class="form-group">
-												<label for="workoutDay${i-1}_workout0">Workout #${j+1}</label>
-												<form:select multiple="single" path="days[${i-1}].dayWorkouts[0].workout" items="${workoutsList}" itemLabel="fullLabel" 
-													class="form-control" id="workoutDay${i-1}_workout0" rows="3" required="required"/>
-											</fieldset>
-										</div>
-										<div class="col">
-											<fieldset class="form-group">
-												<form:label path="days[${i-1}].dayWorkouts[0].sets">Sets</form:label>
-												<form:input path="days[${i-1}].dayWorkouts[0].sets" type="number" class="form-control" required="required" min="1"/>
-												<form:errors path="days[${i-1}].dayWorkouts[0].sets" cssClass="text-warning" />
-											</fieldset>
-										</div>
-										<div class="col">
-											<fieldset class="form-group">
-												<form:label path="days[${i-1}].dayWorkouts[0].repsMin">Reps min</form:label>
-												<form:input path="days[${i-1}].dayWorkouts[0].repsMin" type="number" class="form-control" placeholder="min" aria-label="reps_min" aria-describedby="addon-wrapping" required="required" min="1"/>
-											</fieldset>
-										</div>
-										<div class="col">
-											<fieldset class="form-group">
-												<form:label path="days[${i-1}].dayWorkouts[0].repsMax">Reps max</form:label>
-												<form:input path="days[${i-1}].dayWorkouts[0].repsMax" type="number" class="form-control" placeholder="max" aria-label="reps_max" aria-describedby="addon-wrapping" required="required" min="1"/>
-											</fieldset>
-										</div>
+										<c:forEach var="w" begin="0" end="${plan.days[i-1].dayWorkouts.size() - 1}">
+											<div class="col-6">
+												<fieldset class="form-group">
+													<label for="workoutDay${i-1}_workout${w}">Workout #${w+1}</label>
+													<form:select multiple="single" path="days[${i-1}].dayWorkouts[${w}].workout" items="${workoutsList}" itemLabel="fullLabel" 
+														class="form-control" id="workoutDay${i-1}_workout${w}" rows="3" required="required"/>
+												</fieldset>
+											</div>
+											<div class="col">
+												<fieldset class="form-group">
+													<form:label path="days[${i-1}].dayWorkouts[${w}].sets">Sets</form:label>
+													<form:input path="days[${i-1}].dayWorkouts[${w}].sets" type="number" class="form-control" required="required" min="1"/>
+													<form:errors path="days[${i-1}].dayWorkouts[${w}].sets" cssClass="text-warning" />
+												</fieldset>
+											</div>
+											<div class="col">
+												<fieldset class="form-group">
+													<form:label path="days[${i-1}].dayWorkouts[${w}].repsMin">Reps min</form:label>
+													<form:input path="days[${i-1}].dayWorkouts[${w}].repsMin" type="number" class="form-control" placeholder="min" aria-label="reps_min" aria-describedby="addon-wrapping" required="required" min="1"/>
+												</fieldset>
+											</div>
+											<div class="col">
+												<fieldset class="form-group">
+													<form:label path="days[${i-1}].dayWorkouts[${w}].repsMax">Reps max</form:label>
+													<form:input path="days[${i-1}].dayWorkouts[${w}].repsMax" type="number" class="form-control" placeholder="max" aria-label="reps_max" aria-describedby="addon-wrapping" required="required" min="1"/>
+												</fieldset>
+											</div>
+										</c:forEach>
 									</div>
 									<div id="newWorkoutContainer_day${i-1}"></div>
 								</div>
@@ -127,7 +129,6 @@
 							<label for="gymPlanIntroduction.workoutType">Workout Type</label>
 							<form:select path="gymPlanIntroduction.workoutType" items="${workoutTypes}" class="form-control" id="gymPlanIntroduction.workoutType" required="required"/>
 						</fieldset>
-
 					</div>
 				</div>
 
@@ -144,14 +145,21 @@
 							<div class="custom-control custom-checkbox my-1 mr-sm-2">
 								<form:checkbox path="isForSale" value="${plan.isForSale}" class="custom-control-input" id="isForSale" />
 								<label class="custom-control-label" for="isForSale">Is for sale (others can buy this plan)</label>
+								
+								<div id="priceSection" style="display: none;">
+									<form:label path="price">Price</form:label>
+									<form:input path="price" type="number" placeholder="$" aria-describedby="addon-wrapping" min="0"/>
+								</div>
 							</div>
 						</fieldset>
 					</div>
 				</div>
 
 				<div class="mt-2">
-					<a class="btn btn-primary" href="?step=1" role="button">Back</a>
-					<button type="submit" class="btn btn-success">Save new plan</button>
+					<a class="btn btn-primary" href="/gym" role="button">Back</a>
+					<button type="submit" class="btn btn-success">Save</button>
+					<br><br>
+					<a class="btn btn-danger" href="/gym/plan/${plan.id}/delete" role="button">Delete</a>
 				</div>
 			</div>
 
@@ -165,6 +173,27 @@
 
 	</form:form>
 
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			var isForSaleCheckbox = document.getElementById('isForSale');
+			var priceSection = document.getElementById('priceSection');
+
+			// Check the initial state of the checkbox
+			if (isForSaleCheckbox.checked) {
+				priceSection.style.display = 'block';
+			}
+
+			// Add event listener to toggle visibility
+			isForSaleCheckbox.addEventListener('change', function() {
+				if (this.checked) {
+					priceSection.style.display = 'block';
+				} else {
+					priceSection.style.display = 'none';
+				}
+			});
+		});
+	</script>
+	
 	<script type="text/javascript" async defer>
 		$(document).ready(function() {
 			var activeTab = 0;
