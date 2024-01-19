@@ -15,10 +15,12 @@ import com.jalizadeh.todocial.web.repository.GymDayWorkoutRepository;
 import com.jalizadeh.todocial.web.repository.GymWorkoutLogRepository;
 import com.jalizadeh.todocial.web.repository.GymWorkoutRepository;
 import com.jalizadeh.todocial.web.service.storage.StorageFileSystemService;
+import com.jalizadeh.todocial.web.utils.Pager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,12 +30,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.validation.Valid;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,8 +59,23 @@ public class GymWorkoutContoller {
     private StorageFileSystemService storageService;
 
     @GetMapping(value = "/gym/workouts")
-    public String showWorkouts(ModelMap model) {
-        model.put("workouts", gymWorkoutRepository.findAllByOrderByName());
+    public String showWorkouts(@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, ModelMap model) {
+        model.put("settings", settings);
+        model.put("PageTitle", "Workouts");
+
+        // Evaluate page. If requested parameter is null or less than 0 (to
+        // prevent exception), return initial size. Otherwise, return value of
+        // param. decreased by 1.
+        int evalPage = (page.orElse(0) < 1) ? 0 : page.get() - 1;
+        int evalSize = size.orElse(20);
+
+
+        Pageable pageable = PageRequest.of(evalPage, evalSize);
+        Page<GymWorkout> workouts = gymWorkoutRepository.findAll(pageable);
+        Pager pager = new Pager(workouts);
+
+        model.put("workouts", workouts.toList());
+        model.put("pager", pager);
         model.put("muscleCategories", GymMuscleCategory.values());
         return "gym/workouts";
     }

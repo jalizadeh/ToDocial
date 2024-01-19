@@ -17,7 +17,34 @@
 
 	<div class="row mt-2 border-bottom">
 		<div class="col">
-			<h2>${workouts.size()} Workouts</h2>
+			<h3>Shwoing ${workouts.size()} Workouts</h3>
+
+			<!-- Pagination -->
+			<div class="pagination">
+				<c:if test="${pager.indexOutOfBounds()}">
+					Page is out of bounds. Go back to <a class="pageLink" href="@{${baseUrl}(page=1)}">Home</a>.
+				</c:if>
+
+				<c:if test="${pager.indexOutOfBounds() eq false}">
+					<c:if test="${pager.hasPrevious()}">
+						<span>
+							<a class="pageLink" href="workouts?page=1">&laquo; first</a>
+							<a class="pageLink" href="workouts?page=${pager.getPageIndex() - 1}"> previous</a>
+						</span>
+					</c:if>
+
+					<c:if test="${pager.getTotalPages() != 1}">
+						<span> Page ${pager.getPageIndex()} of ${pager.getTotalPages()} </span>
+					</c:if>
+
+					<c:if test="${pager.hasNext()}">
+						<span>
+							<a class="pageLink" href="workouts?page=${pager.getPageIndex() + 1}">next</a>
+							<a class="pageLink" href="workouts?page=${pager.getTotalPages()}">last &raquo;</a>
+						</span>
+					</c:if>
+				</c:if>
+			</div>
 		</div>
 
 		<div class="col">
@@ -53,5 +80,6 @@
 			  </div>
 		</c:forEach>
 	</div>
+	
 
 <%@ include file="../common/footer.jspf" %>
