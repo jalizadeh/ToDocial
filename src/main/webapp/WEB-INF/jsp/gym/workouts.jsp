@@ -17,7 +17,7 @@
 
 	<div class="row mt-2 border-bottom">
 		<div class="col">
-			<h3>Shwoing ${workouts.size()} Workouts</h3>
+			<h3>Showing ${workouts.size()} Workouts</h3>
 
 			<!-- Pagination -->
 			<div class="pagination">

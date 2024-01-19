@@ -93,6 +93,7 @@
 						</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdownGym">
 							<a class="dropdown-item" href="/gym">Home</a>
+							<a class="dropdown-item" href="/gym/shop">Shop</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="/gym/plans">Plans</a>
 							<a class="dropdown-item" href="/gym/plan/new?step=1"><i class="fas fa-plus"></i> Add plan</a>
@@ -135,6 +136,12 @@
 			<sec:authorize access="isAuthenticated()">
 				<div>
 					<ul class="navbar-nav ml-auto nav-flex-icons">
+						<li class="nav-item shop">
+							<a class="btn btn-outline-primary mt-auto" href="/gym/shop/cart">
+								<i class="fas fa-shopping-cart"></i> <span class="badge badge-light">${items.size()}</span>
+							</a>
+						</li>
+
 						<li class="nav-item avatar dropdown">
 							<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<img class="img-profile rounded-circle" width="32px" height="32px" src="/photo/user/<sec:authentication property="principal.username"/>.jpg">
