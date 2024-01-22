@@ -1,24 +1,19 @@
 package com.jalizadeh.todocial.web.model;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.jalizadeh.todocial.web.model.gym.shop.Order;
+import com.jalizadeh.todocial.web.model.gym.shop.ShoppingCart;
+import com.jalizadeh.todocial.web.model.gym.shop.UserPayment;
+import com.jalizadeh.todocial.web.model.gym.shop.UserShipping;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +29,7 @@ import com.jalizadeh.todocial.web.validator.ValidPassword;
 public class User implements UserDetails{
 	
 	@Id
+	@Column(name="id", nullable = false, updatable = false)
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
@@ -51,16 +47,16 @@ public class User implements UserDetails{
 	 * Uniqueness is checked in {@link UserService}
 	 */
 	//@Column(unique=true)
+	@Column(name="username", nullable = false, updatable = false)
 	@Size(min=5, max=20, message="Username must be between 5-20 characters")
 	private String username;
 	
 	/**
 	 * Uniqueness is checked in {@link UserService}
 	 */
-	//@Column(unique=true) I handle this while registering
+	//@Column(unique=true) //handled while registration
 	@ValidEmail
-	@NotNull
-	@NotEmpty
+	@Column(name="email", nullable = false, updatable = false)
 	private String email;
 	
 	@ValidPassword
@@ -97,7 +93,19 @@ public class User implements UserDetails{
 			joinColumns = @JoinColumn(name="follower"),
 			inverseJoinColumns = @JoinColumn(name="followed", referencedColumnName="id"))
 	private Collection<User> followings;
-	
+
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+	private ShoppingCart shoppingCart;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<UserShipping> userShippingList;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<UserPayment> userPaymentList;
+
+	@OneToMany(mappedBy = "user")
+	private List<Order> orderList;
+
 	
 	public User() {	
 		super();
@@ -241,41 +249,60 @@ public class User implements UserDetails{
 	}
 
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		/*
-		return this.roles.stream()
-			.flatMap(role -> role.getPrivileges().stream())
-			.map(p -> new SimpleGrantedAuthority(p.getName()))
-			.collect(Collectors.toList());
-
-		 */
-		return this.roles.stream()
-				.flatMap(role -> Stream.concat(
-						Stream.of(new SimpleGrantedAuthority(role.getName())), // Include role name
-						role.getPrivileges().stream()
-								.map(privilege -> new SimpleGrantedAuthority(privilege.getName()))
-				)).collect(Collectors.toList());
-	}
-
-	
-
-	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
-
-
 
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
-
-
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
+	}
+
+	public ShoppingCart getShoppingCart() {
+		return shoppingCart;
+	}
+
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
+	}
+
+	public List<UserShipping> getUserShippingList() {
+		return userShippingList;
+	}
+
+	public void setUserShippingList(List<UserShipping> userShippingList) {
+		this.userShippingList = userShippingList;
+	}
+
+	public List<UserPayment> getUserPaymentList() {
+		return userPaymentList;
+	}
+
+	public void setUserPaymentList(List<UserPayment> userPaymentList) {
+		this.userPaymentList = userPaymentList;
+	}
+
+	public List<Order> getOrderList() {
+		return orderList;
+	}
+
+	public void setOrderList(List<Order> orderList) {
+		this.orderList = orderList;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.roles.stream()
+				.flatMap(role -> Stream.concat(
+						Stream.of(new SimpleGrantedAuthority(role.getName())), // Include role name
+						role.getPrivileges().stream()
+								.map(privilege -> new SimpleGrantedAuthority(privilege.getName()))
+				)).collect(Collectors.toList());
 	}
 
 }
