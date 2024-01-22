@@ -61,6 +61,7 @@ public class ExceptionController implements ErrorController {
         }
         
         mv.addObject("settings", settings);
+        mv.addObject("PageTitle", "Error");
     	mv.setViewName("error");
     	return mv;
     }
