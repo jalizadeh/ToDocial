@@ -16,4 +16,6 @@ public interface GymWorkoutRepository extends JpaRepository<GymWorkout, Long>{
     List<GymWorkout> findAllByMuscleCategoryOrderByName(GymMuscleCategory mc);
 
     List<GymWorkout> findAllByOrderByName();
+
+    List<GymWorkout> findAllByOrderByMuscleCategory();
 }

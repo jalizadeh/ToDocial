@@ -77,7 +77,7 @@ public class GymPlanController {
             model.put("mainGoals", GymMainGoal.values());
             model.put("workoutTypes", GymWorkoutType.values());
             model.put("trainingLevels", GymTrainingLevel.values());
-            model.put("workoutsList", gymWorkoutRepository.findAll());
+            model.put("workoutsList", gymWorkoutRepository.findAllByOrderByMuscleCategory());
             //newPlan.setWorkouts(gymWorkoutRepository.findAll());
             model.addAttribute("plan", newPlan);
             return "gym/new_plan_step2";

@@ -199,7 +199,7 @@
 				align: 'left'
 			},
 			subtitle: {
-				text: '<c:out value="${muscleGroupsInPlan.size()}"/> muscle category / <c:out value="${countOfAllMuscleWorkouts}"/> muscles*<br>* some workouts may involve more than one muscle',
+				text: '<c:out value="${muscleGroupsInPlan.size()}"/> muscle category / <c:out value="${countOfAllMuscleWorkouts}"/> workouts*<br>* some workouts may involve more than one muscle',
 				align: 'left'
 			},
 			xAxis: {
