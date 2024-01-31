@@ -5,11 +5,9 @@
 	</c:if>
 
 	<c:if test="${flash != null}">
-		<div class="alert alert-${flash.status} alert-dismissible fade show"
-			role="alert">
+		<div class="alert alert-${flash.status} alert-dismissible fade show" role="alert">
 			${flash.message}
-			<button type="button" class="close" data-dismiss="alert"
-				aria-label="Close">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 		</div>
@@ -33,12 +31,20 @@
 
 						<div>
 							<c:forEach items="${days}" var="day">
-								<p><span class="badge rounded-pill bg-info text-light">Day ${day.dayNumber}</span> ${day.focus}</p>
-								<ul>
+								<div class="my-2">
+									<p><span class="badge rounded-pill bg-info text-light">Day ${day.dayNumber}</span> ${day.focus}</p>
+
 									<c:forEach items="${day.dayWorkouts}" var="dw">
-										<li><a href="/gym/workouts/${dw.workout.id}">${dw.workout.name}</a></li>
+										<div class="row">
+											<div class="col-1">
+												<img src="/photo/gym/${dw.workout.photo}" class="d-block mx-lg-auto img-fluid" alt="${dw.workout.name}" width="40" height="40" loading="lazy"> 
+											</div>
+											<div class="col">
+												<a href="/gym/workouts/${dw.workout.id}">${dw.workout.name}</a>
+											</div>
+										</div>
 									</c:forEach>
-								</ul>
+								</div>
 							</c:forEach>
 						</div>
 					</div>

@@ -283,6 +283,12 @@ public class GymPlanController {
         }
 
         GymPlan foundPlan = plan.get();
+
+        if(!foundPlan.getIsPublic() && foundPlan.getUser().getId() != userService.GetAuthenticatedUser().getId()){
+            redirectAttributes.addFlashAttribute("exception", "The requested plan with id " + id + " doesn't exist");
+            return "redirect:/error";
+        }
+
         List<GymDay> daysOfPlan = gymDayRepository.findAllByPlanIdOrderByDayNumber(id);
 
         List<GymPlanWeekDay> pwd = gymplanWeekDayRepository.findAllByPlanId(id);
