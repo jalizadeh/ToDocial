@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @DisplayName("User & Todo Services Tests")
+@Tag("unit_test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -52,11 +53,11 @@ class UserServiceTest {
         //given
 
         //when
-        Mockito.when(userRepository.findByUsername("test")).thenReturn(user);
+        when(userRepository.findByUsername("test")).thenReturn(user);
         User foundUser = service.findByUsername("test");
 
         //action
-        verify(userRepository, times(1)).findByUsername(ArgumentMatchers.any());
+        verify(userRepository, times(1)).findByUsername(any());
         assertEquals(foundUser, user);
     }
 
@@ -65,7 +66,7 @@ class UserServiceTest {
         //given
 
         //when
-        Mockito.when(userRepository.findByUsername("test")).thenReturn(user);
+        when(userRepository.findByUsername("test")).thenReturn(user);
         User foundUser = service.findByUsername("test");
 
         //action

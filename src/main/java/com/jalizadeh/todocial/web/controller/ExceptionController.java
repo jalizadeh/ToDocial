@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,7 +32,7 @@ public class ExceptionController implements ErrorController {
     }
     
 
-    @RequestMapping(value = ERROR_PATH)
+    @GetMapping(ERROR_PATH)
     public ModelAndView handleError(HttpServletRequest request, 
     		HttpServletResponse response) throws IOException {
     	

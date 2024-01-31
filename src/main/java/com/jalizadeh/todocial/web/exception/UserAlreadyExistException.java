@@ -8,8 +8,7 @@ public final class UserAlreadyExistException extends Throwable {
 		super();
 	}
 
-	public UserAlreadyExistException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
+	public UserAlreadyExistException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
