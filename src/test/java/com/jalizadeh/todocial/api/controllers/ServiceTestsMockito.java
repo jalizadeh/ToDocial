@@ -1,41 +1,6 @@
 package com.jalizadeh.todocial.api.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.jalizadeh.todocial.api.controllers.models.*;
-import com.jalizadeh.todocial.utils.Log;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
-
 import com.jalizadeh.todocial.system.repository.TodoLogRepository;
 import com.jalizadeh.todocial.system.repository.TodoRepository;
 import com.jalizadeh.todocial.system.repository.UserRepository;
@@ -44,13 +9,33 @@ import com.jalizadeh.todocial.web.model.TodoLog;
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.model.VerificationToken;
 import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
+import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("User & Todo Services Tests")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test") // use separated DB for test
-class ServiceTests {
+@ExtendWith(MockitoExtension.class)
+class ServiceTestsMockito {
 
 	private final String baseUrl = "http://localhost";
 	private final String userServicePath = "/user";
@@ -77,6 +62,12 @@ class ServiceTests {
 	@Autowired
 	private TestRestTemplate rest;
 
+	@Mock
+	User user;
+
+	@Mock
+	Todo todo;
+
 	//Arrange User model
 	private Long userId;
 	private final String FIRSTNAME =  "firstname_test";
@@ -101,12 +92,14 @@ class ServiceTests {
 	private TestModel_TodoLog_Response todoLogResponse;
 	private ResponseEntity<TestModel_TodoLog_Response> todoLogResponseEntity;
 
-	
+	/*
 	@BeforeAll
 	void setup() {
 		// delete previously broken generated test user, if exists
 		deleteUser(userRequest.getUsername());
 	}
+
+	 */
 
 	//------------------------------- Tests 1-to-19 are for User Service
 
@@ -115,6 +108,9 @@ class ServiceTests {
 	@Tag("positive")
 	@DisplayName("Create user and check in the DB")
 	void testUserService_givenUserDetailsAsRequestBody_returnsGeneratedUserDetails() {
+
+
+
 		// create a new test user
 		userResponseEntity = rest.postForEntity(getUrl_User(), getEntity(userRequest, false), TestModel_User_Response.class);
 		assertNotNull(userResponseEntity);
@@ -130,7 +126,7 @@ class ServiceTests {
 		assertEquals(dbUser.getPhoto(), "default.jpg");
 		assertFalse(dbUser.isEnabled());
 
-		Log.info("User " + userRequest.getFirstname() + " created successfully");
+		System.err.println("User " + userRequest.getFirstname() + " created successfully");
 	}
 
 	@Test

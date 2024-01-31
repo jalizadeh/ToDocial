@@ -92,8 +92,8 @@ public class LoginSignupController{
 	}
 	
 	
-	@RequestMapping("/login")
-    public String LoginForm(ModelMap model, HttpServletRequest request) {
+	@GetMapping("/login")
+    public String showLoginPage(ModelMap model, HttpServletRequest request) {
 		if(utilites.isUserAnonymous()) {
 			model.put("settings", settings);
 			model.put("PageTitle", "Log in");
@@ -115,7 +115,7 @@ public class LoginSignupController{
 	
 	
 	
-	@RequestMapping("/logout")
+	@GetMapping("/logout")
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -132,18 +132,16 @@ public class LoginSignupController{
 	}
 	
 	
-	@RequestMapping(value="/forgot-password", method=RequestMethod.GET)
-	public String forgotPasswordShowPage(ModelMap model) {
+	@GetMapping("/forgot-password")
+	public String showForgotPasswordPage(ModelMap model) {
 		model.put("settings", settings);
 		model.put("PageTitle", "Forgot Password");
 		return "forgot-password";
 	}
 	
 	
-	@RequestMapping(value="/forgot-password", method=RequestMethod.POST)
-	public String forgotPasswordSubmit(ModelMap model, 
-			@RequestParam String email, WebRequest request,
-			RedirectAttributes redirectAttributes) {
+	@PostMapping("/forgot-password")
+	public String forgotPasswordSubmit(ModelMap model, @RequestParam String email, WebRequest request, RedirectAttributes redirectAttributes) {
 		//model.put("PageTitle", "Forgot Password");
 		User user = userService.findByEmail(email);
 		
@@ -161,7 +159,6 @@ public class LoginSignupController{
             		new FlashMessage("An email is sent to you", FlashMessage.Status.success));
 		} else {
 			Log.error("Forgot password process for email " + email + " failed. The email does not exist.");
-
 			redirectAttributes.addFlashAttribute("flash", 
 					new FlashMessage("The email is not registered", FlashMessage.Status.danger));	
 		}
@@ -170,15 +167,12 @@ public class LoginSignupController{
 	}
 	
 	
-	@RequestMapping(value="reset-password", method=RequestMethod.GET)
-	public String resetPasswordConfirmedShowPage(@RequestParam String token,
-			ModelMap model, RedirectAttributes redirectAttributes) {
+	@GetMapping("reset-password")
+	public String showResetPasswordConfirmed(@RequestParam String token, ModelMap model, RedirectAttributes redirectAttributes) {
 		model.put("settings", settings);
 		model.put("PageTitle", "Reset Password");
 		
-		String tokenStatus = tokenService.validateVerificationToken(
-				tokenService.TOKEN_TYPE_PASSWORD_RESET,
-				token); 
+		String tokenStatus = tokenService.validateVerificationToken(tokenService.TOKEN_TYPE_PASSWORD_RESET, token); 
 
 		switch (tokenStatus) {
 			case "valid":
@@ -186,8 +180,7 @@ public class LoginSignupController{
 				
 				//I need to access the user and change it's password later
 				// the best way is to keep it in the Security Context
-				Authentication auth = new UsernamePasswordAuthenticationToken(user,
-						null,
+				Authentication auth = new UsernamePasswordAuthenticationToken(user,null,
 						userDetailsService.loadUserByUsername(user.getUsername()).getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(auth);
 				model.put("securityQuestions", sqdRepo.findAll());
@@ -196,14 +189,12 @@ public class LoginSignupController{
 				
 			case "invalid":
 				redirectAttributes.addFlashAttribute("flash", 
-						new FlashMessage("There is something wrong with your token. Please try again.", 
-								FlashMessage.Status.danger));
+						new FlashMessage("There is something wrong with your token. Please try again.", FlashMessage.Status.danger));
 				return "redirect:/forgot-password";
 				
 			case "expired":
 				redirectAttributes.addFlashAttribute("flash", 
-						new FlashMessage("Your token is expired. Please try again.", 
-								FlashMessage.Status.danger));
+						new FlashMessage("Your token is expired. Please try again.", FlashMessage.Status.danger));
 				return "redirect:/forgot-password";
 	
 			default:
@@ -215,11 +206,9 @@ public class LoginSignupController{
 	
 	
 	
-	@RequestMapping(value="change-password", method=RequestMethod.POST)
-	public String changePassword(ModelMap model,
-			@RequestParam String password, @RequestParam String mp,
-			@RequestParam Long sq, @RequestParam String sqa,
-			RedirectAttributes redirectAttributes) {
+	@PostMapping("change-password")
+	public String changePassword(ModelMap model, RedirectAttributes redirectAttributes,
+			@RequestParam String password, @RequestParam String mp, @RequestParam Long sq, @RequestParam String sqa) {
 		model.put("settings", settings);
 		model.put("PageTitle", "Change Password");
 		
@@ -228,7 +217,6 @@ public class LoginSignupController{
 			model.put("securityQuestions", sqdRepo.findAll());
             return "change-password";
         }
-		
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		SecurityQuestion secQ = sqRepo.findByUserId(user.getId());
@@ -251,8 +239,8 @@ public class LoginSignupController{
 		return "redirect:/login";
 	}
 	
-	@RequestMapping(value="/signup", method=RequestMethod.GET)
-	public String SignupMessage(ModelMap model) {
+	@GetMapping("/signup")
+	public String showSignupPage(ModelMap model) {
 		if(utilites.isUserAnonymous()) {
 			model.put("settings", settings);
 			model.put("PageTitle", "Sign up");
@@ -267,11 +255,8 @@ public class LoginSignupController{
 	
 	//Register new user and handle all errors
 	@PostMapping("/signup")
-	public ModelAndView registerUserAccount (@Valid User user,
-			@RequestParam Long sq, @RequestParam String sqa,
-			BindingResult result,
-			Errors errors, WebRequest request,
-			@RequestParam(value="file", required=false) MultipartFile file) 
+	public ModelAndView registerUserAccount (@Valid User user, BindingResult result, Errors errors, WebRequest request,
+			@RequestParam Long sq, @RequestParam String sqa, @RequestParam(value="file", required=false) MultipartFile file)
 	    	throws UserAlreadyExistException, EmailExistsException { 
 		
 		//ValidationUtils.invokeValidator(new UserValidator(), user, errors);
@@ -293,7 +278,6 @@ public class LoginSignupController{
 		
 		User registered = null;
     	try {
-    	
     		if (file.isEmpty()) {
     			user.setPhoto("default.jpg");
 			} else {
@@ -303,18 +287,13 @@ public class LoginSignupController{
             
     		registered = userService.registerNewUserAccount(user);
     		SecurityQuestionDefinition sqd = sqdRepo.getOne(sq);
-    		sqRepo.save(new SecurityQuestion(registered,
-    				sqd, 
-    				passwordEncoder.encode(sqa)));
+    		sqRepo.save(new SecurityQuestion(registered, sqd, passwordEncoder.encode(sqa)));
     		
     		//The process of creating token and sending email is asynchronous
     		// and is handled by eventPublisher
     		String appUrl = request.getContextPath();
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent
-            		(registered, appUrl, request.getLocale()));
-    	} catch (UserAlreadyExistException | EmailExistsException | 
-				Exception e) {
-			
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, appUrl, request.getLocale()));
+    	} catch (UserAlreadyExistException | EmailExistsException | Exception e) {
 	    	mv.addObject("exception", e.getMessage());
 	    	mv.addObject("user", user);
 	    	mv.addObject("securityQuestions", sqdRepo.findAll());
@@ -327,31 +306,25 @@ public class LoginSignupController{
 	
 	
 	@GetMapping("/registration-confirm")
-	public String confirmRegistration(ModelMap model, WebRequest request,
-			@RequestParam("token") String token) {
-		
+	public String confirmRegistration(ModelMap model, WebRequest request, @RequestParam("token") String token) {
 		Locale locale = request.getLocale();
 		model.put("user", new User());
 		model.put("settings", settings);
 		
-		String tokenStatus = tokenService.validateVerificationToken(
-				tokenService.TOKEN_TYPE_VERIFICATION,token);
+		String tokenStatus = tokenService.validateVerificationToken(tokenService.TOKEN_TYPE_VERIFICATION,token);
 		
 		switch (tokenStatus) {
 			case "valid":
 				model.put("flash", 
-						new FlashMessage("Your email is verified successfully.\nYou can login now.", 
-								FlashMessage.Status.success));
+						new FlashMessage("Your email is verified successfully.\nYou can login now.", FlashMessage.Status.success));
 				break;
 			case "invalid":
 				model.put("flash", 
-						new FlashMessage("There is something wrong with your token.<br/>Please login and follow the instructions.", 
-								FlashMessage.Status.danger));
+						new FlashMessage("There is something wrong with your token.<br/>Please login and follow the instructions.", FlashMessage.Status.danger));
 				break;
 			case "expired":
 				model.put("flash", 
-						new FlashMessage("Your email verification token is expired.<br/>Please login and follow the instructions.", 
-								FlashMessage.Status.danger));
+						new FlashMessage("Your email verification token is expired.<br/>Please login and follow the instructions.", FlashMessage.Status.danger));
 				break;
 	
 			default:
