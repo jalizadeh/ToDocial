@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.api.controllers;
+package com.jalizadeh.todocial.api.controllers.models;
 
 import java.util.Date;
 

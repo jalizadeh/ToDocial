@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 
 import javax.sql.DataSource;
 
+import com.jalizadeh.todocial.api.controllers.models.TestModel_User_Request;
+import com.jalizadeh.todocial.api.controllers.models.TestModel_User_Response;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -73,7 +75,7 @@ class UserControllerWebLayerTest {
 	@Disabled
 	@Test
 	void createUser_whenValidUserDetailsProvided_returnsCreatedUserDetails() throws Exception, UserAlreadyExistException, EmailExistsException {
-		TestModel_User_Request inputUser = 
+		TestModel_User_Request inputUser =
 				new TestModel_User_Request("firstname_test", "lastname_test", "username_test", "email@test.com", "12345");
 		
 		User userDto = new ModelMapper().map(inputUser, User.class);

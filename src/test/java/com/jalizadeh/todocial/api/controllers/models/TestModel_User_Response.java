@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.api.controllers;
+package com.jalizadeh.todocial.api.controllers.models;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-class TestModel_User_Response{
+public class TestModel_User_Response{
 	private Long id;
 	private String firstname;
 	private String lastname;

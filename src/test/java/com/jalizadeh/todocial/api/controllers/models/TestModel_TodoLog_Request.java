@@ -1,13 +1,12 @@
-package com.jalizadeh.todocial.api.controllers;
+package com.jalizadeh.todocial.api.controllers.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-class TestModel_Token_Request{
-	private String token;
+public class TestModel_TodoLog_Request{
+	private String log; 
 }

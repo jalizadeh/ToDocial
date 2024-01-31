@@ -38,7 +38,7 @@ public class Log {
         currentTime = currentTime.replaceAll("T", " ");
         String logMsg = currentTime + " " + Thread.currentThread() + " " + type + " - " + msg + "\n";
         logs.get().append(logMsg);
-        System.out.println(logMsg);
+        //System.out.println(logMsg);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.api.controllers;
+package com.jalizadeh.todocial.api.controllers.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-class TestModel_User_Request{
+public class TestModel_User_Request{
 	private String firstname;
 	private String lastname;
 	private String username;

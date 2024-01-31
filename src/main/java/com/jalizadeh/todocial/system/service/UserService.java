@@ -56,7 +56,7 @@ public class UserService implements UserDetailsService {
 	public User GetAuthenticatedUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
-		if(authentication.getName().equals("anonymousUser")) {
+		if(authentication == null || authentication.getName().equals("anonymousUser")) {
 			return null;
 		}
 		
