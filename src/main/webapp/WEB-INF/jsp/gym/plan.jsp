@@ -151,7 +151,7 @@
 				type: 'bar'
 			},
 			title: {
-				text: 'Sessions timeline<br><c:out value="${allSessionsForPlan.size()}"/> sessions in ' + sum + ' days',
+				text: 'Sessions timeline<br><c:out value="${allSessionsForPlan.size()}"/> sessions in ' + (sum + 1) + ' days',
 				align: 'left'
 			},
 			xAxis: {

@@ -283,7 +283,10 @@ Settings of the system
               - [x] View
               - [x] Add
               - [x] Delete
-          - [x] Workout log
+          - [ ] Workout log (❗ only available in active plan)
+            - [ ] Add 
+            - [ ] Edit 
+            - [ ] Delete
       - [ ] Search
           - [x] Plans
           - [ ] Workouts

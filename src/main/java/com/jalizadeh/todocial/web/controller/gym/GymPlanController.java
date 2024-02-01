@@ -385,10 +385,11 @@ public class GymPlanController {
     }
 
     @GetMapping(value = "gym/plan/{planId}/week/{week}/day/{dayId}/log_workout/{workoutId}")
-    public String addWorkoutLog(ModelMap model,
-                                @PathVariable Long planId, @PathVariable Long week,
-                                @PathVariable Long dayId, @PathVariable Long workoutId, RedirectAttributes redirectAttributes) {
-        Optional<GymPlan> plan = gymPlanRepository.findById(planId);
+    public String addWorkoutLog(@PathVariable Long planId, @PathVariable Long week,
+                                @PathVariable Long dayId, @PathVariable Long workoutId) {
+
+        //TODO: inactive plan can not be touched
+
 
         GymDayWorkout workout = gymDayWorkoutRepository.findById(workoutId).get();
         workout.setProgress(100);
@@ -398,7 +399,6 @@ public class GymPlanController {
         day.setProgress(Math.min(100, day.getProgress() + (int) Math.ceil(100.0 / day.getTotalWorkouts())));
         gymDayRepository.save(day);
 
-
         return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + dayId;
     }
 
@@ -407,7 +407,9 @@ public class GymPlanController {
     public String addSingleWorkoutLog(@Valid GymWorkoutLog workoutLog,
                                       @PathVariable Long planId, @PathVariable Long week,
                                       @PathVariable Long day, @PathVariable Long workoutId,
-                                      BindingResult result, RedirectAttributes redirectAttributes, ModelMap model) {
+                                      BindingResult result, ModelMap model) {
+
+        //TODO: inactive plan can not be touched
 
         if (result.hasErrors()) {
             model.put("error", result.getAllErrors());
@@ -431,7 +433,7 @@ public class GymPlanController {
             gymplanWeekDayRepository.save(pwd);
         }
 
-        updateProgessInDB(planId, day, pwd, dayWorkout, workoutLog);
+        updateProgressInDB(planId, day, pwd, dayWorkout, workoutLog);
 
         return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + day;
     }
@@ -441,7 +443,9 @@ public class GymPlanController {
     public String addSingleWorkoutLogByNote(@RequestBody String lognote,
                                       @PathVariable Long planId, @PathVariable Long week,
                                       @PathVariable Long day, @PathVariable Long workoutId,
-                                      BindingResult result, RedirectAttributes redirectAttributes, ModelMap model) {
+                                      BindingResult result, ModelMap model) {
+
+        //TODO: inactive plan can not be touched
 
         if (result.hasErrors()) {
             model.put("error", result.getAllErrors());
@@ -466,7 +470,7 @@ public class GymPlanController {
             workoutLog.setLogDate(logDate);
             gymWorkoutLogRepository.save(workoutLog);
 
-            updateProgessInDB(planId, day, pwd, dayWorkout, workoutLog);
+            updateProgressInDB(planId, day, pwd, dayWorkout, workoutLog);
         }
 
         //set the PWD workoutDate only once
@@ -478,7 +482,7 @@ public class GymPlanController {
         return "redirect:/gym/plan/" + planId + "/week/" + week + "/day/" + day;
     }
 
-    private void updateProgessInDB(Long planId, Long day, GymPlanWeekDay pwd, GymDayWorkout dayWorkout, GymWorkoutLog workoutLog) {
+    private void updateProgressInDB(Long planId, Long day, GymPlanWeekDay pwd, GymDayWorkout dayWorkout, GymWorkoutLog workoutLog) {
         //update the progress only when the first set is logged, the other sets wont count
         if(workoutLog.getSetNumber() == 1){
             //set the progress of that workout of the day to 100%

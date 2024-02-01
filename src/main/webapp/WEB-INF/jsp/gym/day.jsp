@@ -61,10 +61,11 @@
 										</div>
 									</c:if>
 								</c:forEach>
-								<div id="newLogPlaceholder${dayWorkout.id}"></div>
-								<button type="button" id="addSingleWorkoutLog${dayWorkout.id}" class="btn btn-primary" onclick="addSingleWorkoutLog(${day.dayNumber},'${dayWorkout}', '${dayWorkout.id}')">Add set</button>
-								or
-								<button type="button" id="addWorkoutLogByNote${dayWorkout.id}" class="btn btn-primary" onclick="addWorkoutLogByNote(${day.dayNumber},'${dayWorkout}', '${dayWorkout.id}')">Add by log note</button>
+								<c:if test="${plan.active}">
+									<div id="newLogPlaceholder${dayWorkout.id}"></div>
+									<button type="button" id="addSingleWorkoutLog${dayWorkout.id}" class="btn btn-primary" onclick="addSingleWorkoutLog(${day.dayNumber},'${dayWorkout}', '${dayWorkout.id}')">Add single set</button>
+									<button type="button" id="addWorkoutLogByNote${dayWorkout.id}" class="btn btn-info" onclick="addWorkoutLogByNote(${day.dayNumber},'${dayWorkout}', '${dayWorkout.id}')">Add multiple sets</button>
+								</c:if>
 							</div>
 						</div>
 					</div>
