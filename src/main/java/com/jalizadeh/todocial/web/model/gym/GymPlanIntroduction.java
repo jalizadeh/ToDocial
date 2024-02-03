@@ -3,11 +3,10 @@ package com.jalizadeh.todocial.web.model.gym;
 import com.jalizadeh.todocial.web.model.gym.types.GymMainGoal;
 import com.jalizadeh.todocial.web.model.gym.types.GymTrainingLevel;
 import com.jalizadeh.todocial.web.model.gym.types.GymWorkoutType;
-import lombok.Data;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 
 @Entity
 @Getter

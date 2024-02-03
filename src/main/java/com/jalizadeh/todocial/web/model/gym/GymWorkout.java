@@ -5,8 +5,7 @@ import com.jalizadeh.todocial.web.model.gym.types.GymMuscleCategory;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.Collection;
+import jakarta.persistence.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 

@@ -1,12 +1,10 @@
 package com.jalizadeh.todocial.web.model;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.Date;
 

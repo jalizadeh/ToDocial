@@ -2,6 +2,7 @@ package com.jalizadeh.todocial.web.ui.views;
 
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
 import com.jalizadeh.todocial.web.ui.utils.SeleniumUtils;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class Homepage {
         driver.get("http://localhost:8080");
     }
 
+    @Step("Check menu items when user is anonymous (not logged in)")
     public Homepage checkIfTopMenuExistsForAnonymousUser() {
         assertNotNull(SeleniumUtils.getElement(homeBtn));
         assertNotNull(SeleniumUtils.getElement(loginLink));
@@ -38,6 +40,7 @@ public class Homepage {
         return this;
     }
 
+    @Step("Check footer items")
     public Homepage checkIfFooterExists() {
         assertNotNull(SeleniumUtils.getElement(footer));
         assertEquals("© 2022 ToDocial", SeleniumUtils.getElement(footer_copyright).getText());

@@ -1,11 +1,11 @@
 package com.jalizadeh.todocial.web.model.gym;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.persistence.*;
-import javax.validation.constraints.Min;
+import jakarta.persistence.*;
 import java.sql.Date;
 
 @Entity

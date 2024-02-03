@@ -2,15 +2,15 @@ package com.jalizadeh.todocial.web.model.gym;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jalizadeh.todocial.web.model.User;
-import lombok.*;
-import lombok.experimental.Accessors;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity

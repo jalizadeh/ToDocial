@@ -16,6 +16,7 @@ import com.jalizadeh.todocial.web.repository.GymWorkoutLogRepository;
 import com.jalizadeh.todocial.web.repository.GymWorkoutRepository;
 import com.jalizadeh.todocial.web.service.storage.StorageFileSystemService;
 import com.jalizadeh.todocial.web.utils.Pager;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;

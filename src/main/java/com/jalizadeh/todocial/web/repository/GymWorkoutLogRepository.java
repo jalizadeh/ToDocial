@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface GymWorkoutLogRepository extends JpaRepository<GymWorkoutLog, Long>{
 
-    List<GymWorkoutLog> findAllByDayWorkout(Long workoutId);
-    List<GymWorkoutLog> findAllByPwdAndDayWorkout(GymPlanWeekDay pwd, GymDayWorkout workout);
-    List<GymWorkoutLog> findAllByPwd(GymPlanWeekDay pwd);
+    //List<GymWorkoutLog> findAllByDayWorkout(Long workoutId);
+    //List<GymWorkoutLog> findAllByPwdAndDayWorkout(GymPlanWeekDay pwd, GymDayWorkout workout);
+    //List<GymWorkoutLog> findAllByPwd(GymPlanWeekDay pwd);
 
     @Query("SELECT wl FROM GymWorkoutLog wl JOIN wl.dayWorkout dw WHERE dw.workout.id = :workoutId ORDER BY wl.logDate ASC")
     List<GymWorkoutLog> findAllLogsForWorkout(@Param("workoutId") Long workoutId);

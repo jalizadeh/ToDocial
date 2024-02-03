@@ -1,12 +1,13 @@
 package com.jalizadeh.todocial.system.security;
 
-import java.util.List;
-
-import javax.sql.DataSource;
-
+import com.google.common.collect.Lists;
+import com.jalizadeh.todocial.system.service.UserService;
+import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.web.model.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.spel.spi.EvaluationContextExtension;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -19,13 +20,13 @@ import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -33,14 +34,12 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
-import com.google.common.collect.Lists;
-import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
-import com.jalizadeh.todocial.web.model.FlashMessage;
-import com.jalizadeh.todocial.system.service.UserService;
+import javax.sql.DataSource;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+public class SecurityConfig {
 	
 	@Autowired
 	private SettingsGeneralConfig settings;
@@ -74,95 +73,105 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
      * * matches zero or more characters
      * ** matches zero or more 'directories' in a path
 	 */
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	@Bean
+	@Order(1)
+	public SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
 		
 		//security config for REST APIs
 		http
-			.authorizeRequests().antMatchers("/api/v1/**").authenticated()
-			.and()
-            .httpBasic()
-            .authenticationEntryPoint(basicAuthEntryPoint);
+			.authorizeHttpRequests((authz) -> authz
+				.requestMatchers("/api/v1/**").authenticated()
+					//.and()
+							//.httpBasic()
+					//.authenticationEntryPoint(basicAuthEntryPoint)
+			);
 
-		
+			return http.build();
+	}
+
+	/*
+	@Bean
+	@Order(2)
+	public SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception{
 		//security config for Web
 		http
-			.authorizeRequests()
-				.antMatchers(
-						"/resources/**", //it is easier to permit all files in this folder
-						"/WEB-INF/**",
-						"/photo/**",
-						"/registration-confirm",
-						"/login",
-						"/signup",
-						"/forgot-password",
-						"/reset-password",
-						"/error",
-						"/",
-						"/@*"
+				.authorizeHttpRequests((authz) -> authz
+						.requestMatchers(
+								"/resources/**", //it is easier to permit all files in this folder
+								"/WEB-INF/**",
+								"/photo/**",
+								"/registration-confirm",
+								"/login",
+								"/signup",
+								"/forgot-password",
+								"/reset-password",
+								"/error",
+								"/",
+								"/@*"
 						).permitAll()
-				
 
-				
-				/*
-				 * Testing security expressions
-				 * these expressions can be also used directly in JSPs
-				 *
-				.antMatchers("/secured")
-					.access("hasRole('ADMIN')")
-					.access("hasAuthority('ROLE_ADMIN')")
-					.access("hasRole('ADMIN')")
-					.hasIpAddress("192.168.1.0/24")
-					.access("hasIpAddress('192.168.1.0/24')")
-					.access("hasIpAddress('::1')")
-					.access("isAnonymous()")
-					.access("isAuthenticated()")
-					.access("request.method == 'GET'")
-					.access("request.method != 'PUT'")
-					.not().access("hasIpAddress('::1')")
-					.access("hasRole('ADMIN') and principal.username == 'user'")
-				*/
-				
-				.antMatchers("/admin/**").hasRole("ADMIN") //no more need to check logged in user in controllers
-				.expressionHandler(customWebSecurityExpressionHandler())
-				.anyRequest().authenticated()
-			.and()
-			.formLogin()
-				.loginPage("/login")
-				.permitAll()
-				.successHandler(loginSuccessHandler())
-				.failureHandler(loginFailureHandler())
-			.and()
-			.logout()
-				.permitAll()
-				.logoutUrl("/logout")
-			.and()
-			.rememberMe()
-				/*
-				 * Cookie-based
-				 */ 
-				.tokenValiditySeconds(604800) //one week
-				.key("lssApplicationKey") //my own key to be used while hashing
-				//.useSecureCookie(true) //enable cookie only in secured connection = https
-				.rememberMeParameter("remember") //the element's name in login form
-				
-				/*
-				 * Persistence-based
-				 * The token is stored in DB
-				 */
-				//.tokenRepository(persistentTokenRepository())
-			
-			.and()
-			.sessionManagement()
-				.maximumSessions(1)
-				.sessionRegistry(sessionRegistry())
-				.and()
-				.sessionFixation().none()
-			
-			.and()
-			.csrf()
-				.disable();
+
+
+						/*
+                         * Testing security expressions
+                         * these expressions can be also used directly in JSPs
+                         *
+                        .antMatchers("/secured")
+                            .access("hasRole('ADMIN')")
+                            .access("hasAuthority('ROLE_ADMIN')")
+                            .access("hasRole('ADMIN')")
+                            .hasIpAddress("192.168.1.0/24")
+                            .access("hasIpAddress('192.168.1.0/24')")
+                            .access("hasIpAddress('::1')")
+                            .access("isAnonymous()")
+                            .access("isAuthenticated()")
+                            .access("request.method == 'GET'")
+                            .access("request.method != 'PUT'")
+                            .not().access("hasIpAddress('::1')")
+                            .access("hasRole('ADMIN') and principal.username == 'user'")
+                        */
+/*
+						.requestMatchers("/admin/**").hasRole("ADMIN") //no more need to check logged in user in controllers
+						//.expressionHandler(customWebSecurityExpressionHandler())
+						.anyRequest().authenticated()
+						.and()
+						.formLogin()
+						.loginPage("/login")
+						.permitAll()
+						.successHandler(loginSuccessHandler())
+						.failureHandler(loginFailureHandler())
+						.and()
+						.logout()
+						.permitAll()
+						.logoutUrl("/logout")
+						.and()
+						.rememberMe()
+						*/
+	/*
+						// Cookie-based
+						.tokenValiditySeconds(604800) //one week
+						.key("lssApplicationKey") //my own key to be used while hashing
+						//.useSecureCookie(true) //enable cookie only in secured connection = https
+						.rememberMeParameter("remember") //the element's name in login form
+
+						// Persistence-based - The token is stored in DB
+						//.tokenRepository(persistentTokenRepository())
+
+						.and()
+						.sessionManagement()
+						.maximumSessions(1)
+						.sessionRegistry(sessionRegistry())
+						.and()
+						.sessionFixation().none()
+
+						.and()
+						.csrf()
+						.disable();
+
+						return http.build();
 	}
+	*/
+
 	
 	@Bean
 	public SessionRegistry sessionRegistry() {

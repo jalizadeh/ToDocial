@@ -1,15 +1,13 @@
 package com.jalizadeh.todocial.web.system;
 
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
+import java.util.Locale;
 
 @Configuration
 public class AppLocaleResolver extends SessionLocaleResolver {

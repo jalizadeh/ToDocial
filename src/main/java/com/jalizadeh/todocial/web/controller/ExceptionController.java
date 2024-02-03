@@ -1,20 +1,17 @@
 package com.jalizadeh.todocial.web.controller;
 
-import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
+import java.io.IOException;
 
 @Controller 
 public class ExceptionController implements ErrorController {
@@ -23,18 +20,9 @@ public class ExceptionController implements ErrorController {
     @Autowired
 	private SettingsGeneralConfig settings;
     
-    /**
-     * implement ErrorController to handle 404
-     */
-    @Override
-    public String getErrorPath() {
-        return ERROR_PATH;
-    }
-    
-
     @GetMapping(ERROR_PATH)
-    public ModelAndView handleError(HttpServletRequest request, 
-    		HttpServletResponse response) throws IOException {
+    public ModelAndView handleError(HttpServletRequest request,
+                                    HttpServletResponse response) throws IOException {
     	
     	Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         ModelAndView mv = new ModelAndView();

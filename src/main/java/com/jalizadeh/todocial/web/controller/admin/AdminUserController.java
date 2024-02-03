@@ -1,13 +1,16 @@
 package com.jalizadeh.todocial.web.controller.admin;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
+import com.jalizadeh.todocial.system.repository.TodoRepository;
+import com.jalizadeh.todocial.system.repository.UserRepository;
+import com.jalizadeh.todocial.system.service.UserService;
+import com.jalizadeh.todocial.web.exception.EmailExistsException;
+import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
+import com.jalizadeh.todocial.web.model.User;
+import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
+import com.jalizadeh.todocial.web.repository.RoleRepository;
+import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
+import com.jalizadeh.todocial.web.validator.UserValidator;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
@@ -21,16 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 
-import com.jalizadeh.todocial.web.exception.EmailExistsException;
-import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
-import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
-import com.jalizadeh.todocial.web.repository.RoleRepository;
-import com.jalizadeh.todocial.system.repository.TodoRepository;
-import com.jalizadeh.todocial.system.repository.UserRepository;
-import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
-import com.jalizadeh.todocial.system.service.UserService;
-import com.jalizadeh.todocial.web.validator.UserValidator;
+import java.util.*;
 
 @Controller
 public class AdminUserController {
@@ -89,7 +83,7 @@ public class AdminUserController {
 
 	@RequestMapping(value="/admin/add-user", method=RequestMethod.POST)
 	public String AddNewUser(@Valid User user, BindingResult result,
-			Errors errors, ModelMap model,  WebRequest request) 
+							 Errors errors, ModelMap model, WebRequest request)
 			throws UserAlreadyExistException, EmailExistsException {
 		
 		ValidationUtils.invokeValidator(new UserValidator(), user, errors);

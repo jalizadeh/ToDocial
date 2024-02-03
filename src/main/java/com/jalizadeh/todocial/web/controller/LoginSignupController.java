@@ -1,17 +1,19 @@
 package com.jalizadeh.todocial.web.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import com.jalizadeh.todocial.system.service.*;
 import com.jalizadeh.todocial.utils.Log;
+import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.web.exception.EmailExistsException;
+import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
+import com.jalizadeh.todocial.web.model.*;
+import com.jalizadeh.todocial.web.registration.OnPasswordResetEvent;
+import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
+import com.jalizadeh.todocial.web.repository.SecurityQuestionDefinitionRepository;
+import com.jalizadeh.todocial.web.repository.SecurityQuestionRepository;
+import com.jalizadeh.todocial.web.service.storage.StorageFileSystemService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,27 +30,13 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
-import com.jalizadeh.todocial.web.exception.EmailExistsException;
-import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
-import com.jalizadeh.todocial.web.model.FlashMessage;
-import com.jalizadeh.todocial.web.model.PasswordResetToken;
-import com.jalizadeh.todocial.web.model.SecurityQuestion;
-import com.jalizadeh.todocial.web.model.SecurityQuestionDefinition;
-import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.registration.OnPasswordResetEvent;
-import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
-import com.jalizadeh.todocial.web.repository.SecurityQuestionDefinitionRepository;
-import com.jalizadeh.todocial.web.repository.SecurityQuestionRepository;
-import com.jalizadeh.todocial.web.service.storage.StorageFileSystemService;
+import java.util.*;
 
 @Controller
 public class LoginSignupController{
@@ -256,7 +244,7 @@ public class LoginSignupController{
 	//Register new user and handle all errors
 	@PostMapping("/signup")
 	public ModelAndView registerUserAccount (@Valid User user, BindingResult result, Errors errors, WebRequest request,
-			@RequestParam Long sq, @RequestParam String sqa, @RequestParam(value="file", required=false) MultipartFile file)
+											 @RequestParam Long sq, @RequestParam String sqa, @RequestParam(value="file", required=false) MultipartFile file)
 	    	throws UserAlreadyExistException, EmailExistsException { 
 		
 		//ValidationUtils.invokeValidator(new UserValidator(), user, errors);

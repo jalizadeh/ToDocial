@@ -1,15 +1,17 @@
 package com.jalizadeh.todocial.web.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
+import com.jalizadeh.todocial.system.repository.TodoLogRepository;
+import com.jalizadeh.todocial.system.repository.TodoRepository;
+import com.jalizadeh.todocial.system.repository.UserRepository;
+import com.jalizadeh.todocial.system.service.CommonServices;
+import com.jalizadeh.todocial.system.service.UserService;
+import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.web.model.FlashMessage;
+import com.jalizadeh.todocial.web.model.Todo;
+import com.jalizadeh.todocial.web.model.TodoLog;
+import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.repository.GymPlanRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -18,21 +20,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
-import com.jalizadeh.todocial.web.model.FlashMessage;
-import com.jalizadeh.todocial.web.model.Todo;
-import com.jalizadeh.todocial.web.model.TodoLog;
-import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.system.repository.TodoLogRepository;
-import com.jalizadeh.todocial.system.repository.TodoRepository;
-import com.jalizadeh.todocial.system.repository.UserRepository;
-import com.jalizadeh.todocial.system.service.CommonServices;
-import com.jalizadeh.todocial.system.service.UserService;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class TodoController {
@@ -141,7 +137,7 @@ public class TodoController {
 	
 	@PostMapping("/add-todo")
 	public String AddTodo(@Valid Todo todo, BindingResult result,
-			RedirectAttributes redirectAttributes, ModelMap model) {
+						  RedirectAttributes redirectAttributes, ModelMap model) {
 		model.put("settings", settings);
 		
 		if(result.hasErrors()) {

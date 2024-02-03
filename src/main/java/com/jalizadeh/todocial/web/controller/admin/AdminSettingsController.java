@@ -1,15 +1,15 @@
 package com.jalizadeh.todocial.web.controller.admin;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
+import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneral;
+import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.web.model.FlashMessage;
+import com.jalizadeh.todocial.web.model.Role;
+import com.jalizadeh.todocial.web.repository.PrivilegeRepository;
+import com.jalizadeh.todocial.web.repository.RoleRepository;
+import com.jalizadeh.todocial.web.system.AppLocaleResolver;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,13 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneral;
-import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
-import com.jalizadeh.todocial.web.model.FlashMessage;
-import com.jalizadeh.todocial.web.model.Role;
-import com.jalizadeh.todocial.web.repository.PrivilegeRepository;
-import com.jalizadeh.todocial.web.repository.RoleRepository;
-import com.jalizadeh.todocial.web.system.AppLocaleResolver;
+import java.util.*;
 
 @Controller
 public class AdminSettingsController {
@@ -59,9 +53,9 @@ public class AdminSettingsController {
 
 	
 	@PostMapping("/admin/settings")
-	public String SaveChanges(ModelMap model, @Valid SettingsGeneral sg, 
-			BindingResult result, RedirectAttributes redirectAttributes,
-			HttpServletRequest request, HttpServletResponse response, Locale locale) {
+	public String SaveChanges(ModelMap model, @Valid SettingsGeneral sg,
+							  BindingResult result, RedirectAttributes redirectAttributes,
+							  HttpServletRequest request, HttpServletResponse response, Locale locale) {
 		if(result.hasErrors()) {
 			model.put("flash", 
 					new FlashMessage("There is some error",  FlashMessage.Status.danger));
