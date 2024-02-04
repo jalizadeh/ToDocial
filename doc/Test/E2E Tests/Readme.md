@@ -44,15 +44,15 @@ For now, only Chrome is tested and later (due to missing implementation of Web D
 
 ## User Registration & Login
 1. Verify if a new user can register with valid details
-    | id  | Input                      | Output                       | Test data |
+    | #  | Input                      | Output                       | Test data |
     | --- | -------------------------- | ---------------------------- | --------- |
-    | 1.1 | Valid user details         | Successful registration      |           |
+    | [1.1](Test%20cases/1.1.md) | Valid user details         | Successful registration      |           |
     | 1.2 | Invalid user details       | Registration failure         |           | 
     | 1.3 | Existing user details      | Registration failure         | an existing user |
     | 1.4 | Missing mandatory details  | Registration failure         |           |
 
 2. Verify if the registration form denies submission with incomplete/invalid details
-    | id  |  Input                     | Output                                  | Test data |
+    | #  |  Input                     | Output                                  | Test data |
     | --- |  -------------------------- | --------------------------------------- | --------- |
     | 2.1 | Incomplete user details    | Submission denial (required fields)     |           |
     | 2.2 | Invalid user details       | Submission denial (validation error)    |           | 
@@ -60,9 +60,9 @@ For now, only Chrome is tested and later (due to missing implementation of Web D
     | 2.4 | Existing user details      | Submission denial (duplicate account)  | an existing user  |
 
 3. Verify if the user can log in with a valid email and password
-    | id  | Input                  | Output                   | Test data |
+    | #  | Input                  | Output                   | Test data |
     | --- | -----------------------| ------------------------ | --------- |
-    | 3.1 | Valid email/password   | Successful login         | an existing user |
+    | [3.1](Test%20cases/3.1.md) | Valid email/password   | Successful login         | an existing user |
     | 3.2 | Invalid email/password | Login failure            |           | 
     | 3.3 | Missing email/password | Login failure            | |
 
