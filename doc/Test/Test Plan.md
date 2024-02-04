@@ -1,4 +1,4 @@
-# ToDocial :: Test Plan
+# Test Plan
 The Test Plan outlines the scope, approach, resources, and schedule of all testing activities. It identifes the items and features to be tested; types of testing. It contains a detailed and executable strategy for conducting. It defnes the detailed testing objective specifc to a particular system, the testing approach, test environment, test conditions, and the test plan.
 
 ## 1. Scope
@@ -19,7 +19,7 @@ The general test objectives are to test the correctness of the generation of the
 - Unit test
 - Integration test
 - System test
-- User acceptance test
+- User acceptance test (E2E)
 
 ## 5. Detailed Test Approach
 Detailed testing phases and methodologies are mentioned below. We will follow the protocols of each phase and achieve the highest results.
@@ -282,62 +282,3 @@ Test closure reports shall be generated for each testing phase as the testing ph
 
 ## 16. Exit Criteria
 All the test cases and test scenarios must be passed. Every user must get the music recommendation as per their interests.
-
-
-## Project Components
-- User
-    - Login
-    - Registration
-    - Follow
-    - Unfollow
-    - Public page
-    - Roles & Privileges
-- Todo
-    - Read
-    - Add
-    - Update
-    - Delete
-- Gym
-    - Read
-    - Add
-    - Update
-    - Delete
-    - Shop
-
-
-### User
-
-### Login
-- Valid login
-- Invalid login
-    - username wrong
-    - password wrong
-
-### UI
-- General components
-    - Top menu
-        - Anonymous user
-        - Logged in user
-            - Menu buttons
-            - Search
-        - Admin user
-    - Footer
-- Pages
-    - Homepage
-    - Todos
-        - User's todo
-        - Other's todo
-    - Gym
-        - Homepage
-        - Plan
-            - New plan
-            - Day
-        - Shop
-            - Homepage
-            - Product
-            - Cart
-    - Settings (Admin user)
-- Buttons
-- Links
-- Forms
-- Languages (EN / IT)
