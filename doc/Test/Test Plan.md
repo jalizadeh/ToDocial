@@ -19,7 +19,7 @@ The general test objectives are to test the correctness of the generation of the
 - Unit test
 - Integration test
 - System test
-- User acceptance test (E2E)
+- [User acceptance test (E2E)](E2E%20Tests)
 
 ## 5. Detailed Test Approach
 Detailed testing phases and methodologies are mentioned below. We will follow the protocols of each phase and achieve the highest results.

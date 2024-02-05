@@ -16,6 +16,10 @@ public class SeleniumUtils {
     private static final int TIMEOUT_POLLING = 250; // in milliseconds
 
 
+    public static void refreshPage(){
+        SeleniumDriverManager.getDriverInThreadLocal().navigate().refresh();
+    }
+
     public static void writeText(By by, String text) {
         WebElement element = getElement(by);
         element.clear();

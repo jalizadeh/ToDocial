@@ -60,11 +60,11 @@ For now, only Chrome is tested and later (due to missing implementation of Web D
     | 2.4 | Existing user details      | Submission denial (duplicate account)  | an existing user  |
 
 3. Verify if the user can log in with a valid email and password
-    | #  | Input                  | Output                   | Test data |
-    | --- | -----------------------| ------------------------ | --------- |
-    | [3.1](Test%20cases/3.1.md) | Valid email/password   | Successful login         | an existing user |
-    | 3.2 | Invalid email/password | Login failure            |           | 
-    | 3.3 | Missing email/password | Login failure            | |
+    | #  | Status | Input                  | Output                   | Test data |
+    | --- | --- | -----------------------| ------------------------ | --------- |
+    | [3.1](Test%20cases/3.1.md) | ✅ | Valid email/password   | Successful login         | an existing user |
+    | [3.2](Test%20cases/3.2.md) | ✅ | Invalid email/password | Login failure            |           |  |
+    | [3.3](Test%20cases/3.3.md) | ❕  | Missing email/password | Login failure            | | |
 
 4. Verify if the login functionality denies access with an invalid email/password
     | Input                  | Output                        |

@@ -1,6 +1,6 @@
 # ToDocial :: Test Documentation
 
-## 1. Test Planning
+## 1. [Test Planning](Test%20Plan.md)
 Activities:
 - Define test objectives
 - Configuration management

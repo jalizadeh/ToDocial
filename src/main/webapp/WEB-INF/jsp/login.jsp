@@ -1,15 +1,11 @@
 <%@ include file="common/header.jspf" %>
 
 		<c:if test="${flash != null}">
-			<div class="alert alert-${flash.status}" role="alert">
-  				${flash.message}
-			</div>
+			<div class="alert alert-${flash.status}" role="alert">${flash.message}</div>
 		</c:if>
 		
 		<c:if test="${message != null}">
-			<div class="alert alert-${message.status}" role="alert">
-  				${message.message}
-			</div>
+			<div class="alert alert-${message.status}" role="alert">${message.message}</div>
 		</c:if>
 		
 		<form:form class="col-6" method="post" action="/login" modelAttribute="user">
