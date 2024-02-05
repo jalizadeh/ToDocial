@@ -1,7 +1,6 @@
 package com.jalizadeh.todocial.web.ui.tests;
 
-import com.jalizadeh.todocial.web.ui.common.UITest;
-import com.jalizadeh.todocial.web.ui.manager.SeleniumDriverManager;
+import com.jalizadeh.todocial.web.ui.common.WebPageTest;
 import com.jalizadeh.todocial.web.ui.views.HomePage;
 import com.jalizadeh.todocial.web.ui.views.LoginPage;
 import org.junit.jupiter.api.*;
@@ -12,7 +11,7 @@ import static com.jalizadeh.todocial.web.ui.utils.SeleniumUtils.refreshPage;
 @Tag("int")
 //@Tag("prod")
 @DisplayName("User Login & Registration")
-public class LoginPageTest extends UITest {
+public class LoginPageTest extends WebPageTest {
 
     private final String USERNAME = "admin";
     private final String PASSWORD = "12345";
@@ -31,19 +30,19 @@ public class LoginPageTest extends UITest {
     @Test
     @DisplayName("Valid username & email")
     void Test_3_1__ValidUsernameAndPassword() {
-        new LoginPage(SeleniumDriverManager.getDriverInThreadLocal())
+        new LoginPage()
                 .checkIfElementsExist()
                 .fillFields(USERNAME, PASSWORD)
                 .clickLoginButton();
 
-        new HomePage(SeleniumDriverManager.getDriverInThreadLocal())
+        new HomePage()
                 .checkIfTopMenuExistsForLoggedInUser();
     }
 
     @Test
     @DisplayName("Invalid username or password")
     void Test_3_2__InvalidUsernameOrPassword(){
-        new LoginPage(SeleniumDriverManager.getDriverInThreadLocal())
+        new LoginPage()
                 .checkIfElementsExist()
                 .fillFields("INVALID_" + USERNAME, PASSWORD)
                 .clickLoginButton()
@@ -51,7 +50,7 @@ public class LoginPageTest extends UITest {
 
         refreshPage();
 
-        new LoginPage(SeleniumDriverManager.getDriverInThreadLocal())
+        new LoginPage()
                 .checkIfElementsExist()
                 .fillFields(USERNAME, "INVALID_" + PASSWORD)
                 .clickLoginButton()
@@ -59,7 +58,7 @@ public class LoginPageTest extends UITest {
 
         refreshPage();
 
-        new LoginPage(SeleniumDriverManager.getDriverInThreadLocal())
+        new LoginPage()
                 .checkIfElementsExist()
                 .fillFields("INVALID_" + USERNAME, "INVALID_" + PASSWORD)
                 .clickLoginButton()

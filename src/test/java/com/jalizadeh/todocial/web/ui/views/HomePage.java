@@ -1,14 +1,13 @@
 package com.jalizadeh.todocial.web.ui.views;
 
+import com.jalizadeh.todocial.web.ui.common.WebPage;
 import com.jalizadeh.todocial.web.ui.utils.SeleniumUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class HomePage {
-
-    private WebDriver driver;
+public class HomePage extends WebPage {
 
     //top menu
     private final By homeBtn = By.xpath("//a[@class='navbar-brand' and @href='/']");
@@ -27,9 +26,8 @@ public class HomePage {
     private final By footer_language_en = By.xpath("//a[@id='langEN']");
     private final By footer_language_it = By.xpath("//a[@id='langEN']");
 
-    public HomePage(WebDriver driver) {
-        this.driver = driver;
-        driver.get("http://localhost:8080");
+    public HomePage() {
+        driver.get(URL);
     }
 
     public HomePage checkIfTopMenuExistsForAnonymousUser() {

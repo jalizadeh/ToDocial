@@ -3,7 +3,7 @@ package com.jalizadeh.todocial.web.ui.common;
 import com.jalizadeh.todocial.web.ui.manager.SeleniumDriverManager;
 import org.openqa.selenium.WebDriver;
 
-public class UITest {
+public class WebPageTest {
 
     protected WebDriver driver;
 
