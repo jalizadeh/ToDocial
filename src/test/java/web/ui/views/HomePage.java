@@ -9,21 +9,21 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HomePage extends WebPage {
 
     //top menu
-    private final By homeBtn = By.xpath("//a[@class='navbar-brand' and @href='/']");
-    private final By loginLink = By.xpath("//a[@class='nav-link' and @href='/login']");
-    private final By signupLink = By.xpath("//a[@class='nav-link' and @href='/signup']");
+    public final static By homeBtn = By.xpath("//a[@class='navbar-brand' and @href='/']");
+    public final static By loginLink = By.xpath("//a[@class='nav-link' and @href='/login']");
+    public final static By signupLink = By.xpath("//a[@class='nav-link' and @href='/signup']");
 
     // top menu - logged in user
-    private final By meButton = By.xpath("//a[@class='navbar-brand' and @href='/me']");
-    private final By todoButton = By.xpath("//a[@class='navbar-brand' and @href='/todos']");
-    private final By gymButton = By.xpath("//a[@class='navbar-brand' and @href='/gym']");
+    public final static By meButton = By.xpath("//a[@class='navbar-brand' and @href='/me']");
+    public final static By todoButton = By.xpath("//a[@class='navbar-brand' and @href='/todos']");
+    public final static By gymButton = By.xpath("//a[@class='navbar-brand' and @href='/gym']");
 
     //footer
-    private final By footer = By.xpath("//footer[@id='sticky-footer']");
-    private final By footer_copyright = By.xpath("//div[@id='footer-copyright']");
-    private final By footer_language = By.xpath("//div[@id='footer-language']");
-    private final By footer_language_en = By.xpath("//a[@id='langEN']");
-    private final By footer_language_it = By.xpath("//a[@id='langEN']");
+    public final static By footer = By.xpath("//footer[@id='sticky-footer']");
+    public final static By footer_copyright = By.xpath("//div[@id='footer-copyright']");
+    public final static By footer_language = By.xpath("//div[@id='footer-language']");
+    public final static By footer_language_en = By.xpath("//a[@id='langEN']");
+    public final static By footer_language_it = By.xpath("//a[@id='langEN']");
 
     public HomePage() {
         driver.get(URL);
