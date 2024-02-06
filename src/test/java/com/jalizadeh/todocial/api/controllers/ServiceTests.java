@@ -1,4 +1,4 @@
-package api.controllers;
+package com.jalizadeh.todocial.api.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import api.controllers.models.*;
+import com.jalizadeh.todocial.api.controllers.models.*;
 import com.jalizadeh.todocial.utils.Log;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

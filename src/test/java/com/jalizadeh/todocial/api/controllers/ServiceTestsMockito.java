@@ -1,6 +1,6 @@
-package api.controllers;
+package com.jalizadeh.todocial.api.controllers;
 
-import api.controllers.models.*;
+import com.jalizadeh.todocial.api.controllers.models.*;
 import com.jalizadeh.todocial.system.repository.TodoLogRepository;
 import com.jalizadeh.todocial.system.repository.TodoRepository;
 import com.jalizadeh.todocial.system.repository.UserRepository;

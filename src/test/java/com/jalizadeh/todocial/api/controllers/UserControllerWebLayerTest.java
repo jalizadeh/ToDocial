@@ -1,4 +1,4 @@
-package api.controllers;
+package com.jalizadeh.todocial.api.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -7,9 +7,8 @@ import static org.mockito.Mockito.when;
 
 import javax.sql.DataSource;
 
-import com.jalizadeh.todocial.api.controllers.ApiUser;
-import api.controllers.models.TestModel_User_Request;
-import api.controllers.models.TestModel_User_Response;
+import com.jalizadeh.todocial.api.controllers.models.TestModel_User_Request;
+import com.jalizadeh.todocial.api.controllers.models.TestModel_User_Response;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;

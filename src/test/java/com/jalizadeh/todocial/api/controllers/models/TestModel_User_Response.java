@@ -1,4 +1,4 @@
-package api.controllers.models;
+package com.jalizadeh.todocial.api.controllers.models;
 
 import java.util.List;
 
