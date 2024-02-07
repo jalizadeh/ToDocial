@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jalizadeh.todocial.system.repository.TodoLogRepository;
-import com.jalizadeh.todocial.system.repository.TodoRepository;
-import com.jalizadeh.todocial.system.repository.UserRepository;
-import com.jalizadeh.todocial.system.service.UserService;
-import com.jalizadeh.todocial.web.model.Todo;
-import com.jalizadeh.todocial.web.model.TodoLog;
-import com.jalizadeh.todocial.web.model.User;
+import com.jalizadeh.todocial.repository.TodoLogRepository;
+import com.jalizadeh.todocial.repository.TodoRepository;
+import com.jalizadeh.todocial.repository.UserRepository;
+import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.model.Todo;
+import com.jalizadeh.todocial.model.TodoLog;
+import com.jalizadeh.todocial.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

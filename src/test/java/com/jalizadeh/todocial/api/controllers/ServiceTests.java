@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import com.jalizadeh.todocial.api.controllers.models.*;
 import com.jalizadeh.todocial.utils.Log;
-import com.jalizadeh.todocial.web.model.ActivationToken;
+import com.jalizadeh.todocial.model.ActivationToken;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,13 +30,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.jalizadeh.todocial.system.repository.TodoLogRepository;
-import com.jalizadeh.todocial.system.repository.TodoRepository;
-import com.jalizadeh.todocial.system.repository.UserRepository;
-import com.jalizadeh.todocial.web.model.Todo;
-import com.jalizadeh.todocial.web.model.TodoLog;
-import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
+import com.jalizadeh.todocial.repository.TodoLogRepository;
+import com.jalizadeh.todocial.repository.TodoRepository;
+import com.jalizadeh.todocial.repository.UserRepository;
+import com.jalizadeh.todocial.model.Todo;
+import com.jalizadeh.todocial.model.TodoLog;
+import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.repository.ActivationTokenRepository;
 
 @Disabled("Use UserApi Tests")
 @DisplayName("User & Todo Services Tests")

@@ -1,9 +1,9 @@
 package com.jalizadeh.todocial.api.controllers;
 
-import com.jalizadeh.todocial.system.service.TokenService;
-import com.jalizadeh.todocial.system.service.UserService;
-import com.jalizadeh.todocial.web.model.ActivationToken;
-import com.jalizadeh.todocial.web.model.User;
+import com.jalizadeh.todocial.service.TokenService;
+import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.model.ActivationToken;
+import com.jalizadeh.todocial.model.User;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

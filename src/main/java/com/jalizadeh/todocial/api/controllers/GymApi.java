@@ -1,9 +1,10 @@
 package com.jalizadeh.todocial.api.controllers;
 
-import com.jalizadeh.todocial.web.model.gym.*;
-import com.jalizadeh.todocial.web.model.gym.dto.GymWorkoutLogSetRep_DTO;
-import com.jalizadeh.todocial.web.repository.*;
-import com.jalizadeh.todocial.web.utils.GymUtils;
+import com.jalizadeh.todocial.model.gym.*;
+import com.jalizadeh.todocial.repository.*;
+import com.jalizadeh.todocial.model.gym.dto.GymWorkoutLogSetRep_DTO;
+import com.jalizadeh.todocial.repository.*;
+import com.jalizadeh.todocial.utils.GymUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -24,14 +24,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jalizadeh.todocial.system.repository.UserRepository;
-import com.jalizadeh.todocial.system.security.BasicAuthEntryPoint;
-import com.jalizadeh.todocial.system.service.TokenService;
-import com.jalizadeh.todocial.system.service.UserService;
-import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
-import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
-import com.jalizadeh.todocial.web.service.storage.StorageService;
+import com.jalizadeh.todocial.repository.UserRepository;
+import com.jalizadeh.todocial.security.BasicAuthEntryPoint;
+import com.jalizadeh.todocial.service.TokenService;
+import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.repository.ActivationTokenRepository;
+import com.jalizadeh.todocial.service.storage.StorageService;
 
 
 @Disabled

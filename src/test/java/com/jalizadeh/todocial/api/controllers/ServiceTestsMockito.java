@@ -1,14 +1,14 @@
 package com.jalizadeh.todocial.api.controllers;
 
 import com.jalizadeh.todocial.api.controllers.models.*;
-import com.jalizadeh.todocial.system.repository.TodoLogRepository;
-import com.jalizadeh.todocial.system.repository.TodoRepository;
-import com.jalizadeh.todocial.system.repository.UserRepository;
-import com.jalizadeh.todocial.web.model.Todo;
-import com.jalizadeh.todocial.web.model.TodoLog;
-import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.model.ActivationToken;
-import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
+import com.jalizadeh.todocial.repository.TodoLogRepository;
+import com.jalizadeh.todocial.repository.TodoRepository;
+import com.jalizadeh.todocial.repository.UserRepository;
+import com.jalizadeh.todocial.model.Todo;
+import com.jalizadeh.todocial.model.TodoLog;
+import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.model.ActivationToken;
+import com.jalizadeh.todocial.repository.ActivationTokenRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
