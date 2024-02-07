@@ -172,7 +172,7 @@ public class LoginSignupController{
 		model.put("settings", settings);
 		model.put("PageTitle", "Reset Password");
 		
-		String tokenStatus = tokenService.validateVerificationToken(tokenService.TOKEN_TYPE_PASSWORD_RESET, token); 
+		String tokenStatus = tokenService.validateToken(tokenService.TOKEN_TYPE_PASSWORD_RESET, token);
 
 		switch (tokenStatus) {
 			case "valid":
@@ -311,7 +311,7 @@ public class LoginSignupController{
 		model.put("user", new User());
 		model.put("settings", settings);
 		
-		String tokenStatus = tokenService.validateVerificationToken(tokenService.TOKEN_TYPE_VERIFICATION,token);
+		String tokenStatus = tokenService.validateToken(tokenService.TOKEN_TYPE_VERIFICATION,token);
 		
 		switch (tokenStatus) {
 			case "valid":

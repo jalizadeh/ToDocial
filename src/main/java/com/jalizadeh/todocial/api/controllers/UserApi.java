@@ -9,9 +9,8 @@ import com.jalizadeh.todocial.system.service.registration.OnApiRegistrationCompl
 import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.web.exception.EmailExistsException;
 import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
-import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.model.ActivationToken;
-import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
+import com.jalizadeh.todocial.web.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -25,20 +24,17 @@ import static com.jalizadeh.todocial.utils.DataUtils.mapUserToDTO;
 
 @RestController
 @RequestMapping("/api/v1/user")
-public class ApiUser {
+public class UserApi {
 	
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
-	private ActivationTokenRepository vTokenRepository;
+	private TokenService tokenService;
 	
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
 	
-	@Autowired
-	private TokenService tokenService;
-
 	@GetMapping("/me")
 	public UserDto getMe() {
 		User currentUser = userService.GetAuthenticatedUser();
@@ -65,7 +61,7 @@ public class ApiUser {
 	}
 
 	@PostMapping()
-	public ResponseEntity<UserDto> createUser(@RequestBody InputUser user) throws UserAlreadyExistException, EmailExistsException {
+	public ResponseEntity<?> createUser(@RequestBody InputUser user) throws UserAlreadyExistException, EmailExistsException {
 		User newUser = new User();
 		newUser.setFirstname(user.getFirstname());
 		newUser.setLastname(user.getLastname());
@@ -74,17 +70,26 @@ public class ApiUser {
 		newUser.setPassword(user.getPassword());
 		newUser.setEnabled(false);
 		newUser.setPhoto("default.jpg");
-		User registeredUser = userService.registerNewUserAccount(newUser);
 
-		//generate verification token in async
-		eventPublisher.publishEvent(new OnApiRegistrationCompleteEvent(registeredUser));
-		return new ResponseEntity<>(mapUserToDTO(registeredUser), HttpStatus.CREATED);
+		try{
+			User registeredUser = userService.registerNewUserAccount(newUser);
+
+			//generate verification token in async
+			eventPublisher.publishEvent(new OnApiRegistrationCompleteEvent(registeredUser));
+			return new ResponseEntity<>(mapUserToDTO(registeredUser), HttpStatus.CREATED);
+
+		} catch (UserAlreadyExistException e){
+			return new ResponseEntity<>("The username already exists", HttpStatus.CONFLICT);
+
+		} catch (EmailExistsException e){
+			return new ResponseEntity<>("The email already exists", HttpStatus.CONFLICT);
+		}
 	}
 
 
 	@PostMapping("/{username}/activate")
 	public ResponseEntity<String> activateUser(@RequestParam("token") String token){
-		String tokenStatus = tokenService.validateVerificationToken(TokenService.TOKEN_TYPE_VERIFICATION,token);
+		String tokenStatus = tokenService.validateToken(TokenService.TOKEN_TYPE_VERIFICATION, token);
 		return new ResponseEntity<>(tokenStatus, HttpStatus.ACCEPTED);
 	}
 	
@@ -92,32 +97,20 @@ public class ApiUser {
 	@GetMapping("/{username}/activation_token")
 	public ResponseEntity<TokenDto> getActivationToken(@PathVariable("username") String username){
 		User user = userService.findByUsername(username);
-		ActivationToken token = vTokenRepository.findByUser(user);
+		ActivationToken token = tokenService.findByUser(user);
 		return new ResponseEntity<>(new TokenDto(token.getToken()) , HttpStatus.OK);
 	}
 
 	
 	@DeleteMapping("/{username}")
-	public ResponseEntity<String> deleteUser(@PathVariable("username") String username){
-		User user = userService.findByUsername(username);
-		user.setEnabled(false);
-		User updated = userService.save(user);
-		return new ResponseEntity<>(String.valueOf(updated.isEnabled()), HttpStatus.OK);
+	public ResponseEntity<?> deleteUser(@PathVariable("username") String username){
+		userService.softDelete(username);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{username}/db")
 	public ResponseEntity<String> deleteUserFromDB(@PathVariable("username") String username){
-		User user = userService.findByUsername(username);
-
-		if(user == null)
-			return new ResponseEntity<>(HttpStatus.OK);
-		
-		//in case user is not activated yet and the token exists
-		ActivationToken token = vTokenRepository.findByUser(user);
-		if(token != null) 
-			vTokenRepository.delete(token);
-		
-		userService.delete(user);
+		userService.hardDelete(username);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

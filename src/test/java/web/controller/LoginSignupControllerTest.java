@@ -167,9 +167,9 @@ class LoginSignupControllerTest {
     }
 
     @Test
-    @Disabled("")
+    @Disabled
     void testLoginSignupController_whenTokenIsValid_navigatedToChangePasswordPage() {
-        when(tokenService.validateVerificationToken(any(String.class), any(String.class))).thenReturn("valid");
+        when(tokenService.validateToken(any(String.class), any(String.class))).thenReturn("valid");
 
         User user = new User();
         when(prtService.findUserByToken(any(String.class))).thenReturn(user);

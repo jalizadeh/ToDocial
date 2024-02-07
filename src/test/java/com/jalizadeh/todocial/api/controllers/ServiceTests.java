@@ -14,14 +14,7 @@ import java.util.stream.Collectors;
 import com.jalizadeh.todocial.api.controllers.models.*;
 import com.jalizadeh.todocial.utils.Log;
 import com.jalizadeh.todocial.web.model.ActivationToken;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -45,6 +38,7 @@ import com.jalizadeh.todocial.web.model.TodoLog;
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
 
+@Disabled("Use UserApi Tests")
 @DisplayName("User & Todo Services Tests")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

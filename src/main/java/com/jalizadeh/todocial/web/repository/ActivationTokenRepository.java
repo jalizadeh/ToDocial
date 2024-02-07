@@ -14,14 +14,12 @@ import com.jalizadeh.todocial.web.model.User;
 public interface ActivationTokenRepository extends JpaRepository<ActivationToken, Long> {
 	
 	ActivationToken findByToken(String token);
-
     ActivationToken findByUser(User user);
-    
     ActivationToken findByUserId(Long id);
-
     Stream<ActivationToken> findAllByExpiryDateLessThan(Date now);
-
     void deleteByExpiryDateLessThan(Date now);
+
+    void deleteByUser(User user);
 
     @Transactional
     @Modifying

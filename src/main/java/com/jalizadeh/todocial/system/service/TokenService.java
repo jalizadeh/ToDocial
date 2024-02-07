@@ -34,20 +34,17 @@ public class TokenService {
 	
 	
 	public void createVerificationToken(User user, String token) {
-		final ActivationToken myToken =
-				new ActivationToken(token, user, new Date());
+		final ActivationToken myToken = new ActivationToken(token, user, new Date());
         tokenRepository.save(myToken);
 	}
 
-
-	
-	public ActivationToken getVerificationToken(String token) {
+	public ActivationToken findActivationToken(String token) {
 		return tokenRepository.findByToken(token);
 	}
 
 
-	//Supports both Verification & Password Reset tokens
-	public String validateVerificationToken(String type, String token) {
+	//Supports both Activation & Password Reset tokens
+	public String validateToken(String type, String token) {
 		if(type.equals(TOKEN_TYPE_VERIFICATION)) {
 			ActivationToken vt = tokenRepository.findByToken(token);
 			if(vt == null) {
@@ -58,8 +55,7 @@ public class TokenService {
 			user.setMp(user.getPassword());
 			
 			Calendar cal = Calendar.getInstance();
-			if(vt.getExpiryDate().getTime() 
-					- cal.getTime().getTime() <= 0 ) {
+			if(vt.getExpiryDate().getTime() - cal.getTime().getTime() <= 0 ) {
 				tokenRepository.delete(vt); //expired token must be deleted
 				return TOKEN_EXPIRED;
 			}
@@ -79,8 +75,7 @@ public class TokenService {
 			user.setMp(user.getPassword());
 			
 			Calendar cal = Calendar.getInstance();
-			if(prt.getExpiryDate().getTime() 
-					- cal.getTime().getTime() <= 0 ) {
+			if(prt.getExpiryDate().getTime() - cal.getTime().getTime() <= 0 ) {
 				prtRepository.delete(prt); //expired token must be deleted
 				return TOKEN_EXPIRED;
 			}
@@ -90,7 +85,19 @@ public class TokenService {
 			//2. ok, first SecurityContext must be filled with the user, then
 			//   the token is removed in controller
 			return TOKEN_VALID;
-
 		}
+	}
+
+	public ActivationToken findByUser(User user) {
+		return tokenRepository.findByUser(user);
+	}
+
+	public void delete(ActivationToken token) {
+		tokenRepository.delete(token);
+	}
+
+	public void deleteByUser(User user) {
+		ActivationToken token = tokenRepository.findByUser(user);
+		tokenRepository.delete(token);
 	}
 }

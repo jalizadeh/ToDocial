@@ -1,10 +1,10 @@
 package com.jalizadeh.todocial.system.service;
 
-import java.security.Principal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.jalizadeh.todocial.system.repository.UserRepository;
+import com.jalizadeh.todocial.web.exception.EmailExistsException;
+import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
+import com.jalizadeh.todocial.web.model.User;
+import com.jalizadeh.todocial.web.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,13 +16,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.jalizadeh.todocial.system.repository.UserRepository;
-import com.jalizadeh.todocial.web.exception.EmailExistsException;
-import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
-import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.repository.RoleRepository;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.security.Principal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 //@Transactional
@@ -39,6 +38,9 @@ public class UserService implements UserDetailsService {
 	
 	@Autowired
 	private SessionRegistry sessionRegistry;
+
+	@Autowired
+	private TokenService tokenService;
 	
 	
 	public UserService() {
@@ -50,7 +52,7 @@ public class UserService implements UserDetailsService {
 	}
 
 
-	public User GetUserByPrincipal(Principal principal) {
+	public User getUserByPrincipal(Principal principal) {
 		return (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
 	}
 	
@@ -105,11 +107,11 @@ public class UserService implements UserDetailsService {
 	public User registerNewUserAccount(final User user) throws UserAlreadyExistException, EmailExistsException {
 		
 		if(usernameExists(user.getUsername())) {
-        	throw new EmailExistsException("There is an account with this username: " + user.getUsername() + "\nPlease select a different username.");
+        	throw new UserAlreadyExistException();
         }
 		
         if (emailExists(user.getEmail())) {
-            throw new UserAlreadyExistException("There is an account with that email address: " + user.getEmail() + "\nPlease enter a different email address.");
+            throw new EmailExistsException();
         }
         
         User nUser = new User();
@@ -178,7 +180,19 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUsername(username) != null;
 	}
 
-	public void delete(User user) {
+
+	public void softDelete(String username){
+		User user = findByUsername(username);
+		user.setEnabled(false);
+		save(user);
+	}
+
+	public void hardDelete(String username) {
+		User user = findByUsername(username);
+
+		//in case user is not activated yet and his token exists
+		tokenService.deleteByUser(user);
+
 		userRepository.delete(user);
 	}
 }

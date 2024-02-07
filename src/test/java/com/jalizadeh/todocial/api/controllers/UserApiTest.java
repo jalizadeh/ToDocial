@@ -1,12 +1,10 @@
 package com.jalizadeh.todocial.api.controllers;
 
-import com.jalizadeh.todocial.api.controllers.dto.InputUser;
+import com.jalizadeh.todocial.system.service.TokenService;
 import com.jalizadeh.todocial.system.service.UserService;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import com.jalizadeh.todocial.web.model.ActivationToken;
+import com.jalizadeh.todocial.web.model.User;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,21 +13,19 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Base64Utils;
-import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ApiUserTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DisplayName("User API Tests")
+class UserApiTest {
 
     private final static String BASE_URL = "/api/v1/user";
     private final static String USERNAME = "admin";
@@ -38,13 +34,32 @@ class ApiUserTest {
     private final static Long INVALID_USER_ID = 99999L;
     private final static String INVALID_USER = "UNKNOWN_USER_1234567890";
 
+    //data for creating new user
+    private final String firstname  = "firstname_test";
+    private final String lastname   = "lastname_test";
+    private final String username   = "username_test";
+    private final String email      = "email@test.com";
+    private final String password   = "12345";
+
+    private final String dataUser =
+            "{   \"firstname\": \"" + firstname + "\",\n" +
+            "    \"lastname\": \""  + lastname  + "\",\n" +
+            "    \"username\": \""  + username  + "\",\n" +
+            "    \"email\": \""     + email     + "\",\n" +
+            "    \"password\": \""  + password  + "\" }"  ;
+
     @Autowired
     private MockMvc mvc;
 
-    @Mock
+    @Autowired
     private UserService userService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Test
+    @Order(1)
+    @DisplayName("Logged in user obtains his account info")
     void ApiUserTest_givenValidUsernamePassword_returnsLoggedInUserInfo() throws Exception {
         mvc.perform(get(BASE_URL + "/me")
                         .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
@@ -63,15 +78,18 @@ class ApiUserTest {
     }
 
     @Test
+    @Order(2)
     @Tag("api")
     @Tag("unit_test")
-    @DisplayName("User API : Access is denied with invalid credentials")
+    @DisplayName("Access is denied with invalid credentials")
     void ApiUserTest_givenInvalidUserCredentials_deniesAccess() throws Exception {
         mvc.perform(get(BASE_URL + "/me"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
+    @Order(3)
+    @DisplayName("Get all enabled users")
     void getUsers() throws Exception {
         mvc.perform(get(BASE_URL)
                         .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
@@ -80,6 +98,8 @@ class ApiUserTest {
     }
 
     @Test
+    @Order(4)
+    @DisplayName("Get user info by username")
     void getUserByUsername() throws Exception {
         mvc.perform(get(BASE_URL + "/admin")
                         .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
@@ -89,6 +109,7 @@ class ApiUserTest {
     }
 
     @Test
+    @Order(5)
     void getUserByUsernameNotFound() throws Exception {
         MockHttpServletResponse response = mvc.perform(get(BASE_URL + "/" + INVALID_USER)
                         .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
@@ -99,6 +120,7 @@ class ApiUserTest {
     }
 
     @Test
+    @Order(6)
     void getUserById() throws Exception {
         mvc.perform(get(BASE_URL + "/id/1")
                 .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
@@ -108,6 +130,7 @@ class ApiUserTest {
     }
 
     @Test
+    @Order(7)
     void getUserByIdNotFound() throws Exception {
         MockHttpServletResponse response = mvc.perform(get(BASE_URL + "/id/" + INVALID_USER_ID)
                         .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
@@ -118,21 +141,8 @@ class ApiUserTest {
     }
 
     @Test
-    void createUser() throws Exception {
-        String firstname = "Albert";
-        String lastname = "Baumbach";
-        String username = "Albert.Baumbach72";
-        String email = "Albert.Baumbach72@yahoo.com";
-        String password = "12345";
-
-        String dataUser =
-                "{   \"firstname\": \"" + firstname + "\",\n" +
-                "    \"lastname\": \"" + lastname + "\",\n" +
-                "    \"username\": \"" + username + "\",\n" +
-                "    \"email\": \"" + email + "\",\n" +
-                "    \"password\": \"" + password + "\" }"
-                ;
-
+    @Order(8)
+    void createUser_valid() throws Exception {
         mvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(dataUser))
@@ -150,25 +160,78 @@ class ApiUserTest {
                 .andExpect(jsonPath("$.followings").isArray())
                 .andExpect(jsonPath("$.followings", hasSize(0)))
                 .andDo(MockMvcResultHandlers.print());
+
+        User user = userService.findByUsername(username);
+        ActivationToken token = tokenService.findByUser(user);
+        assertNotNull(token);
     }
 
     @Test
+    @Order(9)
+    void createUser_existingUsername() throws Exception {
+        setupTestUser();
+
+        String response = mvc.perform(post(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dataUser))
+                .andExpect(status().isConflict())
+                .andReturn().getResponse().getContentAsString();
+
+        assertEquals("The username already exists", response);
+    }
+
+    @Test
+    @Order(10)
     @Disabled
     void activateUser() {
     }
 
     @Test
+    @Order(11)
     @Disabled
     void getActivationToken() {
     }
 
     @Test
-    @Disabled
-    void deleteUser() {
+    @Order(12)
+    void deleteUser() throws Exception {
+        setupTestUser();
+
+        mvc.perform(delete(BASE_URL + "/" + username)
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
+
+        assertFalse(userService.findByUsername(username).isEnabled());
     }
 
     @Test
-    @Disabled
-    void deleteUserFromDB() {
+    @Order(13)
+    void deleteUserFromDB() throws Exception {
+        setupTestUser();
+
+        mvc.perform(delete(BASE_URL + "/" + username + "/db")
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
+
+        assertThrows(RuntimeException.class, () -> userService.findByUsername(username));
+
+        MockHttpServletResponse response = mvc.perform(get(BASE_URL + "/" + INVALID_USER)
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse();
+
+        assertEquals("Username not found: " + INVALID_USER, response.getErrorMessage());
+    }
+
+    private void setupTestUser() throws Exception {
+        try {
+            userService.hardDelete(username);
+        } catch (Exception e){
+            //do nothing, the user is already deleted
+        }
+
+        createUser_valid();
     }
 }

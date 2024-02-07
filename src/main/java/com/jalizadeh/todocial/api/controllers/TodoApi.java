@@ -28,7 +28,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @RestController
-public class ApiTodo {
+public class TodoApi {
 
 	@Autowired
 	private UserService userService;

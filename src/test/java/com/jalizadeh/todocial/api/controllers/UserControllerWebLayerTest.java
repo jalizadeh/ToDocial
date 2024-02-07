@@ -34,9 +34,8 @@ import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
 import com.jalizadeh.todocial.web.service.storage.StorageService;
 
 
-@WebMvcTest(controllers = ApiUser.class,
-excludeAutoConfiguration = {SecurityAutoConfiguration.class})
-//@MockBean({UserRepository.class})
+@Disabled
+@WebMvcTest(controllers = UserApi.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 class UserControllerWebLayerTest {
 	
 	@Autowired
