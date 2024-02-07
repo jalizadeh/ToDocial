@@ -28,7 +28,7 @@ import com.jalizadeh.todocial.web.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.todocial.web.repository.RoleRepository;
 import com.jalizadeh.todocial.system.repository.TodoRepository;
 import com.jalizadeh.todocial.system.repository.UserRepository;
-import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
+import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
 import com.jalizadeh.todocial.system.service.UserService;
 import com.jalizadeh.todocial.web.validator.UserValidator;
 
@@ -48,7 +48,7 @@ public class AdminUserController {
 	private TodoRepository todoRepository;
 	
 	@Autowired
-	private VerificationTokenRepository tokenRepository;
+	private ActivationTokenRepository tokenRepository;
 	
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;

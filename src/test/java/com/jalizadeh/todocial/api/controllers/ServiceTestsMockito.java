@@ -7,8 +7,8 @@ import com.jalizadeh.todocial.system.repository.UserRepository;
 import com.jalizadeh.todocial.web.model.Todo;
 import com.jalizadeh.todocial.web.model.TodoLog;
 import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.model.VerificationToken;
-import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
+import com.jalizadeh.todocial.web.model.ActivationToken;
+import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -54,7 +54,7 @@ class ServiceTestsMockito {
 	private TodoLogRepository todoLogRepository;
 
 	@Autowired
-	private VerificationTokenRepository vtRepository;
+	private ActivationTokenRepository vtRepository;
 
 	@Autowired
 	private Environment env;
@@ -135,7 +135,7 @@ class ServiceTestsMockito {
 	@DisplayName("Activate user after registration")
 	void testUserService_givenUsername_returnsActivatedUser() {
 		// check if activation code exists
-		VerificationToken vToken = vtRepository.findByUserId(userId);
+		ActivationToken vToken = vtRepository.findByUserId(userId);
 		assertNotNull(vToken, "Verification token doesnt exist");
 
 		// get activation code

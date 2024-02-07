@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.jalizadeh.todocial.web.model.PasswordResetToken;
 import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.model.VerificationToken;
-import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
+import com.jalizadeh.todocial.web.model.ActivationToken;
+import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
 import com.jalizadeh.todocial.web.repository.PasswordResetTokenRepository;
 import com.jalizadeh.todocial.system.repository.UserRepository;
 
@@ -24,7 +24,7 @@ public class TokenService {
     public static final String TOKEN_TYPE_PASSWORD_RESET = "PRT";
     
 	@Autowired
-	private VerificationTokenRepository tokenRepository;
+	private ActivationTokenRepository tokenRepository;
 	
 	@Autowired
 	private PasswordResetTokenRepository prtRepository;
@@ -34,14 +34,14 @@ public class TokenService {
 	
 	
 	public void createVerificationToken(User user, String token) {
-		final VerificationToken myToken = 
-				new VerificationToken(token, user, new Date());
+		final ActivationToken myToken =
+				new ActivationToken(token, user, new Date());
         tokenRepository.save(myToken);
 	}
 
 
 	
-	public VerificationToken getVerificationToken(String token) {
+	public ActivationToken getVerificationToken(String token) {
 		return tokenRepository.findByToken(token);
 	}
 
@@ -49,7 +49,7 @@ public class TokenService {
 	//Supports both Verification & Password Reset tokens
 	public String validateVerificationToken(String type, String token) {
 		if(type.equals(TOKEN_TYPE_VERIFICATION)) {
-			VerificationToken vt = tokenRepository.findByToken(token);
+			ActivationToken vt = tokenRepository.findByToken(token);
 			if(vt == null) {
 				return TOKEN_INVALID;
 			}

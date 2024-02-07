@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import com.jalizadeh.todocial.api.controllers.models.*;
 import com.jalizadeh.todocial.utils.Log;
+import com.jalizadeh.todocial.web.model.ActivationToken;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -42,8 +43,7 @@ import com.jalizadeh.todocial.system.repository.UserRepository;
 import com.jalizadeh.todocial.web.model.Todo;
 import com.jalizadeh.todocial.web.model.TodoLog;
 import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.model.VerificationToken;
-import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
+import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
 
 @DisplayName("User & Todo Services Tests")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -69,7 +69,7 @@ class ServiceTests {
 	private TodoLogRepository todoLogRepository;
 
 	@Autowired
-	private VerificationTokenRepository vtRepository;
+	private ActivationTokenRepository vtRepository;
 
 	@Autowired
 	private Environment env;
@@ -139,7 +139,7 @@ class ServiceTests {
 	@DisplayName("Activate user after registration")
 	void testUserService_givenUsername_returnsActivatedUser() {
 		// check if activation code exists
-		VerificationToken vToken = vtRepository.findByUserId(userId);
+		ActivationToken vToken = vtRepository.findByUserId(userId);
 		assertNotNull(vToken, "Verification token doesnt exist");
 
 		// get activation code

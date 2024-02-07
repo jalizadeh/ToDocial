@@ -29,10 +29,8 @@ import com.jalizadeh.todocial.system.security.BasicAuthEntryPoint;
 import com.jalizadeh.todocial.system.service.TokenService;
 import com.jalizadeh.todocial.system.service.UserService;
 import com.jalizadeh.todocial.web.controller.admin.model.SettingsGeneralConfig;
-import com.jalizadeh.todocial.web.exception.EmailExistsException;
-import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
+import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
 import com.jalizadeh.todocial.web.service.storage.StorageService;
 
 
@@ -52,7 +50,7 @@ class UserControllerWebLayerTest {
 	private UserRepository userRepository;
 	
 	@MockBean
-	private VerificationTokenRepository vTokenRepository;
+	private ActivationTokenRepository aTokenRepository;
 	
 	@MockBean
 	private ApplicationEventPublisher eventPublisher;

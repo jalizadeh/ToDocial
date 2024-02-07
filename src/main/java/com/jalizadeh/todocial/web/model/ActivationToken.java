@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-public class VerificationToken {
+public class ActivationToken {
 	
 	//24 hours in milliseconds
 	private static final long EXPIRATION = 1000L * 60 * 60 * 24;
@@ -42,7 +42,7 @@ public class VerificationToken {
 		return new Date(cal.getTime().getTime());
 	}
 
-	public VerificationToken(String token, User user, Date expiryDate) {
+	public ActivationToken(String token, User user, Date expiryDate) {
 		super();
 		this.token = token;
 		this.user = user;
@@ -54,7 +54,7 @@ public class VerificationToken {
 
 	@Override
 	public String toString() {
-		return "VerificationToken [id=" + id + ", token=" + token + ", user=" + user + ", expiryDate=" + expiryDate
+		return "ActivationToken [id=" + id + ", token=" + token + ", user=" + user + ", expiryDate=" + expiryDate
 				+ "]";
 	}
 	

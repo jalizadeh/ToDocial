@@ -10,8 +10,8 @@ import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.web.exception.EmailExistsException;
 import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.web.model.User;
-import com.jalizadeh.todocial.web.model.VerificationToken;
-import com.jalizadeh.todocial.web.repository.VerificationTokenRepository;
+import com.jalizadeh.todocial.web.model.ActivationToken;
+import com.jalizadeh.todocial.web.repository.ActivationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class ApiUser {
 	private UserService userService;
 	
 	@Autowired
-	private VerificationTokenRepository vTokenRepository;
+	private ActivationTokenRepository vTokenRepository;
 	
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
@@ -92,7 +92,7 @@ public class ApiUser {
 	@GetMapping("/{username}/activation_token")
 	public ResponseEntity<TokenDto> getActivationToken(@PathVariable("username") String username){
 		User user = userService.findByUsername(username);
-		VerificationToken token = vTokenRepository.findByUser(user);
+		ActivationToken token = vTokenRepository.findByUser(user);
 		return new ResponseEntity<>(new TokenDto(token.getToken()) , HttpStatus.OK);
 	}
 
@@ -113,7 +113,7 @@ public class ApiUser {
 			return new ResponseEntity<>(HttpStatus.OK);
 		
 		//in case user is not activated yet and the token exists
-		VerificationToken token = vTokenRepository.findByUser(user);
+		ActivationToken token = vTokenRepository.findByUser(user);
 		if(token != null) 
 			vTokenRepository.delete(token);
 		
