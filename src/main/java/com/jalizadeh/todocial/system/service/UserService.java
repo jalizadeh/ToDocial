@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,7 @@ import com.jalizadeh.todocial.web.exception.EmailExistsException;
 import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.web.model.User;
 import com.jalizadeh.todocial.web.repository.RoleRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 //@Transactional
@@ -43,7 +45,7 @@ public class UserService implements UserDetailsService {
 		super();
 	}
 	
-	public String seyHi(String string) {
+	public String sayHi(String string) {
 		return "Hi";
 	}
 
@@ -63,36 +65,35 @@ public class UserService implements UserDetailsService {
 		return (User) authentication.getPrincipal();
 	}
 
-	
-	public UserDetails loadUserByUsername(String username) 
-			throws UsernameNotFoundException {
-		
-		User user = userRepository.findByUsername(username);
-		
-		if(user == null)
-			throw new UsernameNotFoundException("User not found");
-		
-		/*
-		return new org.springframework.security.core.userdetails.User(
-				user.getUsername(),
-				user.getPassword(),
-				user.isEnabled(),
-				true,
-				true,
-				true,
-				user.getAuthorities()
-				);
-			*/
-		return user;
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return findByUsername(username);
 	}
 
+	public List<User> findByEnabled(boolean isEnabled){
+		return userRepository.findByEnabled(isEnabled);
+	}
+
+	public User findById(Long id) {
+		return userRepository.findById(id)
+				.orElseThrow(() ->
+						new ResponseStatusException(HttpStatus.NOT_FOUND, "User Id not found: " + id)
+				);
+	}
 
 	public User findByUsername(String username) {
-		return userRepository.findByUsername(username);
+		return userRepository.findOptionalByUsername(username)
+				.orElseThrow(() ->
+						new ResponseStatusException(HttpStatus.NOT_FOUND, "Username not found: " + username)
+				);
 	}	
 	
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
+	}
+
+	public User save(User user) {
+		return userRepository.save(user);
 	}
 	
 	/**
@@ -168,16 +169,16 @@ public class UserService implements UserDetailsService {
 	}
 	
 	
-	
-	
-	// ~ Methods
-	// =======================================
-	
+
 	private boolean emailExists(final String email) {
         return userRepository.findByEmail(email) != null;
     }
-	
+
 	private boolean usernameExists(String username) {
 		return userRepository.findByUsername(username) != null;
+	}
+
+	public void delete(User user) {
+		userRepository.delete(user);
 	}
 }

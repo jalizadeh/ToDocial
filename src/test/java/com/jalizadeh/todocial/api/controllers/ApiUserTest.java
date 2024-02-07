@@ -1,5 +1,6 @@
 package com.jalizadeh.todocial.api.controllers;
 
+import com.jalizadeh.todocial.api.controllers.dto.InputUser;
 import com.jalizadeh.todocial.system.service.UserService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -10,14 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.Base64Utils;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -112,8 +118,38 @@ class ApiUserTest {
     }
 
     @Test
-    @Disabled
-    void createUser() {
+    void createUser() throws Exception {
+        String firstname = "Albert";
+        String lastname = "Baumbach";
+        String username = "Albert.Baumbach72";
+        String email = "Albert.Baumbach72@yahoo.com";
+        String password = "12345";
+
+        String dataUser =
+                "{   \"firstname\": \"" + firstname + "\",\n" +
+                "    \"lastname\": \"" + lastname + "\",\n" +
+                "    \"username\": \"" + username + "\",\n" +
+                "    \"email\": \"" + email + "\",\n" +
+                "    \"password\": \"" + password + "\" }"
+                ;
+
+        mvc.perform(post(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dataUser))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.id").value(greaterThanOrEqualTo(1)))
+                .andExpect(jsonPath("$.firstname", is(firstname)))
+                .andExpect(jsonPath("$.lastname", is(lastname)))
+                .andExpect(jsonPath("$.username", is(username)))
+                .andExpect(jsonPath("$.email", is(email)))
+                .andExpect(jsonPath("$.enabled", is(false)))
+                .andExpect(jsonPath("$.photo", is("default.jpg")))
+                .andExpect(jsonPath("$.followers").isArray())
+                .andExpect(jsonPath("$.followers", hasSize(0)))
+                .andExpect(jsonPath("$.followings").isArray())
+                .andExpect(jsonPath("$.followings", hasSize(0)))
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test

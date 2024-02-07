@@ -74,7 +74,7 @@ class UserControllerWebLayerTest {
 	
 	@Disabled
 	@Test
-	void createUser_whenValidUserDetailsProvided_returnsCreatedUserDetails() throws Exception, UserAlreadyExistException, EmailExistsException {
+	void createUser_whenValidUserDetailsProvided_returnsCreatedUserDetails() throws Exception {
 		TestModel_User_Request inputUser =
 				new TestModel_User_Request("firstname_test", "lastname_test", "username_test", "email@test.com", "12345");
 		
@@ -82,7 +82,7 @@ class UserControllerWebLayerTest {
 		userDto.setEnabled(false);
 		userDto.setPhoto("default.jpg");
 //		when(userService.registerNewUserAccount(any(User.class))).thenReturn(userDto);
-		when(userService.seyHi(any(String.class))).thenReturn("");
+		when(userService.sayHi(any(String.class))).thenReturn("");
 		
 		MockHttpServletRequestBuilder rb = MockMvcRequestBuilders.post("/api/v1/user")
 			.contentType(MediaType.APPLICATION_JSON)
