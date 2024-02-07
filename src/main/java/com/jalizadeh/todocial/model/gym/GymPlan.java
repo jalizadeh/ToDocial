@@ -1,7 +1,7 @@
 package com.jalizadeh.todocial.model.gym;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.model.user.User;
 import lombok.*;
 
 import javax.persistence.*;

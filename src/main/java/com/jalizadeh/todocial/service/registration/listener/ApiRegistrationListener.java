@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.model.user.User;
 
 @Component
 public class ApiRegistrationListener implements ApplicationListener<OnApiRegistrationCompleteEvent>{

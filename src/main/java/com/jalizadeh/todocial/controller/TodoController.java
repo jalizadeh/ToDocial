@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.jalizadeh.todocial.repository.GymPlanRepository;
+import com.jalizadeh.todocial.repository.gym.GymPlanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jalizadeh.todocial.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.FlashMessage;
-import com.jalizadeh.todocial.model.Todo;
-import com.jalizadeh.todocial.model.TodoLog;
-import com.jalizadeh.todocial.model.User;
-import com.jalizadeh.todocial.repository.TodoLogRepository;
-import com.jalizadeh.todocial.repository.TodoRepository;
-import com.jalizadeh.todocial.repository.UserRepository;
+import com.jalizadeh.todocial.model.todo.Todo;
+import com.jalizadeh.todocial.model.todo.TodoLog;
+import com.jalizadeh.todocial.model.user.User;
+import com.jalizadeh.todocial.repository.todo.TodoLogRepository;
+import com.jalizadeh.todocial.repository.todo.TodoRepository;
+import com.jalizadeh.todocial.repository.user.UserRepository;
 import com.jalizadeh.todocial.service.CommonServices;
 import com.jalizadeh.todocial.service.UserService;
 

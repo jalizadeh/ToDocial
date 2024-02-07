@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jalizadeh.todocial.repository.TodoRepository;
+import com.jalizadeh.todocial.repository.todo.TodoRepository;
 import com.jalizadeh.todocial.model.FlashMessage;
 
 @Controller

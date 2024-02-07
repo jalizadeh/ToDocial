@@ -1,14 +1,14 @@
 package com.jalizadeh.todocial.controller.gym;
 
 
-import com.jalizadeh.todocial.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.FlashMessage;
 import com.jalizadeh.todocial.model.gym.*;
 import com.jalizadeh.todocial.model.gym.dto.GymWorkoutLogSetRep_DTO;
 import com.jalizadeh.todocial.model.gym.types.GymMainGoal;
 import com.jalizadeh.todocial.model.gym.types.GymTrainingLevel;
 import com.jalizadeh.todocial.model.gym.types.GymWorkoutType;
-import com.jalizadeh.todocial.repository.*;
+import com.jalizadeh.todocial.repository.gym.*;
 import com.jalizadeh.todocial.service.UserService;
 import com.jalizadeh.todocial.utils.GymUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,7 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.model.user.User;
 import com.jalizadeh.todocial.service.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.todocial.service.TokenService;
 

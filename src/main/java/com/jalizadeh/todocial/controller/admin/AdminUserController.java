@@ -23,12 +23,12 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.jalizadeh.todocial.exception.EmailExistsException;
 import com.jalizadeh.todocial.exception.UserAlreadyExistException;
-import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.model.user.User;
 import com.jalizadeh.todocial.service.registration.OnRegistrationCompleteEvent;
-import com.jalizadeh.todocial.repository.RoleRepository;
-import com.jalizadeh.todocial.repository.TodoRepository;
-import com.jalizadeh.todocial.repository.UserRepository;
-import com.jalizadeh.todocial.repository.ActivationTokenRepository;
+import com.jalizadeh.todocial.repository.user.RoleRepository;
+import com.jalizadeh.todocial.repository.todo.TodoRepository;
+import com.jalizadeh.todocial.repository.user.UserRepository;
+import com.jalizadeh.todocial.repository.user.ActivationTokenRepository;
 import com.jalizadeh.todocial.service.UserService;
 import com.jalizadeh.todocial.validator.UserValidator;
 

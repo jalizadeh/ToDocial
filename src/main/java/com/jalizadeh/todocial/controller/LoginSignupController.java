@@ -1,11 +1,15 @@
 package com.jalizadeh.todocial.controller;
 
-import com.jalizadeh.todocial.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.exception.EmailExistsException;
 import com.jalizadeh.todocial.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.model.*;
-import com.jalizadeh.todocial.repository.SecurityQuestionDefinitionRepository;
-import com.jalizadeh.todocial.repository.SecurityQuestionRepository;
+import com.jalizadeh.todocial.model.user.PasswordResetToken;
+import com.jalizadeh.todocial.model.user.SecurityQuestion;
+import com.jalizadeh.todocial.model.user.SecurityQuestionDefinition;
+import com.jalizadeh.todocial.model.user.User;
+import com.jalizadeh.todocial.repository.user.SecurityQuestionDefinitionRepository;
+import com.jalizadeh.todocial.repository.user.SecurityQuestionRepository;
 import com.jalizadeh.todocial.service.*;
 import com.jalizadeh.todocial.service.registration.OnPasswordResetEvent;
 import com.jalizadeh.todocial.service.registration.OnRegistrationCompleteEvent;

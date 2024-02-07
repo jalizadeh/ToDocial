@@ -2,7 +2,7 @@ package com.jalizadeh.todocial.service.registration;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.model.user.User;
 
 import lombok.Data;
 

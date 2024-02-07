@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.jalizadeh.todocial.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.Test;
 import com.jalizadeh.todocial.repository.TestRepository;
 import com.jalizadeh.todocial.service.UserService;

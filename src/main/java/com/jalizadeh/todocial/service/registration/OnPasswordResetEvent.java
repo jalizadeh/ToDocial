@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.jalizadeh.todocial.model.PasswordResetToken;
+import com.jalizadeh.todocial.model.user.PasswordResetToken;
 
 public class OnPasswordResetEvent extends ApplicationEvent{
 

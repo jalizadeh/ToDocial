@@ -1,12 +1,12 @@
 package com.jalizadeh.todocial.controller;
 
 
-import com.jalizadeh.todocial.repository.TodoRepository;
+import com.jalizadeh.todocial.repository.todo.TodoRepository;
 import com.jalizadeh.todocial.utils.DataUtils;
-import com.jalizadeh.todocial.controller.admin.model.SettingsGeneralConfig;
-import com.jalizadeh.todocial.model.Todo;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
+import com.jalizadeh.todocial.model.todo.Todo;
 import com.jalizadeh.todocial.model.gym.GymPlan;
-import com.jalizadeh.todocial.repository.GymPlanRepository;
+import com.jalizadeh.todocial.repository.gym.GymPlanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

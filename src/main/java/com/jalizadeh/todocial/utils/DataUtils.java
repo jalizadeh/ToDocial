@@ -1,7 +1,7 @@
 package com.jalizadeh.todocial.utils;
 
-import com.jalizadeh.todocial.api.controllers.dto.UserDto;
-import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.model.user.dto.UserDto;
+import com.jalizadeh.todocial.model.user.User;
 import org.owasp.encoder.Encode;
 
 import java.util.ArrayList;

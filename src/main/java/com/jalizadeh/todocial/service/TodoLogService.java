@@ -5,8 +5,8 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jalizadeh.todocial.repository.TodoLogRepository;
-import com.jalizadeh.todocial.model.TodoLog;
+import com.jalizadeh.todocial.repository.todo.TodoLogRepository;
+import com.jalizadeh.todocial.model.todo.TodoLog;
 
 @Service
 public class TodoLogService {

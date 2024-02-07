@@ -9,7 +9,7 @@ import org.springframework.web.servlet.LocaleResolver;
 
 import com.jalizadeh.todocial.service.storage.StorageProperties;
 import com.jalizadeh.todocial.service.storage.StorageService;
-import com.jalizadeh.todocial.system.AppLocaleResolver;
+import com.jalizadeh.todocial.configurations.AppLocaleResolver;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)

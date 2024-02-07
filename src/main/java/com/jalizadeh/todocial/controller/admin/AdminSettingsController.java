@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jalizadeh.todocial.controller.admin.model.SettingsGeneral;
-import com.jalizadeh.todocial.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.model.settings.SettingsGeneral;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.FlashMessage;
-import com.jalizadeh.todocial.model.Role;
-import com.jalizadeh.todocial.repository.PrivilegeRepository;
-import com.jalizadeh.todocial.repository.RoleRepository;
-import com.jalizadeh.todocial.system.AppLocaleResolver;
+import com.jalizadeh.todocial.model.user.Role;
+import com.jalizadeh.todocial.repository.user.PrivilegeRepository;
+import com.jalizadeh.todocial.repository.user.RoleRepository;
+import com.jalizadeh.todocial.configurations.AppLocaleResolver;
 
 @Controller
 public class AdminSettingsController {

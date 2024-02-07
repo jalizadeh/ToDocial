@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.model.user.User;
 
 public class OnRegistrationCompleteEvent extends ApplicationEvent{
 

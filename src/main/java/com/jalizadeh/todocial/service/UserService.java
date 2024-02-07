@@ -1,10 +1,10 @@
 package com.jalizadeh.todocial.service;
 
-import com.jalizadeh.todocial.repository.UserRepository;
+import com.jalizadeh.todocial.repository.user.UserRepository;
 import com.jalizadeh.todocial.exception.EmailExistsException;
 import com.jalizadeh.todocial.exception.UserAlreadyExistException;
-import com.jalizadeh.todocial.model.User;
-import com.jalizadeh.todocial.repository.RoleRepository;
+import com.jalizadeh.todocial.model.user.User;
+import com.jalizadeh.todocial.repository.user.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

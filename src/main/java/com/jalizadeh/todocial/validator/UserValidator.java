@@ -1,7 +1,7 @@
 package com.jalizadeh.todocial.validator;
 
 
-import com.jalizadeh.todocial.model.User;
+import com.jalizadeh.todocial.model.user.User;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;

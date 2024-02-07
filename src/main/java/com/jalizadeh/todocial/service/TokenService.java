@@ -6,12 +6,12 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jalizadeh.todocial.model.PasswordResetToken;
-import com.jalizadeh.todocial.model.User;
-import com.jalizadeh.todocial.model.ActivationToken;
-import com.jalizadeh.todocial.repository.ActivationTokenRepository;
-import com.jalizadeh.todocial.repository.PasswordResetTokenRepository;
-import com.jalizadeh.todocial.repository.UserRepository;
+import com.jalizadeh.todocial.model.user.PasswordResetToken;
+import com.jalizadeh.todocial.model.user.User;
+import com.jalizadeh.todocial.model.user.ActivationToken;
+import com.jalizadeh.todocial.repository.user.ActivationTokenRepository;
+import com.jalizadeh.todocial.repository.user.PasswordResetTokenRepository;
+import com.jalizadeh.todocial.repository.user.UserRepository;
 
 @Service
 public class TokenService {

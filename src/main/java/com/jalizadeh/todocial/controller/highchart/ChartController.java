@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.jalizadeh.todocial.model.todo.TodoChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.jalizadeh.todocial.repository.TodoRepository;
-import com.jalizadeh.todocial.model.Todo;
+import com.jalizadeh.todocial.repository.todo.TodoRepository;
+import com.jalizadeh.todocial.model.todo.Todo;
 
 @Controller
 public class ChartController {

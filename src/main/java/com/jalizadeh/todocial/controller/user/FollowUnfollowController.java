@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.jalizadeh.todocial.model.User;
-import com.jalizadeh.todocial.repository.UserRepository;
+import com.jalizadeh.todocial.model.user.User;
+import com.jalizadeh.todocial.repository.user.UserRepository;
 import com.jalizadeh.todocial.service.UserService;
 
 @Controller

@@ -1,12 +1,12 @@
 package com.jalizadeh.todocial.controller.gym;
 
-import com.jalizadeh.todocial.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.gym.GymDay;
 import com.jalizadeh.todocial.model.gym.GymPlan;
 import com.jalizadeh.todocial.model.gym.GymPlanWeekDay;
-import com.jalizadeh.todocial.repository.GymDayRepository;
-import com.jalizadeh.todocial.repository.GymPlanRepository;
-import com.jalizadeh.todocial.repository.GymPlanWeekDayRepository;
+import com.jalizadeh.todocial.repository.gym.GymDayRepository;
+import com.jalizadeh.todocial.repository.gym.GymPlanRepository;
+import com.jalizadeh.todocial.repository.gym.GymPlanWeekDayRepository;
 import com.jalizadeh.todocial.service.ShoppingCartService;
 import com.jalizadeh.todocial.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

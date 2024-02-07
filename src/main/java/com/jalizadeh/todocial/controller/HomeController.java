@@ -1,8 +1,8 @@
 package com.jalizadeh.todocial.controller;
 
-import com.jalizadeh.todocial.repository.TodoRepository;
-import com.jalizadeh.todocial.repository.UserRepository;
-import com.jalizadeh.todocial.controller.admin.model.SettingsGeneralConfig;
+import com.jalizadeh.todocial.repository.todo.TodoRepository;
+import com.jalizadeh.todocial.repository.user.UserRepository;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
