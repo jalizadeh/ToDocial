@@ -94,7 +94,7 @@ public class PublicPageController {
 
 
         model.put("user", loggedinUser);
-        model.put("todos", todoRepository.findAllByUserId(targetUser.getId()));
+        model.put("todos", todoRepository.findAllByUser(targetUser));
         model.put("gym", gymPlanRepository.findAllByUserId(targetUser.getId()));
         model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + loggedinUser.getUsername() + ")");
         return "public-page";

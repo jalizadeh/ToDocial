@@ -2,6 +2,7 @@ package com.jalizadeh.todocial.repository.todo;
 
 import java.util.List;
 
+import com.jalizadeh.todocial.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,7 +15,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 	@Query("select t from Todo t where t.user.id=:#{principal.id}")
 	List<Todo> findAllByLoggedinUser();
 	
-	List<Todo> findAllByUserId(Long id);
+	List<Todo> findAllByUser(User user);
 
 	List<Todo> findAllByUserIdAndIsPublicTrue(Long id);
 
