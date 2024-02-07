@@ -1,10 +1,11 @@
-package com.jalizadeh.todocial.web.controller;
+package web.controller;
 
 import com.jalizadeh.todocial.system.service.CommonServices;
 import com.jalizadeh.todocial.system.service.PasswordResetTokenService;
 import com.jalizadeh.todocial.system.service.TokenService;
 import com.jalizadeh.todocial.system.service.UserService;
-import com.jalizadeh.todocial.utils.TestUtils;
+import com.jalizadeh.todocial.web.controller.LoginSignupController;
+import utils.TestUtils;
 import com.jalizadeh.todocial.web.model.FlashMessage;
 import com.jalizadeh.todocial.web.model.PasswordResetToken;
 import com.jalizadeh.todocial.web.model.SecurityQuestionDefinition;

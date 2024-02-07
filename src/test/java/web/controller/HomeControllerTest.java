@@ -1,5 +1,6 @@
-package com.jalizadeh.todocial.web.controller;
+package web.controller;
 
+import com.jalizadeh.todocial.web.controller.HomeController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

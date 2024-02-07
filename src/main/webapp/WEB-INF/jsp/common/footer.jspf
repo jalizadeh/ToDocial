@@ -1,19 +1,16 @@
 
 	</div> <!-- container -->
 	
-	<footer id="sticky-footer" class="py-1" 
-		style="background-color: #e3f2fd; z-index:2000">
+	<footer id="sticky-footer" class="py-1" style="background-color: #e3f2fd; z-index:2000">
 		<div class="container  text-center">
 			<div class="row">
-				<div class="col-3">${settings.footerCopyright}</div>
+				<div class="col-3" id="footer-copyright">${settings.footerCopyright}</div>
 				<div class="col-3"></div>
 				<div class="col-3"></div>
-				<div class="col-3">
-					<a id="langEN" href="#">
-					English <img src="/resources/img/flag-united-states_1f1fa-1f1f8.png" width="20px">
-					</a> / <a id="langIT" href="#">
-					Italiano <img src="/resources/img/flag-italy_1f1ee-1f1f9.png" width="20px">
-					</a>
+				<div class="col-3" id="footer-language">
+					<a id="langEN" href="#">English <img src="/resources/img/flag-united-states_1f1fa-1f1f8.png" width="20px"></a>
+					 / 
+					<a id="langIT" href="#">Italiano <img src="/resources/img/flag-italy_1f1ee-1f1f9.png" width="20px"></a>
 				</div>
 			</div>
 		</div>

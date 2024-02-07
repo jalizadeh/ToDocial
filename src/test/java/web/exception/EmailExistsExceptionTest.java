@@ -1,5 +1,6 @@
-package com.jalizadeh.todocial.web.exception;
+package web.exception;
 
+import com.jalizadeh.todocial.web.exception.EmailExistsException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -3,40 +3,43 @@ The logic specific to this component
 
 
 
-## Note to workout log convertor
-
-0x12
-10:12
-
-x -> 
-: -> reps count
-, -> set
-
-
-10:12,12:10,12:9	*super straight
-10,12:10,12:9
-10,12:10-9
-10,12:10-9
+## Structure
+- x -> times
+	- 10x3 means: 3 sets of 10 kg
+- : -> reps count
+	- by default, each set has 12 reps, unless it is different or could not reached.
+	- 10:12-11-10 means: 3 sets of 10 kg, but the first one, 12 reps, the second one, 11 and the third one, 10 reps
+- , -> set
+	- separates different weights
+	- 5,7.5,10 means: 3 sets of which the first one is 5 kg, second one is 7.5 kg, and the third one is 10 kg
 
 
-10:MaxSet,10:MS,10:MS
-10:MS-MS-MS
-10x3:MS
-10x3
+## Examples
+- 10:12,12:10,12:9 *\*super straight*
+- 10,12:10,12:9
+- 10,12:10-9
+- 10,12:10-9
 
-10:12
-10:12-9-8
+- 10:MaxSet,10:MS,10:MS
+- 10:MS-MS-MS
+- 10x3:MS
+- 10x3
 
-10:12,12:12,12:12
-10,12,12
-10,12:12-12
-10,12x2:12 		* ignored
-10,12x2
+- 0x12
+- 10:12
 
+- 10:12
+- 10:12-9-8
 
-anyway, i need [W, R]
+- 10:12,12:12,12:12
+- 10,12,12
+- 10,12:12-12
+- 10,12x2:12 		*\* ignored*
+- 10,12x2
 
-process:
+## Algorithm
+> anyway, i need [Weight, Rep]
+
 ```
 - all sets are devided by ',', but if it doesnt have
 	- it must have ':'

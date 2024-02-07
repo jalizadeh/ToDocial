@@ -1,7 +1,7 @@
 # Gym Shop
 
 
-### **UX and User Flows:**
+## UX and User Flows
 
 1. **User Registration/Login:**
    - Ensure a seamless registration and login process for users.
@@ -27,7 +27,7 @@
 6. **Order Confirmation:**
    - Provide users with a clear order confirmation page and confirmation email.
 
-### **Pages and Sections:**
+## **Pages and Sections:**
 
 1. **Shop Homepage:**
    - Display featured plans/products.
@@ -52,7 +52,7 @@
    - Order confirmation number.
    - Any additional information.
 
-### **Database Tables:**
+## **Database Tables:**
 
 1. **User Table:**
    - Store user information.
@@ -105,7 +105,7 @@
    | transaction_id   | VARCHAR(100)     | Unique identifier for the payment transaction|
 
 
-### **Security Issues:**
+## **Security Issues:**
 
 1. **Secure Authentication:**
    - Use secure authentication mechanisms, such as bcrypt for password hashing.
@@ -122,7 +122,7 @@
 5. **Input Validation:**
    - Validate user inputs to prevent common security vulnerabilities like SQL injection and cross-site scripting.
 
-### **Additional Considerations:**
+## **Additional Considerations:**
 
 1. **Performance:**
    - Optimize your application for performance, especially during high traffic times.

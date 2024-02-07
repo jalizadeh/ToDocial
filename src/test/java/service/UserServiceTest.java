@@ -1,6 +1,7 @@
-package com.jalizadeh.todocial.system.service;
+package service;
 
 import com.jalizadeh.todocial.system.repository.UserRepository;
+import com.jalizadeh.todocial.system.service.UserService;
 import com.jalizadeh.todocial.web.exception.EmailExistsException;
 import com.jalizadeh.todocial.web.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.web.model.User;

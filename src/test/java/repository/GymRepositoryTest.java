@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.repository;
+package repository;
 
 import com.jalizadeh.todocial.web.model.gym.GymPlan;
 import com.jalizadeh.todocial.web.repository.GymPlanRepository;
