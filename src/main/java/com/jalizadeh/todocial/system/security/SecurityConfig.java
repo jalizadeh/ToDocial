@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.spel.spi.EvaluationContextExtension;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
@@ -79,7 +80,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		//security config for REST APIs
 		http
-			.authorizeRequests().antMatchers("/api/v1/**").authenticated()
+			.authorizeRequests()
+				.antMatchers(HttpMethod.POST, "/api/v1/user").permitAll() // Permit only creating new user
+				.antMatchers(HttpMethod.POST, "/api/v1/user/*/activate").permitAll() // Permit only creating new user
+				.antMatchers(HttpMethod.GET, "/api/v1/user/*/activation_token").permitAll() // Permit only creating new user
+				.antMatchers("/api/v1/**").authenticated()
 			.and()
             .httpBasic()
             .authenticationEntryPoint(basicAuthEntryPoint);
@@ -101,7 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 						"/",
 						"/@*"
 						).permitAll()
-				
+
 
 				
 				/*
@@ -158,7 +163,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.sessionRegistry(sessionRegistry())
 				.and()
 				.sessionFixation().none()
-			
+
 			.and()
 			.csrf()
 				.disable();
