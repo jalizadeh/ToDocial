@@ -92,7 +92,7 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
 | Test | Action  | Endpoint |
 | ------------- | ------------- | ------------- |
 | ✅ | Get all `Todo`s  | `GET /api/v1/todo`  |
-|     | Get one `Todo`  | `GET /api/v1/todo/{id}`  |
+|     | Get one `Todo`  | `GET /api/v1/todo/id/{id}`  |
 | ✅ | Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
 |    | Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  |
 | ✅ | Create a `Todo` for `User` | `POST /api/v1/todo`  |

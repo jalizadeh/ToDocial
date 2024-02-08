@@ -1,15 +1,17 @@
 package com.jalizadeh.todocial.model.todo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.*;
-
 @Entity
 @Data
+@NoArgsConstructor
 public class TodoLog {
 
 	@Id
@@ -21,11 +23,8 @@ public class TodoLog {
 	private String log;
 	
 	@ManyToMany(mappedBy="logs", cascade = CascadeType.REMOVE)
+	@JsonIgnore
 	private Collection<Todo> todos;
-
-	public TodoLog() {
-		super();
-	}
 
 	public TodoLog(Date logDate, String log) {
 		this.logDate = logDate;

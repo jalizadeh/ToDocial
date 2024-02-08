@@ -62,7 +62,7 @@ public class TodoApi {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> cancelTodo(@PathVariable("id") Long id) {
+	public ResponseEntity<?> cancelTodo(@PathVariable("id") Long id) {
 		boolean canceled = todoService.cancelTodo(id);
 
 		if(canceled){
@@ -89,7 +89,7 @@ public class TodoApi {
 		TodoLog created = todoService.createTodoLog(todoId, log);
 
 		if(created != null){
-			return new ResponseEntity<>(mapTodoToLogDTO(created),HttpStatus.OK);
+			return new ResponseEntity<>(mapTodoToLogDTO(created),HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
