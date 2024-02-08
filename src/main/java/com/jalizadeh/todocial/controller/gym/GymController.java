@@ -3,7 +3,7 @@ package com.jalizadeh.todocial.controller.gym;
 
 import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.repository.gym.GymPlanRepository;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

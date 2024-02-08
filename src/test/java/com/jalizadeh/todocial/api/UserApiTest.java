@@ -1,7 +1,7 @@
 package com.jalizadeh.todocial.api;
 
-import com.jalizadeh.todocial.service.TokenService;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.TokenService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.model.user.ActivationToken;
 import com.jalizadeh.todocial.model.user.User;
 import org.junit.jupiter.api.*;

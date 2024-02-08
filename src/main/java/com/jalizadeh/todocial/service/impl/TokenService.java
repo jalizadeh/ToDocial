@@ -1,17 +1,16 @@
-package com.jalizadeh.todocial.service;
+package com.jalizadeh.todocial.service.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.jalizadeh.todocial.model.user.ActivationToken;
 import com.jalizadeh.todocial.model.user.PasswordResetToken;
 import com.jalizadeh.todocial.model.user.User;
-import com.jalizadeh.todocial.model.user.ActivationToken;
 import com.jalizadeh.todocial.repository.user.ActivationTokenRepository;
 import com.jalizadeh.todocial.repository.user.PasswordResetTokenRepository;
 import com.jalizadeh.todocial.repository.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @Service
 public class TokenService {
@@ -99,5 +98,18 @@ public class TokenService {
 	public void deleteByUser(User user) {
 		ActivationToken token = tokenRepository.findByUser(user);
 		tokenRepository.delete(token);
+	}
+
+	public User findUserByPRToken(String token) {
+		return prtRepository.findByToken(token).getUser();
+	}
+
+	public void savePRToken(PasswordResetToken prt) {
+		prtRepository.save(prt);
+	}
+
+	public void deleteByPRToken(String token) {
+		//valid token must be deleted
+		prtRepository.deleteByToken(token);
 	}
 }

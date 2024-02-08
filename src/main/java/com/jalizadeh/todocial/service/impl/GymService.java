@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.service;
+package com.jalizadeh.todocial.service.impl;
 
 import com.jalizadeh.todocial.model.gym.GymDay;
 import com.jalizadeh.todocial.model.gym.GymPlan;
@@ -44,5 +44,17 @@ public class GymService {
 
     public List<GymWorkoutLogSetRep_DTO> parseLogNote(String log) {
         return GymUtils.workoutLogNoteParser(log);
+    }
+
+    public List<GymPlan> findAllPlansByUserIdAndIsPublicTrue(Long id) {
+        return gymRepository.findAllByUserIdAndIsPublicTrue(id);
+    }
+
+    public List<GymPlan> findAllPlansByUserId(Long id) {
+        return gymRepository.findAllByUserId(id);
+    }
+
+    public List<GymPlan> searchAllPlans(String q) {
+        return gymRepository.searchAll(q);
     }
 }

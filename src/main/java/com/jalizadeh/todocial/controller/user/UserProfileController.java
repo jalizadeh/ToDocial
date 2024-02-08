@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 
 @Controller
 public class UserProfileController {

@@ -9,7 +9,7 @@ import com.jalizadeh.todocial.model.gym.types.GymMainGoal;
 import com.jalizadeh.todocial.model.gym.types.GymTrainingLevel;
 import com.jalizadeh.todocial.model.gym.types.GymWorkoutType;
 import com.jalizadeh.todocial.repository.gym.*;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.utils.GymUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

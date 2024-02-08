@@ -2,7 +2,7 @@ package com.jalizadeh.todocial.service.registration.listener;
 
 import java.util.UUID;
 
-import com.jalizadeh.todocial.service.TokenService;
+import com.jalizadeh.todocial.service.impl.TokenService;
 import com.jalizadeh.todocial.service.registration.OnApiRegistrationCompleteEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

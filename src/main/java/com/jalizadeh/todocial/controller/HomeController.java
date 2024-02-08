@@ -3,6 +3,8 @@ package com.jalizadeh.todocial.controller;
 import com.jalizadeh.todocial.repository.todo.TodoRepository;
 import com.jalizadeh.todocial.repository.user.UserRepository;
 import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
+import com.jalizadeh.todocial.service.impl.TodoService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,15 +17,15 @@ public class HomeController {
 	private SettingsGeneralConfig settings;
 
 	@Autowired
-	private TodoRepository todoRepository;
+	private TodoService todoService;
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 	
 	@GetMapping("/")
 	public String showHomePage(ModelMap model) {
-		model.put("todos", todoRepository.findAllByIsPublicTrue());
-		model.put("users", userRepository.findByEnabled(true));
+		model.put("todos", todoService.findAllTodosByIsPublicTrue());
+		model.put("users", userService.findByEnabled(true));
 		model.put("settings", settings);
 		model.put("PageTitle", "Home");
 		return "home";

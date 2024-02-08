@@ -1,16 +1,14 @@
 package com.jalizadeh.todocial.controller;
 
-import com.jalizadeh.todocial.service.CommonServices;
-import com.jalizadeh.todocial.service.PasswordResetTokenService;
-import com.jalizadeh.todocial.service.TokenService;
-import com.jalizadeh.todocial.service.UserService;
-import com.jalizadeh.todocial.utils.TestUtils;
 import com.jalizadeh.todocial.model.FlashMessage;
 import com.jalizadeh.todocial.model.user.PasswordResetToken;
 import com.jalizadeh.todocial.model.user.SecurityQuestionDefinition;
 import com.jalizadeh.todocial.model.user.User;
-import com.jalizadeh.todocial.service.registration.OnPasswordResetEvent;
 import com.jalizadeh.todocial.repository.user.SecurityQuestionDefinitionRepository;
+import com.jalizadeh.todocial.service.impl.TokenService;
+import com.jalizadeh.todocial.service.impl.UserService;
+import com.jalizadeh.todocial.service.registration.OnPasswordResetEvent;
+import com.jalizadeh.todocial.utils.TestUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -48,9 +46,6 @@ class LoginSignupControllerTest {
     UserService userService;
 
     @Mock
-    PasswordResetTokenService prtService;
-
-    @Mock
     TokenService tokenService;
 
     @Mock
@@ -58,9 +53,6 @@ class LoginSignupControllerTest {
 
     @Mock
     ApplicationEventPublisher eventPublisher;
-
-    @Mock
-    CommonServices utilites;
 
     @Mock
     HttpServletRequest request;
@@ -96,7 +88,7 @@ class LoginSignupControllerTest {
     @Test
     @DisplayName("If the user is anonymous (not logged in), is navigated to /login page")
     void testLoginSignupController_whenNotLoggedIn_returnsLoginPageViewName() {
-        when(utilites.isUserAnonymous()).thenReturn(true);
+        when(userService.isUserAnonymous()).thenReturn(true);
         String viewName = loginSignupController.showLoginPage(modelMap, request);
 
         assertEquals("login", viewName);
@@ -110,7 +102,7 @@ class LoginSignupControllerTest {
     @Test
     @DisplayName("If the user is already logged in and navigates to /login page, he is redirected to homepage")
     void testLoginSignupController_whenAlreadyLoggedIn_returnsRedirectToHomepage() {
-        when(utilites.isUserAnonymous()).thenReturn(false);
+        when(userService.isUserAnonymous()).thenReturn(false);
         String viewName = loginSignupController.showLoginPage(modelMap, request);
 
         assertEquals("redirect:/", viewName);
@@ -146,7 +138,7 @@ class LoginSignupControllerTest {
     void testLoginSignupController_whenUserExists_redirectsWithSuccessMsg() {
         User existingUser = new User();
         when(userService.findByEmail(any(String.class))).thenReturn(existingUser);
-        doNothing().when(prtService).saveNewToken(any(PasswordResetToken.class));
+        doNothing().when(tokenService).savePRToken(any(PasswordResetToken.class));
         doNothing().when(eventPublisher).publishEvent(any(OnPasswordResetEvent.class));
 
         String viewName = loginSignupController.forgotPasswordSubmit(modelMap, "existing@mail.com", webRequest, redirectAttributes);
@@ -171,7 +163,7 @@ class LoginSignupControllerTest {
         when(tokenService.validateToken(any(String.class), any(String.class))).thenReturn("valid");
 
         User user = new User();
-        when(prtService.findUserByToken(any(String.class))).thenReturn(user);
+        when(tokenService.findUserByPRToken(any(String.class))).thenReturn(user);
 
         when(new UsernamePasswordAuthenticationToken(user, null, TestUtils.createMockAuthorities("ROLE_USER")))
                 .thenReturn((UsernamePasswordAuthenticationToken) authentication);
@@ -189,7 +181,7 @@ class LoginSignupControllerTest {
     @Test
     @DisplayName("Show sign up page to anonymous users")
     void testLoginSignupController_whenUserIsAnonymous_showSignupPage() {
-        when(utilites.isUserAnonymous()).thenReturn(true);
+        when(userService.isUserAnonymous()).thenReturn(true);
         when(sqdRepo.findAll()).thenReturn(createMockedSecurityQuestions());
 
         String viewName = loginSignupController.showSignupPage(modelMap);
@@ -205,7 +197,7 @@ class LoginSignupControllerTest {
     @Test
     @DisplayName("Redirect to home page when logged in users open sign up page")
     void testLoginSignupController_whenUserIsLoggedIn_redirectToHomepageInsteadofSignupPage(){
-        when(utilites.isUserAnonymous()).thenReturn(false);
+        when(userService.isUserAnonymous()).thenReturn(false);
 
         String viewName = loginSignupController.showSignupPage(modelMap);
 

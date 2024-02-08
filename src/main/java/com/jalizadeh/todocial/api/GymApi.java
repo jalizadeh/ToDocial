@@ -2,13 +2,11 @@ package com.jalizadeh.todocial.api;
 
 import com.jalizadeh.todocial.model.gym.*;
 import com.jalizadeh.todocial.model.gym.dto.GymWorkoutLogSetRep_DTO;
-import com.jalizadeh.todocial.service.GymService;
-import com.jalizadeh.todocial.utils.GymUtils;
+import com.jalizadeh.todocial.service.impl.GymService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class GymApi {

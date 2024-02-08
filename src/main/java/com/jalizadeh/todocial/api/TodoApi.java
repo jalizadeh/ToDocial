@@ -5,7 +5,7 @@ import com.jalizadeh.todocial.model.todo.TodoLog;
 import com.jalizadeh.todocial.model.todo.dto.InputLog;
 import com.jalizadeh.todocial.model.todo.dto.InputTodo;
 import com.jalizadeh.todocial.model.todo.dto.TodoDto;
-import com.jalizadeh.todocial.service.TodoService;
+import com.jalizadeh.todocial.service.impl.TodoService;
 import com.jalizadeh.todocial.utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

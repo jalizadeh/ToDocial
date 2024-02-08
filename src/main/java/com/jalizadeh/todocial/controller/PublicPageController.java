@@ -1,12 +1,10 @@
 package com.jalizadeh.todocial.controller;
 
-import com.jalizadeh.todocial.repository.todo.TodoRepository;
-import com.jalizadeh.todocial.repository.user.UserRepository;
-import com.jalizadeh.todocial.service.CommonServices;
-import com.jalizadeh.todocial.service.UserService;
 import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.user.User;
-import com.jalizadeh.todocial.repository.gym.GymPlanRepository;
+import com.jalizadeh.todocial.service.impl.GymService;
+import com.jalizadeh.todocial.service.impl.TodoService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,19 +22,13 @@ public class PublicPageController {
     private UserService userService;
 
     @Autowired
-    private UserRepository userRepository;
+    private TodoService todoService;
 
     @Autowired
-    private TodoRepository todoRepository;
-
-    @Autowired
-    private CommonServices utilites;
+    private GymService gymService;
 
     @Autowired
     private SettingsGeneralConfig settings;
-
-    @Autowired
-    private GymPlanRepository gymPlanRepository;
 
     /**
      * If user is authenticated, he will be redirected to his public page accessing all info (even private),
@@ -48,7 +40,7 @@ public class PublicPageController {
         model.put("settings", settings);
 
         User currentUser = userService.GetAuthenticatedUser();
-        User targetUser = userRepository.findByUsername(username);
+        User targetUser = userService.findByUsername(username);
 
         //if there is no mathcing account
         if (targetUser == null) {
@@ -57,16 +49,16 @@ public class PublicPageController {
         }
 
         //if the user is anonymous
-        if (utilites.isUserAnonymous()) {
+        if (userService.isUserAnonymous()) {
             model.put("user", targetUser);
-            model.put("todos", todoRepository.findAllByUserIdAndIsPublicTrue(targetUser.getId()));
-            model.put("gym", gymPlanRepository.findAllByUserIdAndIsPublicTrue(targetUser.getId()));
+            model.put("todos", todoService.findAllTodosByUserIdAndIsPublicTrue(targetUser.getId()));
+            model.put("gym", gymService.findAllPlansByUserIdAndIsPublicTrue(targetUser.getId()));
             model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")");
             return "public-page";
         }
 
 
-        User loggedinUser  =  userRepository.findByUsername(currentUser.getUsername());
+        User loggedinUser  =  userService.findByUsername(currentUser.getUsername());
 
         //the user is logged in and is checking another profile
         //but first check if current user is following the target or not
@@ -86,16 +78,16 @@ public class PublicPageController {
 
 
             model.put("user", targetUser);
-            model.put("todos", todoRepository.findAllByUserIdAndIsPublicTrue(targetUser.getId()));
-            model.put("gym", gymPlanRepository.findAllByUserIdAndIsPublicTrue(targetUser.getId()));
+            model.put("todos", todoService.findAllTodosByUserIdAndIsPublicTrue(targetUser.getId()));
+            model.put("gym", gymService.findAllPlansByUserIdAndIsPublicTrue(targetUser.getId()));
             model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")");
             return "public-page";
         }
 
 
         model.put("user", loggedinUser);
-        model.put("todos", todoRepository.findAllByUser(targetUser));
-        model.put("gym", gymPlanRepository.findAllByUserId(targetUser.getId()));
+        model.put("todos", todoService.findAllByUser(targetUser));
+        model.put("gym", gymService.findAllPlansByUserId(targetUser.getId()));
         model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + loggedinUser.getUsername() + ")");
         return "public-page";
     }

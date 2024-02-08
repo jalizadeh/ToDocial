@@ -1,7 +1,7 @@
 package com.jalizadeh.todocial.controller.gym;
 
 import com.jalizadeh.todocial.service.ServiceTypes;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.FlashMessage;

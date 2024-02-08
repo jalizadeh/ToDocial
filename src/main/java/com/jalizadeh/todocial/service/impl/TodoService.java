@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.service;
+package com.jalizadeh.todocial.service.impl;
 
 import com.jalizadeh.todocial.model.todo.Todo;
 import com.jalizadeh.todocial.model.todo.TodoLog;
@@ -42,6 +42,10 @@ public class TodoService {
 
     public List<Todo> findAll() {
         return todoRepository.findAll();
+    }
+
+    public List<Todo> findAllByUser(User user) {
+        return todoRepository.findAllByUser(user);
     }
 
     public List<Todo> findTodosByUsername(String username) {
@@ -129,5 +133,42 @@ public class TodoService {
             return null;
 
         return todoLogRepository.findById(todoLogId).orElse(null);
+    }
+
+    public List<Todo> findAllTodosByIsPublicTrue() {
+        return todoRepository.findAllByIsPublicTrue();
+    }
+
+    public List<Todo> findAllTodosByUserIdAndIsPublicTrue(Long id) {
+        return todoRepository.findAllByUserIdAndIsPublicTrue(id);
+    }
+
+    public List<Todo> searchAllTodosByLoggedinUser(String q) {
+        return todoRepository.searchAllByLoggedinUser(q);
+    }
+
+    public List<Todo> getAllCompletedTodos() {
+        return todoRepository.getAllCompleted();
+    }
+
+    public List<Todo> getAllNotCompletedTodos() {
+        return todoRepository.getAllNotCompleted();
+    }
+
+    public List<Todo> getAllCanceledTodos() {
+        return todoRepository.getAllCanceled();
+    }
+
+
+    public void save(Todo todo) {
+        todoRepository.save(todo);
+    }
+
+    public void deleteById(Long id) {
+        todoRepository.deleteById(id);
+    }
+
+    public void deleteLogById(Long id) {
+        todoLogRepository.deleteById(id);
     }
 }
