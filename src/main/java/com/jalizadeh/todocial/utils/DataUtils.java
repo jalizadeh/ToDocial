@@ -1,5 +1,9 @@
 package com.jalizadeh.todocial.utils;
 
+import com.jalizadeh.todocial.model.todo.Todo;
+import com.jalizadeh.todocial.model.todo.TodoLog;
+import com.jalizadeh.todocial.model.todo.dto.TodoDto;
+import com.jalizadeh.todocial.model.todo.dto.TodoLogDto;
 import com.jalizadeh.todocial.model.user.dto.UserDto;
 import com.jalizadeh.todocial.model.user.User;
 import org.owasp.encoder.Encode;
@@ -23,5 +27,15 @@ public class DataUtils {
                 u.getFollowers() != null ? u.getFollowers().stream().map(User::getUsername).collect(Collectors.toList()) : new ArrayList<>(),
                 u.getFollowings() != null ? u.getFollowings().stream().map(User::getUsername).collect(Collectors.toList()) : new ArrayList<>()
         );
+    }
+
+    public static TodoDto mapTodoToDTO(Todo t) {
+        return new TodoDto(t.getId(), t.getName(), t.getDescription(), t.getReason(),
+                new ArrayList<>(), t.getLike(),
+                t.isCompleted(), t.isCanceled(), t.getIsPublic());
+    }
+
+    public static TodoLogDto mapTodoToLogDTO(TodoLog l) {
+        return new TodoLogDto(l.getId(), l.getLog(), l.getLogDate());
     }
 }

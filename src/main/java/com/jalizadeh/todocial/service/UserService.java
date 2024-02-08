@@ -1,10 +1,10 @@
 package com.jalizadeh.todocial.service;
 
-import com.jalizadeh.todocial.repository.user.UserRepository;
 import com.jalizadeh.todocial.exception.EmailExistsException;
 import com.jalizadeh.todocial.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.model.user.User;
 import com.jalizadeh.todocial.repository.user.RoleRepository;
+import com.jalizadeh.todocial.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-//@Transactional
 public class UserService implements UserDetailsService {
 	
 	@Autowired 

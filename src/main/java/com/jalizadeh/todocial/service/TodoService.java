@@ -1,6 +1,5 @@
 package com.jalizadeh.todocial.service;
 
-import com.jalizadeh.todocial.api.TodoApi;
 import com.jalizadeh.todocial.model.todo.Todo;
 import com.jalizadeh.todocial.model.todo.TodoLog;
 import com.jalizadeh.todocial.model.todo.dto.InputLog;
@@ -9,11 +8,8 @@ import com.jalizadeh.todocial.model.user.User;
 import com.jalizadeh.todocial.repository.todo.TodoLogRepository;
 import com.jalizadeh.todocial.repository.todo.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +26,18 @@ public class TodoService {
     private TodoLogRepository todoLogRepository;
 
 
+    public Todo findById(Long id) {
+        User loggedInUser = userService.GetAuthenticatedUser();
+        Todo foundTodo = todoRepository.findById(id).orElse(null);
+
+        if (foundTodo == null)
+            return null;
+
+        if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
+            return null; //forbidden
+
+        return foundTodo;
+    }
 
     public TodoLog saveNewLog(String log) {
         return todoLogRepository.save(new TodoLog(new Date(), log));
@@ -45,7 +53,8 @@ public class TodoService {
     }
 
     public List<Todo> findAllByLoggedinUser() {
-        return todoRepository.findAllByLoggedinUser();
+        User user = userService.GetAuthenticatedUser();
+        return todoRepository.findAllByUser(user);
     }
 
     public Todo createTodo(InputTodo todo) {

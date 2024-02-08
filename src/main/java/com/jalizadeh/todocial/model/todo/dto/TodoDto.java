@@ -1,6 +1,5 @@
 package com.jalizadeh.todocial.model.todo.dto;
 
-import com.jalizadeh.todocial.api.TodoApi;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

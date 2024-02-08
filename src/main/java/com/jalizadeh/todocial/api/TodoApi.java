@@ -5,18 +5,18 @@ import com.jalizadeh.todocial.model.todo.TodoLog;
 import com.jalizadeh.todocial.model.todo.dto.InputLog;
 import com.jalizadeh.todocial.model.todo.dto.InputTodo;
 import com.jalizadeh.todocial.model.todo.dto.TodoDto;
-import com.jalizadeh.todocial.model.todo.dto.TodoLogDto;
-import com.jalizadeh.todocial.model.user.User;
 import com.jalizadeh.todocial.service.TodoService;
+import com.jalizadeh.todocial.utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.jalizadeh.todocial.utils.DataUtils.mapTodoToDTO;
+import static com.jalizadeh.todocial.utils.DataUtils.mapTodoToLogDTO;
 
 @RestController
 @RequestMapping("/api/v1/todo")
@@ -24,30 +24,41 @@ public class TodoApi {
 
 	@Autowired
 	private TodoService todoService;
-	
+
+	@GetMapping("/id/{id}")
+	public ResponseEntity<?> getTodo(@PathVariable("id") Long id) {
+		Todo todo = todoService.findById(id);
+
+		if(todo != null){
+			return new ResponseEntity<>(mapTodoToDTO(todo),HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@GetMapping
 	public List<TodoDto> getAllTodos() {
 		return todoService.findAll().stream()
-				.map(this::mapTodoToDTO).collect(Collectors.toList());
+				.map(DataUtils::mapTodoToDTO).collect(Collectors.toList());
 	}
 
 	@GetMapping("/{username}")
 	public List<TodoDto> getUserTodo(@PathVariable("username") String username) {
 		return todoService.findTodosByUsername(username).stream()
-				.map(this::mapTodoToDTO)
+				.map(DataUtils::mapTodoToDTO)
 				.collect(Collectors.toList());
 	}
 
 	@GetMapping("/me")
-	public List<TodoDto> getUserTodo() {
+	public List<TodoDto> getCurrentUserTodo() {
 		return todoService.findAllByLoggedinUser().stream()
-				.map(this::mapTodoToDTO).collect(Collectors.toList());
+				.map(DataUtils::mapTodoToDTO).collect(Collectors.toList());
 	}
 
 	@PostMapping
-	public TodoDto createTodo(@RequestBody InputTodo todo) {
+	public ResponseEntity<TodoDto> createTodo(@RequestBody InputTodo todo) {
 		Todo createdTodo = todoService.createTodo(todo);
-		return mapTodoToDTO(createdTodo);
+		return new ResponseEntity<>(mapTodoToDTO(createdTodo), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/{id}")
@@ -62,7 +73,7 @@ public class TodoApi {
 	}
 
 	@DeleteMapping("/{id}/db")
-	public ResponseEntity<String> deleteTodoFromDB(@PathVariable("id") Long id) {
+	public ResponseEntity<?> deleteTodoFromDB(@PathVariable("id") Long id) {
 		boolean deleted = todoService.deleteTodoById(id);
 
 		if(deleted){
@@ -73,12 +84,12 @@ public class TodoApi {
 	}
 	
 
-	@PostMapping("/{id}/log")
-	public  ResponseEntity<?> createTodoLog(@PathVariable("id") Long id, @RequestBody InputLog log) {
-		TodoLog created = todoService.createTodoLog(id, log);
+	@PostMapping("/{todoId}/log")
+	public  ResponseEntity<?> createTodoLog(@PathVariable("todoId") Long todoId, @RequestBody InputLog log) {
+		TodoLog created = todoService.createTodoLog(todoId, log);
 
 		if(created != null){
-			return new ResponseEntity<TodoLogDto>(mapTodoToLogDTO(created),HttpStatus.OK);
+			return new ResponseEntity<>(mapTodoToLogDTO(created),HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -95,16 +106,5 @@ public class TodoApi {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	
 
-	private TodoDto mapTodoToDTO(Todo t) {
-		return new TodoDto(t.getId(), t.getName(), t.getDescription(), t.getReason(), new ArrayList<>(), t.getLike(),
-				t.isCompleted(), t.isCanceled(), t.getIsPublic());
-	}
-
-	private TodoLogDto mapTodoToLogDTO(TodoLog l) {
-		return new TodoLogDto(l.getId(), l.getLog(), l.getLogDate());
-	}
-	
 }

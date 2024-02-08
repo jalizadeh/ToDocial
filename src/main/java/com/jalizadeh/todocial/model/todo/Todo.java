@@ -1,5 +1,6 @@
 package com.jalizadeh.todocial.model.todo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jalizadeh.todocial.model.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -49,12 +50,15 @@ public class Todo {
 	
 	private Long like;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	private User user;
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "todos_logs", joinColumns = @JoinColumn(name = "todo_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "log_id", referencedColumnName = "id"))
+	@ManyToMany
+	@JoinTable(name = "todos_logs",
+			joinColumns = @JoinColumn(name = "todo_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "log_id", referencedColumnName = "id"))
 	private Collection<TodoLog> logs;
 
 	public static enum TType {

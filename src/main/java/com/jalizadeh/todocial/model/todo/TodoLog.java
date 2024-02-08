@@ -6,11 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -24,7 +20,7 @@ public class TodoLog {
 	
 	private String log;
 	
-	@ManyToMany(mappedBy="logs")
+	@ManyToMany(mappedBy="logs", cascade = CascadeType.REMOVE)
 	private Collection<Todo> todos;
 
 	public TodoLog() {
@@ -34,7 +30,7 @@ public class TodoLog {
 	public TodoLog(Date logDate, String log) {
 		this.logDate = logDate;
 		this.log = log;
-		this.todos = new ArrayList<Todo>();
+		this.todos = new ArrayList<>();
 	}
 
 }
