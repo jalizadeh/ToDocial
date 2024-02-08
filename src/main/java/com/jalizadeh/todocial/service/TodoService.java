@@ -30,11 +30,8 @@ public class TodoService {
         User loggedInUser = userService.GetAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(id).orElse(null);
 
-        if (foundTodo == null)
+        if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
             return null;
-
-        if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
-            return null; //forbidden
 
         return foundTodo;
     }
@@ -88,11 +85,8 @@ public class TodoService {
         User loggedInUser = userService.GetAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(id).orElse(null);
 
-        if (foundTodo == null)
+        if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
             return false;
-
-        if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
-            return false; //forbidden
 
         todoRepository.delete(foundTodo);
         return true;
@@ -101,12 +95,8 @@ public class TodoService {
     public TodoLog createTodoLog(Long id, InputLog log) {
         User loggedInUser = userService.GetAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(id).orElse(null);
-
-        if (foundTodo == null)
+        if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
             return null;
-
-        if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
-            return null; //forbidden
 
         TodoLog todoLog = new TodoLog(new Date(), log.getLog());
         todoLog.getTodos().add(foundTodo);
@@ -120,15 +110,24 @@ public class TodoService {
     public boolean deleteTodoLog(Long todoId, Long todoLogId) {
         User loggedInUser = userService.GetAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(todoId).orElse(null);
-        TodoLog foundTodoLog = todoLogRepository.findById(todoLogId).orElse(null);
-
-        if (foundTodo == null || foundTodoLog == null)
+        if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
             return false;
 
-        if (!foundTodo.getUser().getId().equals(loggedInUser.getId()))
+        TodoLog foundTodoLog = todoLogRepository.findById(todoLogId).orElse(null);
+        if (foundTodoLog == null)
             return false;
 
         todoLogRepository.delete(foundTodoLog);
         return true;
+    }
+
+    public TodoLog findTodoLogById(Long todoId, Long todoLogId) {
+        User loggedInUser = userService.GetAuthenticatedUser();
+
+        Todo foundTodo = todoRepository.findById(todoId).orElse(null);
+        if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
+            return null;
+
+        return todoLogRepository.findById(todoLogId).orElse(null);
     }
 }

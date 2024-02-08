@@ -22,7 +22,7 @@ public class TodoLog {
 	
 	private String log;
 	
-	@ManyToMany(mappedBy="logs", cascade = CascadeType.REMOVE)
+	@ManyToMany(mappedBy="logs")
 	@JsonIgnore
 	private Collection<Todo> todos;
 

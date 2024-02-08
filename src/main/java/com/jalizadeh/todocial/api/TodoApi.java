@@ -82,7 +82,17 @@ public class TodoApi {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+	@GetMapping("/{todoId}/log/{todoLogId}")
+	public ResponseEntity<?> getTodoLog(@PathVariable("todoId") Long todoId, @PathVariable("todoLogId") Long todoLogId) {
+		TodoLog todoLog = todoService.findTodoLogById(todoId, todoLogId);
+
+		if(todoLog != null){
+			return new ResponseEntity<>(mapTodoToLogDTO(todoLog),HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
 	@PostMapping("/{todoId}/log")
 	public  ResponseEntity<?> createTodoLog(@PathVariable("todoId") Long todoId, @RequestBody InputLog log) {
@@ -97,14 +107,9 @@ public class TodoApi {
 	
 	
 	@DeleteMapping("/{todoId}/log/{todoLogId}")
-	public  ResponseEntity<String> deleteTodoLog(@PathVariable("todoId") Long todoId, @PathVariable("todoLogId") Long todoLogId) {
-		boolean deleted = todoService.deleteTodoLog(todoId, todoLogId);
-
-		if(deleted){
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	public  ResponseEntity<?> deleteTodoLog(@PathVariable("todoId") Long todoId, @PathVariable("todoLogId") Long todoLogId) {
+		return todoService.deleteTodoLog(todoId, todoLogId) ?
+			new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 }

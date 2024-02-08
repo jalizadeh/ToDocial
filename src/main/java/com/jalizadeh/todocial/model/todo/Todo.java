@@ -55,7 +55,7 @@ public class Todo {
 	@JsonIgnore
 	private User user;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.REMOVE)
 	@JoinTable(name = "todos_logs",
 			joinColumns = @JoinColumn(name = "todo_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "log_id", referencedColumnName = "id"))

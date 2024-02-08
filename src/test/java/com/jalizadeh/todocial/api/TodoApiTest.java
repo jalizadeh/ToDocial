@@ -47,14 +47,16 @@ class TodoApiTest {
 
     @Test
     @Order(1)
-    void findById_invalid() throws Exception {
-        mvc.perform(get(BASE_URL + "/id/9999")
+    @DisplayName("Return 404 Not Found for not existing todo")
+    void TodoApiTest_givenNotExistingId_returnsNotFound() throws Exception {
+        mvc.perform(get(BASE_URL + "/id/" + INVALID_ID)
                         .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Order(2)
+    @DisplayName("Get all todos")
     void getAllTodo() throws Exception {
         mvc.perform(get(BASE_URL)
                     .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
@@ -65,17 +67,18 @@ class TodoApiTest {
 
     @Test
     @Order(3)
+    @DisplayName("Get all todos of the given username")
     void getUserTodo() throws Exception {
         mvc.perform(get(BASE_URL + "/" + USERNAME)
                         .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$",hasSize(greaterThan(5))));
-
     }
 
     @Test
     @Order(4)
+    @DisplayName("Get all todos of currently logged in user")
     void getCurrentUserTodo() throws Exception {
         mvc.perform(get(BASE_URL + "/me")
                         .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes()))
@@ -88,6 +91,7 @@ class TodoApiTest {
 
     @Test
     @Order(5)
+    @DisplayName("Create a todo")
     void createTodo() throws Exception {
         InputTodo inputTodo = new InputTodo(testTodoName, testTodoDescription, testTodoReason);
 
@@ -122,6 +126,7 @@ class TodoApiTest {
 
     @Test
     @Order(6)
+    @DisplayName("Create a log for existing todo")
     void createTodoLog() throws Exception{
         InputLog inputLog = new InputLog(testTodoLogText);
 
@@ -141,22 +146,31 @@ class TodoApiTest {
         createdTodoLogId = createdTodoLog.getId();
 
         //get the created resource
-        mvc.perform(get(BASE_URL + "/" + createdTodoId + "/" + createdTodoLogId)
+        mvc.perform(get(BASE_URL + "/" + createdTodoId + "/log/" + createdTodoLogId)
                         .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id").value(createdTodoLogId));
-
     }
 
     @Test
     @Order(7)
-    @Disabled
-    void deleteTodoLog() {
+    @DisplayName("Delete a log of a todo")
+    void deleteTodoLog() throws Exception {
+        mvc.perform(delete(BASE_URL + "/" + createdTodoId + "/log/" + createdTodoLogId)
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                .andExpect(status().isOk());
+
+
+        //get the created resource
+        mvc.perform(get(BASE_URL + "/" + createdTodoId + "/log/" + createdTodoLogId)
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     @Order(8)
+    @DisplayName("Set a todo as canceled")
     void cancelTodo_valid() throws Exception {
         mvc.perform(delete(BASE_URL + "/" + createdTodoId)
                 .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
@@ -173,6 +187,7 @@ class TodoApiTest {
 
     @Test
     @Order(9)
+    @DisplayName("Return 404 Not Found while canceling non-existing todo or not-owner")
     void cancelTodo_notFound_notOwner() throws Exception {
         //Not found
         mvc.perform(delete(BASE_URL + "/9999")
@@ -188,6 +203,7 @@ class TodoApiTest {
 
     @Test
     @Order(20)
+    @DisplayName("Delete a todo from database")
     void deleteTodoFromDB_valid() throws Exception {
         mvc.perform(delete(BASE_URL + "/" + createdTodoId + "/db")
                 .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
@@ -201,6 +217,7 @@ class TodoApiTest {
 
     @Test
     @Order(21)
+    @DisplayName("Return 404 Not Found while deleting of not-existing todo or not-owner")
     void deleteTodoFromDB_NotFound_NotOwner() throws Exception {
         //Not found
         mvc.perform(delete(BASE_URL + "/" + INVALID_ID + "/db")
