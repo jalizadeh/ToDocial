@@ -35,11 +35,6 @@ public class SearchController {
 
         String q = DataUtils.sanitizeQuery(query);
 
-        model.put("settings", settings);
-        model.put("PageTitle", "Search in " + target.toUpperCase());
-        model.put("target", target.toUpperCase());
-        model.put("query", q);
-
         switch (target){
             case "todo":
                 List<Todo> todos = todoService.searchAllTodosByLoggedinUser(q);
@@ -50,10 +45,14 @@ public class SearchController {
                 model.put("items", gymPlans);
                 break;
             default:
-                redirectAttributes.addFlashAttribute("exception", "The search criteria is not correct");
+                redirectAttributes.addFlashAttribute("exception", "The search target is not correct, it should be 'todo' or 'gym'.");
                 return "redirect:/error";
         }
 
+        model.put("settings", settings);
+        model.put("PageTitle", "Search in " + target.toUpperCase());
+        model.put("target", target.toUpperCase());
+        model.put("query", q);
         return "search/" + target;
     }
 

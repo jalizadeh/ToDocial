@@ -4,7 +4,7 @@ import com.jalizadeh.todocial.model.FlashMessage;
 import com.jalizadeh.todocial.model.user.PasswordResetToken;
 import com.jalizadeh.todocial.model.user.SecurityQuestionDefinition;
 import com.jalizadeh.todocial.model.user.User;
-import com.jalizadeh.todocial.repository.user.SecurityQuestionDefinitionRepository;
+import com.jalizadeh.todocial.service.impl.SecurityQuestionService;
 import com.jalizadeh.todocial.service.impl.TokenService;
 import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.service.registration.OnPasswordResetEvent;
@@ -49,7 +49,7 @@ class LoginSignupControllerTest {
     TokenService tokenService;
 
     @Mock
-    SecurityQuestionDefinitionRepository sqdRepo;
+    SecurityQuestionService securityQuestionService;
 
     @Mock
     ApplicationEventPublisher eventPublisher;
@@ -182,7 +182,7 @@ class LoginSignupControllerTest {
     @DisplayName("Show sign up page to anonymous users")
     void testLoginSignupController_whenUserIsAnonymous_showSignupPage() {
         when(userService.isUserAnonymous()).thenReturn(true);
-        when(sqdRepo.findAll()).thenReturn(createMockedSecurityQuestions());
+        when(securityQuestionService.findAllSQD()).thenReturn(createMockedSecurityQuestions());
 
         String viewName = loginSignupController.showSignupPage(modelMap);
 
