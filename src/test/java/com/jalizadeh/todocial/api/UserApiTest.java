@@ -1,7 +1,7 @@
 package com.jalizadeh.todocial.api;
 
-import com.jalizadeh.todocial.service.TokenService;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.TokenService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.model.user.ActivationToken;
 import com.jalizadeh.todocial.model.user.User;
 import org.junit.jupiter.api.*;
@@ -28,8 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserApiTest {
 
     private final static String BASE_URL = "/api/v1/user";
-    private final static String USERNAME = "admin";
-    private final static String PASSWORD = "12345";
+    private final static String AUTH = "admin:12345";
 
     private final static Long INVALID_USER_ID = 99999L;
     private final static String INVALID_USER = "UNKNOWN_USER_1234567890";
@@ -62,7 +61,7 @@ class UserApiTest {
     @DisplayName("Logged in user obtains his account info")
     void ApiUserTest_givenValidUsernamePassword_returnsLoggedInUserInfo() throws Exception {
         mvc.perform(get(BASE_URL + "/me")
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.firstname", is("Javad")))
@@ -92,7 +91,7 @@ class UserApiTest {
     @DisplayName("Get all enabled users")
     void getUsers() throws Exception {
         mvc.perform(get(BASE_URL)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThan(2))));
     }
@@ -102,7 +101,7 @@ class UserApiTest {
     @DisplayName("Get user info by username")
     void getUserByUsername() throws Exception {
         mvc.perform(get(BASE_URL + "/admin")
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isMap())
                 .andExpect(jsonPath("$.username", is("admin")));
@@ -112,7 +111,7 @@ class UserApiTest {
     @Order(5)
     void getUserByUsernameNotFound() throws Exception {
         MockHttpServletResponse response = mvc.perform(get(BASE_URL + "/" + INVALID_USER)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound())
                 .andReturn().getResponse();
 
@@ -123,7 +122,7 @@ class UserApiTest {
     @Order(6)
     void getUserById() throws Exception {
         mvc.perform(get(BASE_URL + "/id/1")
-                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id", is(1)));
@@ -133,7 +132,7 @@ class UserApiTest {
     @Order(7)
     void getUserByIdNotFound() throws Exception {
         MockHttpServletResponse response = mvc.perform(get(BASE_URL + "/id/" + INVALID_USER_ID)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound())
                 .andReturn().getResponse();
 
@@ -198,7 +197,7 @@ class UserApiTest {
         setupTestUser();
 
         mvc.perform(delete(BASE_URL + "/" + username)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
 
@@ -211,14 +210,14 @@ class UserApiTest {
         setupTestUser();
 
         mvc.perform(delete(BASE_URL + "/" + username + "/db")
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
 
         assertThrows(RuntimeException.class, () -> userService.findByUsername(username));
 
         MockHttpServletResponse response = mvc.perform(get(BASE_URL + "/" + INVALID_USER)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound())
                 .andReturn().getResponse();
 

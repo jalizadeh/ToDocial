@@ -29,7 +29,7 @@ import com.jalizadeh.todocial.repository.user.RoleRepository;
 import com.jalizadeh.todocial.repository.todo.TodoRepository;
 import com.jalizadeh.todocial.repository.user.UserRepository;
 import com.jalizadeh.todocial.repository.user.ActivationTokenRepository;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.validator.UserValidator;
 
 @Controller

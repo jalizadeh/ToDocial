@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 
 @Controller
 public class UserAccountController {
@@ -16,7 +16,7 @@ public class UserAccountController {
 	@RequestMapping("/user/account")
 	public String ShowProfile(ModelMap model) {
 		model.put("PageTitle", "Account");
-		model.put("loggedinUser", userService.GetAuthenticatedUser());
+		model.put("loggedinUser", userService.getAuthenticatedUser());
 		return "user/account";
 	}
 	

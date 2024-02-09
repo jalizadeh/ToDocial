@@ -1,16 +1,17 @@
 package com.jalizadeh.todocial.controller;
 
-import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.exception.EmailExistsException;
 import com.jalizadeh.todocial.exception.UserAlreadyExistException;
-import com.jalizadeh.todocial.model.*;
+import com.jalizadeh.todocial.model.FlashMessage;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.user.PasswordResetToken;
 import com.jalizadeh.todocial.model.user.SecurityQuestion;
 import com.jalizadeh.todocial.model.user.SecurityQuestionDefinition;
 import com.jalizadeh.todocial.model.user.User;
-import com.jalizadeh.todocial.repository.user.SecurityQuestionDefinitionRepository;
-import com.jalizadeh.todocial.repository.user.SecurityQuestionRepository;
-import com.jalizadeh.todocial.service.*;
+import com.jalizadeh.todocial.service.ServiceTypes;
+import com.jalizadeh.todocial.service.impl.SecurityQuestionService;
+import com.jalizadeh.todocial.service.impl.TokenService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.service.registration.OnPasswordResetEvent;
 import com.jalizadeh.todocial.service.registration.OnRegistrationCompleteEvent;
 import com.jalizadeh.todocial.service.storage.StorageFileSystemService;
@@ -52,13 +53,7 @@ public class LoginSignupController{
 	private TokenService tokenService;
 
 	@Autowired
-	private SecurityQuestionDefinitionRepository sqdRepo;
-	
-	@Autowired
-	private SecurityQuestionRepository sqRepo;
-	
-	@Autowired
-	private PasswordResetTokenService prtService;
+	private SecurityQuestionService securityQuestionService;
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -68,9 +63,6 @@ public class LoginSignupController{
 	
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
-	
-	@Autowired
-	private CommonServices utilites;
 	
 	@Autowired
 	private SettingsGeneralConfig settings;
@@ -86,7 +78,7 @@ public class LoginSignupController{
 	
 	@GetMapping("/login")
     public String showLoginPage(ModelMap model, HttpServletRequest request) {
-		if(utilites.isUserAnonymous()) {
+		if(userService.isUserAnonymous()) {
 			model.put("settings", settings);
 			model.put("PageTitle", "Log in");
 	        model.put("user", new User());
@@ -140,7 +132,7 @@ public class LoginSignupController{
 		if(user != null) {
 			String token = UUID.randomUUID().toString();
 			PasswordResetToken prt = new PasswordResetToken(token, user, new Date());
-			prtService.saveNewToken(prt);
+			tokenService.savePRToken(prt);
 
     		String appUrl = request.getContextPath();
             eventPublisher.publishEvent(new OnPasswordResetEvent(prt, appUrl, request.getLocale()));
@@ -168,15 +160,15 @@ public class LoginSignupController{
 
 		switch (tokenStatus) {
 			case "valid":
-				User user = prtService.findUserByToken(token);
+				User user = tokenService.findUserByPRToken(token);
 				
 				//I need to access the user and change it's password later
 				// the best way is to keep it in the Security Context
 				Authentication auth = new UsernamePasswordAuthenticationToken(user,null,
 						userDetailsService.loadUserByUsername(user.getUsername()).getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(auth);
-				model.put("securityQuestions", sqdRepo.findAll());
-				prtService.deleteByToken(token);
+				model.put("securityQuestions", securityQuestionService.findAllSQD());
+				tokenService.deleteByPRToken(token);
 				return "change-password";
 				
 			case "invalid":
@@ -206,18 +198,18 @@ public class LoginSignupController{
 		
 		if (!password.equals(mp)) {
 			model.put("errorMessages", "Passwords do not match");
-			model.put("securityQuestions", sqdRepo.findAll());
+			model.put("securityQuestions", securityQuestionService.findAllSQD());
             return "change-password";
         }
 		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		SecurityQuestion secQ = sqRepo.findByUserId(user.getId());
+		SecurityQuestion secQ = securityQuestionService.findSQByUserId(user.getId());
 		
 		//check answer validity
 		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
 		if(!b.matches(sqa, secQ.getAnswer()) || !sq.equals(secQ.getQuestionDefinition().getId())) {
 			model.put("errorMessages", "The given answer is not correct. Try again.");
-			model.put("securityQuestions", sqdRepo.findAll());
+			model.put("securityQuestions", securityQuestionService.findAllSQD());
             return "change-password";
 		}
 		
@@ -233,11 +225,11 @@ public class LoginSignupController{
 	
 	@GetMapping("/signup")
 	public String showSignupPage(ModelMap model) {
-		if(utilites.isUserAnonymous()) {
+		if(userService.isUserAnonymous()) {
 			model.put("settings", settings);
 			model.put("PageTitle", "Sign up");
 			model.addAttribute("user", new User());
-			model.put("securityQuestions", sqdRepo.findAll());
+			model.put("securityQuestions", securityQuestionService.findAllSQD());
 			return "signup";
 		}
 		
@@ -263,7 +255,7 @@ public class LoginSignupController{
 	    	
 	    	mv.addObject("errorMessages", errorMessages);
 	    	mv.addObject("user", user);
-	    	mv.addObject("securityQuestions", sqdRepo.findAll());
+	    	mv.addObject("securityQuestions", securityQuestionService.findAllSQD());
 	    	mv.setViewName("signup");
 	    	return mv;
 		}
@@ -278,8 +270,8 @@ public class LoginSignupController{
 			}
             
     		registered = userService.registerNewUserAccount(user);
-    		SecurityQuestionDefinition sqd = sqdRepo.getOne(sq);
-    		sqRepo.save(new SecurityQuestion(registered, sqd, passwordEncoder.encode(sqa)));
+    		SecurityQuestionDefinition sqd = securityQuestionService.findSQById(sq);
+			securityQuestionService.saveSQ(new SecurityQuestion(registered, sqd, passwordEncoder.encode(sqa)));
     		
     		//The process of creating token and sending email is asynchronous
     		// and is handled by eventPublisher
@@ -288,7 +280,7 @@ public class LoginSignupController{
     	} catch (UserAlreadyExistException | EmailExistsException | Exception e) {
 	    	mv.addObject("exception", e.getMessage());
 	    	mv.addObject("user", user);
-	    	mv.addObject("securityQuestions", sqdRepo.findAll());
+	    	mv.addObject("securityQuestions", securityQuestionService.findAllSQD());
 	    	mv.setViewName("signup");
 	    	return mv;
 		}

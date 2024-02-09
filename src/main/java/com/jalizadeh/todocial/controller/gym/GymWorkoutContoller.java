@@ -1,7 +1,7 @@
 package com.jalizadeh.todocial.controller.gym;
 
 import com.jalizadeh.todocial.service.ServiceTypes;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.FlashMessage;
@@ -124,7 +124,7 @@ public class GymWorkoutContoller {
 
         // the rest is only visible to the owner, not anyone else
         List<GymPlan> plansByWorkoutId = gymDayWorkoutRepository
-                .findDistinctPlansByUserIdAndWorkoutId(userService.GetAuthenticatedUser().getId(), foundWorkout.getId());
+                .findDistinctPlansByUserIdAndWorkoutId(userService.getAuthenticatedUser().getId(), foundWorkout.getId());
 
         if(!plansByWorkoutId.isEmpty()) {
             List<GymWorkoutLog> allLogsForWorkout = gymWorkoutLogRepository.findAllLogsForWorkout(id);

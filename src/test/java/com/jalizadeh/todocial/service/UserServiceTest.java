@@ -5,6 +5,7 @@ import com.jalizadeh.todocial.exception.EmailExistsException;
 import com.jalizadeh.todocial.exception.UserAlreadyExistException;
 import com.jalizadeh.todocial.model.user.User;
 import com.jalizadeh.todocial.repository.user.RoleRepository;
+import com.jalizadeh.todocial.service.impl.UserService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;

@@ -28,8 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TodoApiTest {
 
     private final static String BASE_URL = "/api/v1/todo";
+    private final static String AUTH = "admin:12345";
     private final static String USERNAME = "admin";
-    private final static String PASSWORD = "12345";
     private final static Long INVALID_ID = 99999L;
 
     private final String testTodoName = "TODO - test";
@@ -50,7 +50,7 @@ class TodoApiTest {
     @DisplayName("Return 404 Not Found for not existing todo")
     void TodoApiTest_givenNotExistingId_returnsNotFound() throws Exception {
         mvc.perform(get(BASE_URL + "/id/" + INVALID_ID)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound());
     }
 
@@ -59,7 +59,7 @@ class TodoApiTest {
     @DisplayName("Get all todos")
     void getAllTodo() throws Exception {
         mvc.perform(get(BASE_URL)
-                    .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                    .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$",hasSize(greaterThan(3))));
@@ -70,7 +70,7 @@ class TodoApiTest {
     @DisplayName("Get all todos of the given username")
     void getUserTodo() throws Exception {
         mvc.perform(get(BASE_URL + "/" + USERNAME)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$",hasSize(greaterThan(5))));
@@ -81,7 +81,7 @@ class TodoApiTest {
     @DisplayName("Get all todos of currently logged in user")
     void getCurrentUserTodo() throws Exception {
         mvc.perform(get(BASE_URL + "/me")
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes()))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -96,7 +96,7 @@ class TodoApiTest {
         InputTodo inputTodo = new InputTodo(testTodoName, testTodoDescription, testTodoReason);
 
         MvcResult result = mvc.perform(post(BASE_URL)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes()))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(inputTodo)))
                 .andExpect(status().isCreated())
@@ -118,7 +118,7 @@ class TodoApiTest {
 
         //get the created resource
         mvc.perform(get(BASE_URL + "/id/" + createdTodoId)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id").value(createdTodoId));
@@ -131,7 +131,7 @@ class TodoApiTest {
         InputLog inputLog = new InputLog(testTodoLogText);
 
         MvcResult result = mvc.perform(post(BASE_URL + "/" + createdTodoId + "/log")
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes()))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(inputLog)))
                 .andExpect(status().isCreated())
@@ -147,7 +147,7 @@ class TodoApiTest {
 
         //get the created resource
         mvc.perform(get(BASE_URL + "/" + createdTodoId + "/log/" + createdTodoLogId)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id").value(createdTodoLogId));
@@ -158,13 +158,13 @@ class TodoApiTest {
     @DisplayName("Delete a log of a todo")
     void deleteTodoLog() throws Exception {
         mvc.perform(delete(BASE_URL + "/" + createdTodoId + "/log/" + createdTodoLogId)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk());
 
 
         //get the created resource
         mvc.perform(get(BASE_URL + "/" + createdTodoId + "/log/" + createdTodoLogId)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound());
     }
 
@@ -173,12 +173,12 @@ class TodoApiTest {
     @DisplayName("Set a todo as canceled")
     void cancelTodo_valid() throws Exception {
         mvc.perform(delete(BASE_URL + "/" + createdTodoId)
-                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
 
         mvc.perform(get(BASE_URL + "/id/" + createdTodoId)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.id").value(createdTodoId))
@@ -191,12 +191,12 @@ class TodoApiTest {
     void cancelTodo_notFound_notOwner() throws Exception {
         //Not found
         mvc.perform(delete(BASE_URL + "/9999")
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound());
 
         //This user is not the owner of this resource
         mvc.perform(delete(BASE_URL + "/22")
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound());
     }
 
@@ -206,12 +206,12 @@ class TodoApiTest {
     @DisplayName("Delete a todo from database")
     void deleteTodoFromDB_valid() throws Exception {
         mvc.perform(delete(BASE_URL + "/" + createdTodoId + "/db")
-                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
 
         mvc.perform(get(BASE_URL + "/id/" + createdTodoId)
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound());
     }
 
@@ -221,12 +221,12 @@ class TodoApiTest {
     void deleteTodoFromDB_NotFound_NotOwner() throws Exception {
         //Not found
         mvc.perform(delete(BASE_URL + "/" + INVALID_ID + "/db")
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound());
 
         //This user is not the owner of this resource
         mvc.perform(delete(BASE_URL + "/22/db")
-                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString((USERNAME + ":" + PASSWORD).getBytes())))
+                        .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(AUTH.getBytes())))
                 .andExpect(status().isNotFound());
     }
 

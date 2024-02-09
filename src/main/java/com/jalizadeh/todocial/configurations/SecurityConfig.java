@@ -37,7 +37,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import com.google.common.collect.Lists;
 import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.FlashMessage;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 
 @Configuration
 @EnableWebSecurity

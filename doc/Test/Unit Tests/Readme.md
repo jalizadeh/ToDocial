@@ -96,9 +96,52 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
 | ✅ | Get all `Todo` for `User`  | `GET /api/v1/todo/{username}`  |
 |    | Get all filtered `Todo` for `User`  | `GET /api/v1/todo/{username}?filter={filters}`  |
 | ✅ | Create a `Todo` for `User` | `POST /api/v1/todo`  |
-|   | Cancel (pause) a `Todo`  | `DELETE /api/v1/todo/{id}` |
+| ✅ | Cancel (pause) a `Todo`  | `DELETE /api/v1/todo/{id}` |
 | ✅ | Delete a `Todo` and its `TodoLog`  | `DELETE /api/v1/todo/{id}/db` |
 | ✅ | Create a `Todo Log`  | `POST /api/v1/todo/{id}/log` |
-|   | Get a `Todo Log`  | `GET /api/v1/todo/{id}/log/{id}` |
-|   | Get all `Todo Log`  | `GET /api/v1/todo/{id}/log` |
+| ✅ | Get a `Todo Log`  | `GET /api/v1/todo/{id}/log/{id}` |
+| ✅ | Get all `Todo Log`  | `GET /api/v1/todo/{id}/log` |
 | ✅ | Delete a `Todo Log`  | `DELETE /api/v1/todo/{id}/log/{id}` |
+
+
+## Search Controller
+
+1. **Valid Search for Todos**:
+   - **Scenario**: Perform a search for todos with a valid query.
+   - **Test Steps**:
+     1. Send a GET request to `/search` with `target=todo` and a valid query (`q` parameter).
+     2. Verify that the response status is 200 OK.
+     3. Verify that the returned page contains a list of todos matching the search query.
+
+2. **Valid Search for Gym Plans**:
+   - **Scenario**: Perform a search for gym plans with a valid query.
+   - **Test Steps**:
+     1. Send a GET request to `/search` with `target=gym` and a valid query (`q` parameter).
+     2. Verify that the response status is 200 OK.
+     3. Verify that the returned page contains a list of gym plans matching the search query.
+
+3. **Search with Empty Query**:
+   - **Scenario**: Perform a search with an empty query.
+   - **Test Steps**:
+     1. Send a GET request to `/search` with `target=todo` and an empty query (`q` parameter).
+     2. Verify that the response status is 200 OK.
+     3. Verify that the returned page contains a list of all todos.
+
+4. **Invalid Target**:
+   - **Scenario**: Perform a search with an invalid target.
+   - **Test Steps**:
+     1. Send a GET request to `/search` with an invalid `target` parameter.
+     2. Verify that the response status is a redirection (e.g., 302 Found).
+     3. Verify that the redirection URL is `/error`.
+     4. Verify that an appropriate error message is flashed (e.g., "The search criteria is not correct").
+
+5. **Sanitization of Query**:
+   - **Scenario**: Test the sanitization of the search query.
+   - **Test Steps**:
+     1. Send a GET request to `/search` with `target=todo` and a query containing potentially harmful characters (e.g., HTML tags, special characters).
+     2. Verify that the search query is sanitized properly to prevent XSS attacks or other security vulnerabilities.
+
+6. **Edge Cases**:
+   - **Scenario**: Test edge cases such as very long queries, special characters, or edge values for parameters.
+   - **Test Steps**: 
+     - For example, send requests with excessively long queries, special characters, or unusual values for the `target` parameter to ensure that the endpoint handles these cases gracefully.

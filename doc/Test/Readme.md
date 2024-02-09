@@ -84,3 +84,39 @@ Work product:
 - Product backlog
 - Archived/finalized testware
 - Analyze lessons
+
+## Tips & Tricks
+A good way to figure out test scenarios and their cases, and stay concentrated on them, is following:
+
+1. Run `mvn clean test` which produces *Surefire* and *Jacoco* reports
+2. Go to `/target/site/jacoco/index.html` which has full report for test coverage
+3. Open the desired class 
+    - I suggest to start, pick the smallest classes first
+4. Look for red lines or diamonds
+    - Red line: uncovered loc
+    - Diamond: hover mouse pointer on it and check the test branches (scenarios) you need to consider
+
+Note that in Jacoco report, green line doesn't 100% guaranties that the line is tested.
+
+```
+mvn test -Dtest=SearchControllerTest.java
+```
+
+![](files/jacoco_before.PNG)
+
+The test developed never tests `modelMap`, but only covers 1/3 of test branches.
+
+```java
+@Test
+void searchTodo_validQuery() throws Exception {
+    List<Todo> mockTodos = Arrays.asList(new Todo(), new Todo());
+    when(todoService.searchAllTodosByLoggedinUser(any())).thenReturn(mockTodos);
+
+    mvc.perform(get(BASE_URL).param("target", "todo").param("q", VALID_QUERY)
+                    .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString("admin:12345".getBytes())))
+            .andExpect(MockMvcResultMatchers.status().isOk());
+}
+```
+
+
+![](files/jacoco_after.PNG)

@@ -22,9 +22,7 @@ public class ExceptionController implements ErrorController {
     @Autowired
 	private SettingsGeneralConfig settings;
     
-    /**
-     * implement ErrorController to handle 404
-     */
+    //implement ErrorController to handle 404
     @Override
     public String getErrorPath() {
         return ERROR_PATH;
@@ -32,8 +30,7 @@ public class ExceptionController implements ErrorController {
     
 
     @GetMapping(ERROR_PATH)
-    public ModelAndView handleError(HttpServletRequest request, 
-    		HttpServletResponse response) throws IOException {
+    public ModelAndView handleError(HttpServletRequest request, HttpServletResponse response) throws IOException {
     	
     	Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         ModelAndView mv = new ModelAndView();

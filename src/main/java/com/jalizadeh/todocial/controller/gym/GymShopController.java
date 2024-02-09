@@ -8,7 +8,7 @@ import com.jalizadeh.todocial.repository.gym.GymDayRepository;
 import com.jalizadeh.todocial.repository.gym.GymPlanRepository;
 import com.jalizadeh.todocial.repository.gym.GymPlanWeekDayRepository;
 import com.jalizadeh.todocial.service.ShoppingCartService;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

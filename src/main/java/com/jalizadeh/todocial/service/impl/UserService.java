@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.service;
+package com.jalizadeh.todocial.service.impl;
 
 import com.jalizadeh.todocial.exception.EmailExistsException;
 import com.jalizadeh.todocial.exception.UserAlreadyExistException;
@@ -7,6 +7,7 @@ import com.jalizadeh.todocial.repository.user.RoleRepository;
 import com.jalizadeh.todocial.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,13 +51,20 @@ public class UserService implements UserDetailsService {
 		return "Hi";
 	}
 
+	public boolean isUserAnonymous() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication instanceof AnonymousAuthenticationToken)
+			return true;
+
+		return false;
+	}
 
 	public User getUserByPrincipal(Principal principal) {
 		return (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
 	}
 	
 
-	public User GetAuthenticatedUser() {
+	public User getAuthenticatedUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		if(authentication == null || authentication.getName().equals("anonymousUser")) {

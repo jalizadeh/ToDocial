@@ -1,14 +1,13 @@
 package com.jalizadeh.todocial.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
-import com.jalizadeh.todocial.repository.gym.GymPlanRepository;
+import com.jalizadeh.todocial.model.FlashMessage;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
+import com.jalizadeh.todocial.model.todo.Todo;
+import com.jalizadeh.todocial.model.todo.TodoLog;
+import com.jalizadeh.todocial.model.user.User;
+import com.jalizadeh.todocial.service.impl.GymService;
+import com.jalizadeh.todocial.service.impl.TodoService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -21,16 +20,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
-import com.jalizadeh.todocial.model.FlashMessage;
-import com.jalizadeh.todocial.model.todo.Todo;
-import com.jalizadeh.todocial.model.todo.TodoLog;
-import com.jalizadeh.todocial.model.user.User;
-import com.jalizadeh.todocial.repository.todo.TodoLogRepository;
-import com.jalizadeh.todocial.repository.todo.TodoRepository;
-import com.jalizadeh.todocial.repository.user.UserRepository;
-import com.jalizadeh.todocial.service.CommonServices;
-import com.jalizadeh.todocial.service.UserService;
+import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 public class TodoController {
@@ -39,22 +33,13 @@ public class TodoController {
 	private UserService userService;
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private TodoRepository todoRepository;
-	
-	@Autowired
-	private TodoLogRepository todoLogRepository;
-	
-	@Autowired
-	private CommonServices utilites;
+	private TodoService todoService;
 	
 	@Autowired
 	private SettingsGeneralConfig settings;
 
 	@Autowired
-	private GymPlanRepository gymPlanRepository;
+	private GymService gymService;
 	
 	
 	@InitBinder
@@ -68,11 +53,11 @@ public class TodoController {
 		model.put("settings", settings);
 		model.put("PageTitle", "My Todos");
 
-		User loggedinUser = userService.GetAuthenticatedUser();
+		User loggedinUser = userService.getAuthenticatedUser();
 		model.put("user", loggedinUser);
-		model.put("todosCompleted", todoRepository.getAllCompleted());
-		model.put("todosNotCompleted", todoRepository.getAllNotCompleted());
-		model.put("todosCanceled", todoRepository.getAllCanceled());
+		model.put("todosCompleted", todoService.getAllCompletedTodos());
+		model.put("todosNotCompleted", todoService.getAllNotCompletedTodos());
+		model.put("todosCanceled", todoService.getAllCanceledTodos());
 
 		return "todos";
 	}
@@ -81,17 +66,17 @@ public class TodoController {
 	@PostMapping(value = "/todos", params = {"todoId", "log"})
 	public String addNewTodoLog(ModelMap model, @RequestParam Long todoId, @RequestParam String log) {
 
-		User user = userService.GetAuthenticatedUser();
+		User user = userService.getAuthenticatedUser();
 
 		//TODO: check for security+null
 		
 		TodoLog todoLog = new TodoLog(new Date(), log);
-		Todo todo = todoRepository.getOne(todoId);
+		Todo todo = todoService.findById(todoId);
 		
 		todoLog.getTodos().add(todo);
 		todo.getLogs().add(todoLog);
 		
-		todoRepository.save(todo);
+		todoService.save(todo);
 		
 		return "redirect:/todos";
 	}
@@ -99,28 +84,28 @@ public class TodoController {
 	
 	@GetMapping("/cancel-todo")
 	public String DeleteTodo(ModelMap model, @RequestParam Long id) {
-		Todo todo = todoRepository.getOne(id);
+		Todo todo = todoService.findById(id);
 		todo.setCanceled(true);
 		todo.setCancel_date(new Date());
-		todoRepository.save(todo);
+		todoService.save(todo);
 		return "redirect:/todos";
 	}
 	
 	
 	@GetMapping("/resume-todo")
 	public String ResumeTodo(ModelMap model, @RequestParam Long id) {
-		Todo todo = todoRepository.getOne(id);
+		Todo todo = todoService.findById(id);
 		todo.setCanceled(false);
 		//todo.setCancel_date(new Date());
-		todoRepository.save(todo);
+		todoService.save(todo);
 		return "redirect:/todos";
 	}
 	
 	
 	@GetMapping("/delete-todo-log")
 	public String DeleteTodoLog(ModelMap model, @RequestParam Long id) {
-		User user = userService.GetAuthenticatedUser();
-		todoLogRepository.deleteById(id);
+		User user = userService.getAuthenticatedUser();
+		todoService.deleteById(id);
 		return "redirect:/todos";
 	}
 	
@@ -149,10 +134,10 @@ public class TodoController {
 			return "todo";
 		}
 		
-		User user = userService.GetAuthenticatedUser();
+		User user = userService.getAuthenticatedUser();
     	todo.setUser(user);
     	//todo.setCreation_date(new Date());
-		todoRepository.save(todo);
+		todoService.save(todo);
 		
 		redirectAttributes.addFlashAttribute("flash", 
 				new FlashMessage("Todo created successfully", FlashMessage.Status.success));
@@ -167,15 +152,18 @@ public class TodoController {
 	 */
 	@GetMapping("/todo")
 	public String ShowUpdateTodoPage(ModelMap model, @RequestParam Long id, RedirectAttributes redirectAttributes) {
-		Optional<Todo> todo = todoRepository.findById(id);
+		/*
+		Optional<Todo> todo = todoService.findById(id);
 
 		//if requested to-do id doesnt exists
 		if(!todo.isPresent()){
 			redirectAttributes.addFlashAttribute("exception", "The requested todo with id "+ id + " doesn't exist");
 			return "redirect:/error";
 		}
-
 		Todo foundTodo = todo.get();
+
+		 */
+		Todo foundTodo = todoService.findById(id);
 		model.put("PageTitle", foundTodo.getName());
 		model.put("settings", settings);
 		model.put("todo", foundTodo);
@@ -183,7 +171,7 @@ public class TodoController {
 		model.addAttribute("allType",allType());
 
 		//to-do doesnt belongs to current logged in user. It is viewable only, not editable
-		User currentUser = userService.GetAuthenticatedUser();
+		User currentUser = userService.getAuthenticatedUser();
 		if(!foundTodo.getUser().getUsername().equals(currentUser.getUsername())){
 			return "todo-completed";
 		}
@@ -206,14 +194,14 @@ public class TodoController {
 			return "todo";
 		}
 
-		User user = userService.GetAuthenticatedUser();
-		Todo ref = todoRepository.getOne(todo.getId());
+		User user = userService.getAuthenticatedUser();
+		Todo ref = todoService.findById(todo.getId());
 		
 		todo.setUser(user);
 		todo.setLike(ref.getLike());
 		//todo.setCreation_date(ref.getCreation_date());
 		todo.setLogs(ref.getLogs());
-		todoRepository.save(todo);
+		todoService.save(todo);
 		
 		redirectAttributes.addFlashAttribute("flash", 
 				new FlashMessage("Todo updated successfully", FlashMessage.Status.success));
@@ -222,18 +210,17 @@ public class TodoController {
 	
 	
 	@PostMapping("/update-todo-newlog")
-	public String UpdateTodoNewLog(ModelMap model, @RequestParam Long todoId, 
-			@RequestParam String log) {
+	public String UpdateTodoNewLog(ModelMap model, @RequestParam Long todoId, @RequestParam String log) {
 
 		//TODO: check for security+null
 		
 		TodoLog todoLog = new TodoLog(new Date(), log);
-		Todo todo = todoRepository.getOne(todoId);
+		Todo todo = todoService.findById(todoId);
 		
 		todoLog.getTodos().add(todo);
 		todo.getLogs().add(todoLog);
 		
-		todoRepository.save(todo);
+		todoService.save(todo);
 		
 		return "redirect:/update-todo?id=" + todoId;
 	}
@@ -242,7 +229,7 @@ public class TodoController {
 	@GetMapping("/update-todo-deletelog")
 	public String UpdateTodoDeleteLog(ModelMap model, @RequestParam Long todoId, 
 			@RequestParam Long logId) {
-		todoLogRepository.deleteById(logId);
+		todoService.deleteLogById(logId);
 		return "redirect:/update-todo?id=" + todoId;
 	}
 	
@@ -252,7 +239,7 @@ public class TodoController {
 		model.put("PageTitle", "Complete & Archive Todo");
 		model.put("settings", settings);
 		
-		Todo todo = todoRepository.getOne(id);
+		Todo todo = todoService.findById(id);
 		todo.setCompletion_date(new Date());
 		todo.setCompleted(true);
 		model.put("todo", todo);
@@ -276,14 +263,14 @@ public class TodoController {
 			return "todo";
 		}
 		
-		Todo ref = todoRepository.getOne(todo.getId());
+		Todo ref = todoService.findById(todo.getId());
 		todo.setCreation_date(ref.getCreation_date());
 		todo.setCompletion_date(new Date());
 		todo.setCompleted(true);
 		todo.setUser(ref.getUser());
 		todo.setLogs(ref.getLogs());
 		
-		todoRepository.save(todo);
+		todoService.save(todo);
 		
 		redirectAttributes.addFlashAttribute("flash", 
 				new FlashMessage("Todo completed successfully", FlashMessage.Status.success));
@@ -297,7 +284,7 @@ public class TodoController {
 		model.put("PageTitle", "Completed Todo");
 		model.put("settings", settings);
 		
-		Todo todo = todoRepository.getOne(id);
+		Todo todo = todoService.findById(id);
 		if(!todo.isCompleted()) {
 			redirectAttributes.addFlashAttribute("flash", 
 					new FlashMessage("Todo is not completed yet.", FlashMessage.Status.warning));
@@ -313,10 +300,10 @@ public class TodoController {
 	
 	@GetMapping("/todo-state")
 	public String changeState(ModelMap model, @RequestParam Long id) {
-		User user = userService.GetAuthenticatedUser();
-		Todo todo = todoRepository.getOne(id);
+		User user = userService.getAuthenticatedUser();
+		Todo todo = todoService.findById(id);
 		todo.setCompleted(!todo.isCompleted());
-		todoRepository.save(todo);
+		todoService.save(todo);
 		return "redirect:/todos";
 	}
 	

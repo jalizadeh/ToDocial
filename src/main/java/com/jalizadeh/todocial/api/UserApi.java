@@ -3,8 +3,8 @@ package com.jalizadeh.todocial.api;
 import com.jalizadeh.todocial.model.user.dto.InputUser;
 import com.jalizadeh.todocial.model.user.dto.TokenDto;
 import com.jalizadeh.todocial.model.user.dto.UserDto;
-import com.jalizadeh.todocial.service.TokenService;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.TokenService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.service.registration.OnApiRegistrationCompleteEvent;
 import com.jalizadeh.todocial.utils.DataUtils;
 import com.jalizadeh.todocial.exception.EmailExistsException;
@@ -37,7 +37,7 @@ public class UserApi {
 	
 	@GetMapping("/me")
 	public UserDto getMe() {
-		User currentUser = userService.GetAuthenticatedUser();
+		User currentUser = userService.getAuthenticatedUser();
 		return mapUserToDTO(currentUser);
 	}
 

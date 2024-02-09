@@ -1,12 +1,11 @@
 package com.jalizadeh.todocial.controller;
 
-
-import com.jalizadeh.todocial.repository.todo.TodoRepository;
-import com.jalizadeh.todocial.utils.DataUtils;
+import com.jalizadeh.todocial.model.gym.GymPlan;
 import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
 import com.jalizadeh.todocial.model.todo.Todo;
-import com.jalizadeh.todocial.model.gym.GymPlan;
-import com.jalizadeh.todocial.repository.gym.GymPlanRepository;
+import com.jalizadeh.todocial.service.impl.GymService;
+import com.jalizadeh.todocial.service.impl.TodoService;
+import com.jalizadeh.todocial.utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,10 +22,10 @@ public class SearchController {
     private SettingsGeneralConfig settings;
 
     @Autowired
-    private TodoRepository todoRepository;
+    private TodoService todoService;
 
     @Autowired
-    private GymPlanRepository gymPlanRepository;
+    private GymService gymService;
 
 
     @GetMapping("/search")
@@ -36,25 +35,24 @@ public class SearchController {
 
         String q = DataUtils.sanitizeQuery(query);
 
+        switch (target){
+            case "todo":
+                List<Todo> todos = todoService.searchAllTodosByLoggedinUser(q);
+                model.put("items", todos);
+                break;
+            case "gym":
+                List<GymPlan> gymPlans = gymService.searchAllPlans(q);
+                model.put("items", gymPlans);
+                break;
+            default:
+                redirectAttributes.addFlashAttribute("exception", "The search target is not correct, it should be 'todo' or 'gym'.");
+                return "redirect:/error";
+        }
+
         model.put("settings", settings);
         model.put("PageTitle", "Search in " + target.toUpperCase());
         model.put("target", target.toUpperCase());
         model.put("query", q);
-
-        switch (target){
-            case "todo":
-                List<Todo> todos = todoRepository.searchAllByLoggedinUser(q);
-                model.put("items", todos);
-                break;
-            case "gym":
-                List<GymPlan> gymPlans = gymPlanRepository.searchAll(q);
-                model.put("items", gymPlans);
-                break;
-            default:
-                redirectAttributes.addFlashAttribute("exception", "The search criteria is not correct");
-                return "redirect:/error";
-        }
-
         return "search/" + target;
     }
 

@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.service;
+package com.jalizadeh.todocial.service.impl;
 
 import com.jalizadeh.todocial.model.todo.Todo;
 import com.jalizadeh.todocial.model.todo.TodoLog;
@@ -27,7 +27,7 @@ public class TodoService {
 
 
     public Todo findById(Long id) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(id).orElse(null);
 
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
@@ -44,18 +44,22 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
+    public List<Todo> findAllByUser(User user) {
+        return todoRepository.findAllByUser(user);
+    }
+
     public List<Todo> findTodosByUsername(String username) {
         User user = userService.findByUsername(username);
         return todoRepository.findAllByUser(user);
     }
 
     public List<Todo> findAllByLoggedinUser() {
-        User user = userService.GetAuthenticatedUser();
+        User user = userService.getAuthenticatedUser();
         return todoRepository.findAllByUser(user);
     }
 
     public Todo createTodo(InputTodo todo) {
-        User user = userService.GetAuthenticatedUser();
+        User user = userService.getAuthenticatedUser();
 
         Todo newTodo = new Todo();
         newTodo.setName(todo.getName());
@@ -68,7 +72,7 @@ public class TodoService {
     }
 
     public boolean cancelTodo(Long id) {
-        User loggedinUser = userService.GetAuthenticatedUser();
+        User loggedinUser = userService.getAuthenticatedUser();
         Todo todo = todoRepository.findById(id).orElse(null);
 
         if (todo != null && todo.getUser().getId().equals(loggedinUser.getId())) {
@@ -82,7 +86,7 @@ public class TodoService {
     }
 
     public boolean deleteTodoById(Long id) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(id).orElse(null);
 
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
@@ -93,7 +97,7 @@ public class TodoService {
     }
 
     public TodoLog createTodoLog(Long id, InputLog log) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(id).orElse(null);
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
             return null;
@@ -108,7 +112,7 @@ public class TodoService {
     }
 
     public boolean deleteTodoLog(Long todoId, Long todoLogId) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(todoId).orElse(null);
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
             return false;
@@ -122,12 +126,49 @@ public class TodoService {
     }
 
     public TodoLog findTodoLogById(Long todoId, Long todoLogId) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
 
         Todo foundTodo = todoRepository.findById(todoId).orElse(null);
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
             return null;
 
         return todoLogRepository.findById(todoLogId).orElse(null);
+    }
+
+    public List<Todo> findAllTodosByIsPublicTrue() {
+        return todoRepository.findAllByIsPublicTrue();
+    }
+
+    public List<Todo> findAllTodosByUserIdAndIsPublicTrue(Long id) {
+        return todoRepository.findAllByUserIdAndIsPublicTrue(id);
+    }
+
+    public List<Todo> searchAllTodosByLoggedinUser(String q) {
+        return todoRepository.searchAllByLoggedinUser(q);
+    }
+
+    public List<Todo> getAllCompletedTodos() {
+        return todoRepository.getAllCompleted();
+    }
+
+    public List<Todo> getAllNotCompletedTodos() {
+        return todoRepository.getAllNotCompleted();
+    }
+
+    public List<Todo> getAllCanceledTodos() {
+        return todoRepository.getAllCanceled();
+    }
+
+
+    public void save(Todo todo) {
+        todoRepository.save(todo);
+    }
+
+    public void deleteById(Long id) {
+        todoRepository.deleteById(id);
+    }
+
+    public void deleteLogById(Long id) {
+        todoLogRepository.deleteById(id);
     }
 }

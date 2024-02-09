@@ -9,7 +9,7 @@ import com.jalizadeh.todocial.model.gym.types.GymMainGoal;
 import com.jalizadeh.todocial.model.gym.types.GymTrainingLevel;
 import com.jalizadeh.todocial.model.gym.types.GymWorkoutType;
 import com.jalizadeh.todocial.repository.gym.*;
-import com.jalizadeh.todocial.service.UserService;
+import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.utils.GymUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -114,7 +114,7 @@ public class GymPlanController {
             return "redirect:/gym/plan/new?step=2";
         } else if (step == 2) {
             newPlan = plan;
-            newPlan.setUser(userService.GetAuthenticatedUser());
+            newPlan.setUser(userService.getAuthenticatedUser());
             GymPlan savedPlan = gymPlanRepository.save(newPlan);
 
             newPlan.getDays().forEach(d -> {
@@ -155,7 +155,7 @@ public class GymPlanController {
         }
 
         GymPlan foundPlan = plan.get();
-        if(foundPlan.getUser().getId() != userService.GetAuthenticatedUser().getId()){
+        if(foundPlan.getUser().getId() != userService.getAuthenticatedUser().getId()){
             redirectAttributes.addFlashAttribute("exception", "This plan doesnt belong to you");
             return "redirect:/error";
         }
@@ -190,7 +190,7 @@ public class GymPlanController {
         GymPlan foundPlan = gymPlanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Plan not found with id: " + id));
 
-        foundPlan.setUser(userService.GetAuthenticatedUser());
+        foundPlan.setUser(userService.getAuthenticatedUser());
         foundPlan.setTitle(plan.getTitle());
         foundPlan.setGymPlanIntroduction(plan.getGymPlanIntroduction());
         //TODO: the rest
@@ -284,7 +284,7 @@ public class GymPlanController {
 
         GymPlan foundPlan = plan.get();
 
-        if(!foundPlan.getIsPublic() && foundPlan.getUser().getId() != userService.GetAuthenticatedUser().getId()){
+        if(!foundPlan.getIsPublic() && foundPlan.getUser().getId() != userService.getAuthenticatedUser().getId()){
             redirectAttributes.addFlashAttribute("exception", "The requested plan with id " + id + " doesn't exist");
             return "redirect:/error";
         }
