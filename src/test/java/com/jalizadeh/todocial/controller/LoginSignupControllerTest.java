@@ -96,7 +96,7 @@ class LoginSignupControllerTest {
         //assertEquals(settings, modelMap.get("settings"));
         //assertEquals(?, modelMap.get("user")
         assertEquals("Log in", modelMap.get("PageTitle"));
-        assertNull(userService.GetAuthenticatedUser());
+        assertNull(userService.getAuthenticatedUser());
     }
 
     @Test

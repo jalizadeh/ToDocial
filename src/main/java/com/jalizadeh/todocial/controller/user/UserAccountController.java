@@ -16,7 +16,7 @@ public class UserAccountController {
 	@RequestMapping("/user/account")
 	public String ShowProfile(ModelMap model) {
 		model.put("PageTitle", "Account");
-		model.put("loggedinUser", userService.GetAuthenticatedUser());
+		model.put("loggedinUser", userService.getAuthenticatedUser());
 		return "user/account";
 	}
 	

@@ -22,7 +22,7 @@ public class FollowUnfollowController {
 	@RequestMapping(value="/users/follow", method=RequestMethod.GET)
 	public String follow(@RequestParam String target) {
 		
-		User user = userService.GetAuthenticatedUser();
+		User user = userService.getAuthenticatedUser();
 		User targetUser = userRepository.findByUsername(target);
 		user.getFollowings().add(targetUser);
 		userRepository.save(user);
@@ -34,7 +34,7 @@ public class FollowUnfollowController {
 	@RequestMapping(value="/users/unfollow", method=RequestMethod.GET)
 	public String unfollow(@RequestParam String target) {
 		
-		User user = userService.GetAuthenticatedUser();
+		User user = userService.getAuthenticatedUser();
 		user.getFollowings().removeIf(f -> f.getUsername().equals(target));
 		userRepository.save(user);
 		

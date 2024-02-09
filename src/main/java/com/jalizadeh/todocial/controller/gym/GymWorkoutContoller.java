@@ -124,7 +124,7 @@ public class GymWorkoutContoller {
 
         // the rest is only visible to the owner, not anyone else
         List<GymPlan> plansByWorkoutId = gymDayWorkoutRepository
-                .findDistinctPlansByUserIdAndWorkoutId(userService.GetAuthenticatedUser().getId(), foundWorkout.getId());
+                .findDistinctPlansByUserIdAndWorkoutId(userService.getAuthenticatedUser().getId(), foundWorkout.getId());
 
         if(!plansByWorkoutId.isEmpty()) {
             List<GymWorkoutLog> allLogsForWorkout = gymWorkoutLogRepository.findAllLogsForWorkout(id);

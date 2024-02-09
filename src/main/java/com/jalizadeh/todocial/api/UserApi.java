@@ -37,7 +37,7 @@ public class UserApi {
 	
 	@GetMapping("/me")
 	public UserDto getMe() {
-		User currentUser = userService.GetAuthenticatedUser();
+		User currentUser = userService.getAuthenticatedUser();
 		return mapUserToDTO(currentUser);
 	}
 

@@ -27,7 +27,7 @@ public class TodoService {
 
 
     public Todo findById(Long id) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(id).orElse(null);
 
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
@@ -54,12 +54,12 @@ public class TodoService {
     }
 
     public List<Todo> findAllByLoggedinUser() {
-        User user = userService.GetAuthenticatedUser();
+        User user = userService.getAuthenticatedUser();
         return todoRepository.findAllByUser(user);
     }
 
     public Todo createTodo(InputTodo todo) {
-        User user = userService.GetAuthenticatedUser();
+        User user = userService.getAuthenticatedUser();
 
         Todo newTodo = new Todo();
         newTodo.setName(todo.getName());
@@ -72,7 +72,7 @@ public class TodoService {
     }
 
     public boolean cancelTodo(Long id) {
-        User loggedinUser = userService.GetAuthenticatedUser();
+        User loggedinUser = userService.getAuthenticatedUser();
         Todo todo = todoRepository.findById(id).orElse(null);
 
         if (todo != null && todo.getUser().getId().equals(loggedinUser.getId())) {
@@ -86,7 +86,7 @@ public class TodoService {
     }
 
     public boolean deleteTodoById(Long id) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(id).orElse(null);
 
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
@@ -97,7 +97,7 @@ public class TodoService {
     }
 
     public TodoLog createTodoLog(Long id, InputLog log) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(id).orElse(null);
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
             return null;
@@ -112,7 +112,7 @@ public class TodoService {
     }
 
     public boolean deleteTodoLog(Long todoId, Long todoLogId) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
         Todo foundTodo = todoRepository.findById(todoId).orElse(null);
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))
             return false;
@@ -126,7 +126,7 @@ public class TodoService {
     }
 
     public TodoLog findTodoLogById(Long todoId, Long todoLogId) {
-        User loggedInUser = userService.GetAuthenticatedUser();
+        User loggedInUser = userService.getAuthenticatedUser();
 
         Todo foundTodo = todoRepository.findById(todoId).orElse(null);
         if (foundTodo == null || !foundTodo.getUser().getId().equals(loggedInUser.getId()))

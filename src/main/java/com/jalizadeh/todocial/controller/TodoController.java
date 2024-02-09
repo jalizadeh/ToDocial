@@ -53,7 +53,7 @@ public class TodoController {
 		model.put("settings", settings);
 		model.put("PageTitle", "My Todos");
 
-		User loggedinUser = userService.GetAuthenticatedUser();
+		User loggedinUser = userService.getAuthenticatedUser();
 		model.put("user", loggedinUser);
 		model.put("todosCompleted", todoService.getAllCompletedTodos());
 		model.put("todosNotCompleted", todoService.getAllNotCompletedTodos());
@@ -66,7 +66,7 @@ public class TodoController {
 	@PostMapping(value = "/todos", params = {"todoId", "log"})
 	public String addNewTodoLog(ModelMap model, @RequestParam Long todoId, @RequestParam String log) {
 
-		User user = userService.GetAuthenticatedUser();
+		User user = userService.getAuthenticatedUser();
 
 		//TODO: check for security+null
 		
@@ -104,7 +104,7 @@ public class TodoController {
 	
 	@GetMapping("/delete-todo-log")
 	public String DeleteTodoLog(ModelMap model, @RequestParam Long id) {
-		User user = userService.GetAuthenticatedUser();
+		User user = userService.getAuthenticatedUser();
 		todoService.deleteById(id);
 		return "redirect:/todos";
 	}
@@ -134,7 +134,7 @@ public class TodoController {
 			return "todo";
 		}
 		
-		User user = userService.GetAuthenticatedUser();
+		User user = userService.getAuthenticatedUser();
     	todo.setUser(user);
     	//todo.setCreation_date(new Date());
 		todoService.save(todo);
@@ -171,7 +171,7 @@ public class TodoController {
 		model.addAttribute("allType",allType());
 
 		//to-do doesnt belongs to current logged in user. It is viewable only, not editable
-		User currentUser = userService.GetAuthenticatedUser();
+		User currentUser = userService.getAuthenticatedUser();
 		if(!foundTodo.getUser().getUsername().equals(currentUser.getUsername())){
 			return "todo-completed";
 		}
@@ -194,7 +194,7 @@ public class TodoController {
 			return "todo";
 		}
 
-		User user = userService.GetAuthenticatedUser();
+		User user = userService.getAuthenticatedUser();
 		Todo ref = todoService.findById(todo.getId());
 		
 		todo.setUser(user);
@@ -300,7 +300,7 @@ public class TodoController {
 	
 	@GetMapping("/todo-state")
 	public String changeState(ModelMap model, @RequestParam Long id) {
-		User user = userService.GetAuthenticatedUser();
+		User user = userService.getAuthenticatedUser();
 		Todo todo = todoService.findById(id);
 		todo.setCompleted(!todo.isCompleted());
 		todoService.save(todo);

@@ -35,11 +35,10 @@ public class PublicPageController {
      * but if it is an anonymous user, can access the public area of a registered user's page
      */
     @GetMapping("/@{username}")
-    public String showPublicPage(ModelMap model, @PathVariable String username,
-                                 RedirectAttributes redirectAttributes) {
+    public String showPublicPage(ModelMap model, RedirectAttributes redirectAttributes, @PathVariable String username) {
         model.put("settings", settings);
 
-        User currentUser = userService.GetAuthenticatedUser();
+        User loggedinUser = userService.getAuthenticatedUser();
         User targetUser = userService.findByUsername(username);
 
         //if there is no mathcing account
@@ -53,16 +52,14 @@ public class PublicPageController {
             model.put("user", targetUser);
             model.put("todos", todoService.findAllTodosByUserIdAndIsPublicTrue(targetUser.getId()));
             model.put("gym", gymService.findAllPlansByUserIdAndIsPublicTrue(targetUser.getId()));
-            model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")");
+            model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + " | @" + targetUser.getUsername());
             return "public-page";
         }
 
 
-        User loggedinUser  =  userService.findByUsername(currentUser.getUsername());
-
         //the user is logged in and is checking another profile
         //but first check if current user is following the target or not
-        if(!currentUser.getUsername().equals(username)) {
+        if(!loggedinUser.getUsername().equals(username)) {
             List<String> listOfFollowings = loggedinUser.getFollowings().stream()
                     .map(u -> u.getUsername())
                     .collect(Collectors.toList());
@@ -80,7 +77,7 @@ public class PublicPageController {
             model.put("user", targetUser);
             model.put("todos", todoService.findAllTodosByUserIdAndIsPublicTrue(targetUser.getId()));
             model.put("gym", gymService.findAllPlansByUserIdAndIsPublicTrue(targetUser.getId()));
-            model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + targetUser.getUsername() + ")");
+            model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + " | @" + targetUser.getUsername());
             return "public-page";
         }
 
@@ -88,7 +85,7 @@ public class PublicPageController {
         model.put("user", loggedinUser);
         model.put("todos", todoService.findAllByUser(targetUser));
         model.put("gym", gymService.findAllPlansByUserId(targetUser.getId()));
-        model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + "(" + loggedinUser.getUsername() + ")");
+        model.put("PageTitle", targetUser.getFirstname() + " " + targetUser.getLastname() + " | @" + targetUser.getUsername());
         return "public-page";
     }
 

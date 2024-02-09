@@ -28,7 +28,7 @@ public class TestController {
 	@GetMapping("/test-start")
 	public String startTest(ModelMap model) {
 		Test test = new Test();
-		test.setUser(userService.GetAuthenticatedUser());
+		test.setUser(userService.getAuthenticatedUser());
 		Test savedTest = testService.save(test);
 		return "redirect:/test?uid=" + savedTest.getUid() + "&tid=1";
 	}
@@ -38,7 +38,7 @@ public class TestController {
 			@RequestParam(required=false) String uid, @RequestParam(required=false) String tid) {
 		
 		if(uid == null || tid == null) {
-			List<Test> allTests = testService.findAllTestsByUserId(userService.GetAuthenticatedUser().getId());
+			List<Test> allTests = testService.findAllTestsByUserId(userService.getAuthenticatedUser().getId());
 			m.put("settings", settings);
 			m.put("PageTitle", "Personal Test");
 			m.put("allTests", allTests);

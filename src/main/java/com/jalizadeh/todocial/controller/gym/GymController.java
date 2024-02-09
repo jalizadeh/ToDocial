@@ -24,7 +24,7 @@ public class GymController {
 
     @RequestMapping(value = "/gym", method = RequestMethod.GET)
     public String homepage(ModelMap model) {
-        Long userId = userService.GetAuthenticatedUser().getId();
+        Long userId = userService.getAuthenticatedUser().getId();
 
         model.put("settings", settings);
         model.put("PageTitle", "Gym");

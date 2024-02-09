@@ -16,7 +16,7 @@ public class UserSecurityController {
 	@RequestMapping("/user/security")
 	public String ShowProfile(ModelMap model) {
 		model.put("PageTitle", "Settings");
-		model.put("loggedinUser", userService.GetAuthenticatedUser());
+		model.put("loggedinUser", userService.getAuthenticatedUser());
 		return "user/security";
 	}
 	
