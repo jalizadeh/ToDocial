@@ -89,7 +89,7 @@ class LoginSignupControllerTest {
     @DisplayName("If the user is anonymous (not logged in), is navigated to /login page")
     void testLoginSignupController_whenNotLoggedIn_returnsLoginPageViewName() {
         when(userService.isUserAnonymous()).thenReturn(true);
-        String viewName = loginSignupController.showLoginPage(modelMap, request);
+        String viewName = loginSignupController.showLoginPage(modelMap, request, null);
 
         assertEquals("login", viewName);
         //TODO: how should be checked?
@@ -103,11 +103,12 @@ class LoginSignupControllerTest {
     @DisplayName("If the user is already logged in and navigates to /login page, he is redirected to homepage")
     void testLoginSignupController_whenAlreadyLoggedIn_returnsRedirectToHomepage() {
         when(userService.isUserAnonymous()).thenReturn(false);
-        String viewName = loginSignupController.showLoginPage(modelMap, request);
+        String viewName = loginSignupController.showLoginPage(modelMap, request, null);
 
         assertEquals("redirect:/", viewName);
     }
 
+    /*
     @Test
     @Disabled("SecurityContextHolder.getContext() is static method and Mockito cant handle")
     void logout() {
@@ -125,6 +126,7 @@ class LoginSignupControllerTest {
 
         //verify(Log.info("User: " + authentication.getName() + " signed out successfully"));
     }
+     */
 
     @Test
     @DisplayName("Forgot password page showed")

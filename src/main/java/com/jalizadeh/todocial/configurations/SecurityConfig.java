@@ -1,9 +1,9 @@
 package com.jalizadeh.todocial.configurations;
 
-import java.util.List;
-
-import javax.sql.DataSource;
-
+import com.google.common.collect.Lists;
+import com.jalizadeh.todocial.model.FlashMessage;
+import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
+import com.jalizadeh.todocial.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,13 +31,12 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
-import com.google.common.collect.Lists;
-import com.jalizadeh.todocial.model.settings.SettingsGeneralConfig;
-import com.jalizadeh.todocial.model.FlashMessage;
-import com.jalizadeh.todocial.service.impl.UserService;
+import javax.sql.DataSource;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -54,6 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private BasicAuthEntryPoint basicAuthEntryPoint;
+
+	@Autowired
+	private LogoutHandler logoutHandler;
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
@@ -141,6 +143,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.logout()
 				.permitAll()
 				.logoutUrl("/logout")
+				.addLogoutHandler(logoutHandler)
+				.invalidateHttpSession(true)
 			.and()
 			.rememberMe()
 				/*
