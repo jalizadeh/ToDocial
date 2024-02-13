@@ -1,7 +1,7 @@
 <%@ include file="../common/header.jspf" %>
 
 	<div class="row">
-		<div class="col-8">
+		<div class="col-9">
 			<div class="row mt-2">
 				<div class="col">
 					<h2>${plan.title} <span class="badge rounded-pill bg-light text-dark">${plan.numberOfWeeks} weeks</span> <span class="badge rounded-pill bg-light text-dark">${plan.numberOfDays} days</span></h2>
@@ -35,16 +35,18 @@
 								</h5>
 								
 								<c:forEach items="${days}" var="day">
+									<c:set var="shouldPrint" value="true" />
 									<p class="card-text">
-										<!-- TODO: change day color by it's progress -->
-										<c:choose>
-											<c:when test="${day.progress == 100}">
-												<span class="badge rounded-pill bg-success">${day.dayNumber}</span> <a href="${plan.id}/week/${i}/day/${day.dayNumber}">${day.focus}</a>
-											</c:when>    
-											<c:otherwise>
-												<span class="badge rounded-pill bg-secondary">${day.dayNumber}</span> <a href="${plan.id}/week/${i}/day/${day.dayNumber}">${day.focus}</a>
-											</c:otherwise>
-										</c:choose>
+										<c:forEach items="${pwd}" var="singlePWD">
+											<c:if test="${singlePWD.weekNumber == i && singlePWD.dayNumber == day.dayNumber  && singlePWD.progress == 100}">
+												<span class="badge badge-pill badge-success">${day.dayNumber}</span> <a href="${plan.id}/week/${i}/day/${day.dayNumber}">${day.focus}</a>
+												<c:set var="shouldPrint" value="false" />
+											</c:if>
+										</c:forEach>
+										
+										<c:if test="${shouldPrint}">
+											<span class="badge badge-pill badge-secondary">${day.dayNumber}</span> <a href="${plan.id}/week/${i}/day/${day.dayNumber}">${day.focus}</a>
+										</c:if>
 									</p>
 								</c:forEach>
 							</div>
@@ -55,7 +57,7 @@
 		</div>
 
 		<!-- right pane -->
-		<div class="col-4">
+		<div class="col">
 			<c:if test="${plan.active == false and plan.startDate ne null and plan.completeDate ne null}">
 				<div class="row">
 					<p>Started at: ${plan.startDate}</p>
