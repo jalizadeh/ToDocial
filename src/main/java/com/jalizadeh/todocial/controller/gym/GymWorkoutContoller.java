@@ -318,7 +318,8 @@ public class GymWorkoutContoller {
             List<Integer> fromTo;
             if(!plansTimeline.containsKey(p)){
                 fromTo = new ArrayList<>();
-                from += planCounter;
+                from = 0;
+                from += planCounter++;
                 fromTo.add(from);
                 fromTo.add(from++);
                 plansTimeline.put(p, fromTo);
