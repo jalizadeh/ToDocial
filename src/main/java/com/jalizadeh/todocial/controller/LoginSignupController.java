@@ -21,10 +21,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -39,7 +37,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -56,9 +53,6 @@ public class LoginSignupController{
 	private SecurityQuestionService securityQuestionService;
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
-	
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
@@ -67,17 +61,18 @@ public class LoginSignupController{
 	@Autowired
 	private SettingsGeneralConfig settings;
 	
-	//image upload
-	private final StorageFileSystemService storageService;
-
 	@Autowired
-	public LoginSignupController(StorageFileSystemService storageService) {
-		this.storageService = storageService;
-	}
-	
-	
+	private StorageFileSystemService storageService;
+
+
 	@GetMapping("/login")
-    public String showLoginPage(ModelMap model, HttpServletRequest request) {
+    public String showLoginPage(ModelMap model, HttpServletRequest request,
+								@RequestParam(value = "logout", required = false) String logout) {
+
+		if(logout != null){
+			model.put("message", new FlashMessage("You logged out successfully.", FlashMessage.Status.success));
+		}
+
 		if(userService.isUserAnonymous()) {
 			model.put("settings", settings);
 			model.put("PageTitle", "Log in");
@@ -96,25 +91,6 @@ public class LoginSignupController{
 		
 		return "redirect:/";
     }
-	
-	
-	
-	@GetMapping("/logout")
-	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		if (auth != null) {
-			new SecurityContextLogoutHandler().logout(request, response, auth);
-			SecurityContextHolder.clearContext();
-		}
-
-		Log.info("User: " + auth.getName() + " signed out successfully");
-		
-		redirectAttributes.addFlashAttribute("message",
-				new FlashMessage("You logged out successfully.", FlashMessage.Status.success));
-		return new ModelAndView("redirect:/login");
-	}
-	
 	
 	@GetMapping("/forgot-password")
 	public String showForgotPasswordPage(ModelMap model) {
@@ -142,9 +118,9 @@ public class LoginSignupController{
             redirectAttributes.addFlashAttribute("flash", 
             		new FlashMessage("An email is sent to you", FlashMessage.Status.success));
 		} else {
-			Log.error("Forgot password process for email " + email + " failed. The email does not exist.");
+			Log.error("Forgot password process for email '" + email + "' failed. The email does not exist.");
 			redirectAttributes.addFlashAttribute("flash", 
-					new FlashMessage("The email is not registered", FlashMessage.Status.danger));	
+					new FlashMessage("The email does not exist.", FlashMessage.Status.danger));
 		}
 		
 		return "redirect:/forgot-password";
@@ -165,7 +141,7 @@ public class LoginSignupController{
 				//I need to access the user and change it's password later
 				// the best way is to keep it in the Security Context
 				Authentication auth = new UsernamePasswordAuthenticationToken(user,null,
-						userDetailsService.loadUserByUsername(user.getUsername()).getAuthorities());
+						userService.loadUserByUsername(user.getUsername()).getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(auth);
 				model.put("securityQuestions", securityQuestionService.findAllSQD());
 				tokenService.deleteByPRToken(token);
