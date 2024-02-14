@@ -43,6 +43,8 @@ public class GymUtils {
     }
 
     public static String parseRawInput(String text) {
+        if(text == null) return null;
+
         text = text.replace("%2C", ",");
         text = text.replace("%3A", ":");
         return text;

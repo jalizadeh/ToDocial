@@ -8,7 +8,7 @@ import com.jalizadeh.todocial.service.impl.SecurityQuestionService;
 import com.jalizadeh.todocial.service.impl.TokenService;
 import com.jalizadeh.todocial.service.impl.UserService;
 import com.jalizadeh.todocial.service.registration.OnPasswordResetEvent;
-import com.jalizadeh.todocial.utils.TestUtils;
+import com.jalizadeh.todocial.testutils.TestUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,10 +20,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;

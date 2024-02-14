@@ -1,4 +1,4 @@
-package com.jalizadeh.todocial.utils;
+package com.jalizadeh.todocial.testutils;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -145,3 +145,67 @@ The path `/api/v1/*` is secured by Basic Authentication, so that, if the user is
    - **Scenario**: Test edge cases such as very long queries, special characters, or edge values for parameters.
    - **Test Steps**: 
      - For example, send requests with excessively long queries, special characters, or unusual values for the `target` parameter to ensure that the endpoint handles these cases gracefully.
+
+
+## Utils
+
+### GymUtils
+
+**parseRawInput**
+
+1. **Basic Replacement**:
+   - **Scenario**: Ensure that basic replacements of `%2C` and `%3A` with `,` and `:` respectively work correctly.
+   - **Test Cases**:
+     - Input: `"hello%2Cworld%3A"`
+     - Expected Output: `"hello,world:"`
+
+2. **Empty Input**:
+   - **Scenario**: Verify that the method handles an empty input string gracefully.
+   - **Test Cases**:
+     - Input: `""`
+     - Expected Output: `""`
+
+3. **No Replacements Needed**:
+   - **Scenario**: Test when the input string does not contain any `%2C` or `%3A`.
+   - **Test Cases**:
+     - Input: `"no,replacement:needed"`
+     - Expected Output: `"no,replacement:needed"`
+
+4. **Multiple Occurrences**:
+   - **Scenario**: Check if the method correctly replaces all occurrences of `%2C` and `%3A`.
+   - **Test Cases**:
+     - Input: `"one%2Ctwo%2Cthree%3Afour%3Afive"`
+     - Expected Output: `"one,two,three:four:five"`
+
+5. **Null Input**:
+   - **Scenario**: Verify that the method gracefully handles a null input.
+   - **Test Cases**:
+     - Input: `null`
+     - Expected Output: `null`
+
+
+**workoutLogNoteParser**
+
+1. **Basic Input**:
+   - **Scenario**: Test the method with a simple log containing sets and reps separated by commas.
+   - **Test Cases**:
+     - Input: `"5x10,8x12,6x15"`
+     - Expected Output: List containing GymWorkoutLogSetRep_DTO objects with appropriate set and rep values.
+
+2. **Empty Input**:
+   - **Scenario**: Verify that the method gracefully handles an empty input.
+   - **Test Cases**:
+     - Input: `""`
+     - Expected Output: `null`
+
+3. **Nested Sets and Reps**:
+   - **Scenario**: Check if the method correctly handles nested sets and reps separated by colons.
+   - **Test Cases**:
+     - Input: `"5:10-12-15,7:8-10"`
+     - Expected Output: List containing GymWorkoutLogSetRep_DTO objects with appropriate set and rep values for nested sets.
+
+4. **Invalid Input**:
+   - **Scenario**: Test when the input log contains invalid characters or format.
+   - **Test Cases**:
+     - Input: `"invalid-log"`
+     - Expected Output: `null`
