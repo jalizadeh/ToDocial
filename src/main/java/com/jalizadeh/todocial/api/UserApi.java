@@ -1,5 +1,6 @@
 package com.jalizadeh.todocial.api;
 
+import com.jalizadeh.todocial.model.ApiResponseData;
 import com.jalizadeh.todocial.model.user.dto.InputUser;
 import com.jalizadeh.todocial.model.user.dto.TokenDto;
 import com.jalizadeh.todocial.model.user.dto.UserDto;
@@ -61,7 +62,7 @@ public class UserApi {
 	}
 
 	@PostMapping()
-	public ResponseEntity<?> createUser(@RequestBody InputUser user) throws UserAlreadyExistException, EmailExistsException {
+	public ResponseEntity<ApiResponseData<UserDto>> createUser(@RequestBody InputUser user) throws UserAlreadyExistException, EmailExistsException {
 		User newUser = new User();
 		newUser.setFirstname(user.getFirstname());
 		newUser.setLastname(user.getLastname());
@@ -76,13 +77,23 @@ public class UserApi {
 
 			//generate verification token in async
 			eventPublisher.publishEvent(new OnApiRegistrationCompleteEvent(registeredUser));
-			return new ResponseEntity<>(mapUserToDTO(registeredUser), HttpStatus.CREATED);
+
+			ApiResponseData<UserDto> responseData  = new ApiResponseData<>();
+			responseData .setStatus(HttpStatus.CREATED);
+			responseData .setData(mapUserToDTO(registeredUser));
+			return new ResponseEntity<>(responseData, HttpStatus.CREATED);
 
 		} catch (UserAlreadyExistException e){
-			return new ResponseEntity<>("The username already exists", HttpStatus.CONFLICT);
+			ApiResponseData<UserDto> responseData = new ApiResponseData<>();
+			responseData.setStatus(HttpStatus.CONFLICT);
+			responseData.setMessage("The username already exists");
+			return new ResponseEntity<>(responseData, HttpStatus.CONFLICT);
 
 		} catch (EmailExistsException e){
-			return new ResponseEntity<>("The email already exists", HttpStatus.CONFLICT);
+			ApiResponseData<UserDto> responseData = new ApiResponseData<>();
+			responseData.setStatus(HttpStatus.CONFLICT);
+			responseData.setMessage("The email already exists");
+			return new ResponseEntity<>(responseData, HttpStatus.CONFLICT);
 		}
 	}
 
@@ -103,7 +114,7 @@ public class UserApi {
 
 	
 	@DeleteMapping("/{username}")
-	public ResponseEntity<?> deleteUser(@PathVariable("username") String username){
+	public ResponseEntity<Void> deleteUser(@PathVariable("username") String username){
 		userService.softDelete(username);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
