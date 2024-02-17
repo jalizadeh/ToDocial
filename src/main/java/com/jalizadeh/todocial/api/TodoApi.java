@@ -5,6 +5,7 @@ import com.jalizadeh.todocial.model.todo.TodoLog;
 import com.jalizadeh.todocial.model.todo.dto.InputLog;
 import com.jalizadeh.todocial.model.todo.dto.InputTodo;
 import com.jalizadeh.todocial.model.todo.dto.TodoDto;
+import com.jalizadeh.todocial.model.todo.dto.TodoLogDto;
 import com.jalizadeh.todocial.service.impl.TodoService;
 import com.jalizadeh.todocial.utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class TodoApi {
 	private TodoService todoService;
 
 	@GetMapping("/id/{id}")
-	public ResponseEntity<?> getTodo(@PathVariable("id") Long id) {
+	public ResponseEntity<TodoDto> getTodo(@PathVariable("id") Long id) {
 		Todo todo = todoService.findById(id);
 
 		if(todo != null){
@@ -62,7 +63,7 @@ public class TodoApi {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> cancelTodo(@PathVariable("id") Long id) {
+	public ResponseEntity<Void> cancelTodo(@PathVariable("id") Long id) {
 		boolean canceled = todoService.cancelTodo(id);
 
 		if(canceled){
@@ -73,7 +74,7 @@ public class TodoApi {
 	}
 
 	@DeleteMapping("/{id}/db")
-	public ResponseEntity<?> deleteTodoFromDB(@PathVariable("id") Long id) {
+	public ResponseEntity<Void> deleteTodoFromDB(@PathVariable("id") Long id) {
 		boolean deleted = todoService.deleteTodoById(id);
 
 		if(deleted){
@@ -84,7 +85,7 @@ public class TodoApi {
 	}
 
 	@GetMapping("/{todoId}/log/{todoLogId}")
-	public ResponseEntity<?> getTodoLog(@PathVariable("todoId") Long todoId, @PathVariable("todoLogId") Long todoLogId) {
+	public ResponseEntity<TodoLogDto> getTodoLog(@PathVariable("todoId") Long todoId, @PathVariable("todoLogId") Long todoLogId) {
 		TodoLog todoLog = todoService.findTodoLogById(todoId, todoLogId);
 
 		if(todoLog != null){
@@ -95,7 +96,7 @@ public class TodoApi {
 	}
 
 	@PostMapping("/{todoId}/log")
-	public  ResponseEntity<?> createTodoLog(@PathVariable("todoId") Long todoId, @RequestBody InputLog log) {
+	public  ResponseEntity<TodoLogDto> createTodoLog(@PathVariable("todoId") Long todoId, @RequestBody InputLog log) {
 		TodoLog created = todoService.createTodoLog(todoId, log);
 
 		if(created != null){
@@ -107,7 +108,7 @@ public class TodoApi {
 	
 	
 	@DeleteMapping("/{todoId}/log/{todoLogId}")
-	public  ResponseEntity<?> deleteTodoLog(@PathVariable("todoId") Long todoId, @PathVariable("todoLogId") Long todoLogId) {
+	public  ResponseEntity<Void> deleteTodoLog(@PathVariable("todoId") Long todoId, @PathVariable("todoLogId") Long todoLogId) {
 		return todoService.deleteTodoLog(todoId, todoLogId) ?
 			new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
