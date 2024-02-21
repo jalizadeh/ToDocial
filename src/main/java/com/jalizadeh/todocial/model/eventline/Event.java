@@ -2,10 +2,12 @@ package com.jalizadeh.todocial.model.eventline;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jalizadeh.todocial.model.user.User;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "eventline")
@@ -15,6 +17,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //used Java.Utils Date class for better organization of same-day events
     private Date date;
 
     private String title;
@@ -27,4 +30,12 @@ public class Event {
     @JoinColumn(name = "created_by")
     @JsonIgnore
     private User createdBy;
+
+    @Getter(AccessLevel.NONE)
+    private boolean isPublic;
+
+    public boolean getIsPublic() {
+        return isPublic;
+    }
+
 }

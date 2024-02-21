@@ -6,27 +6,30 @@
 	</div>
 
 	<div class="row">
-		<p>
+		<p> Jump to day 
 			<c:forEach var = "i" begin = "1" end = "${monthDays}">
-				<a href="/eventline/month/${monthId}/day/${i}">${i}</a>
+				<a href="#month${i}">${i}</a>
 			</c:forEach>
 		</p>
 	</div>
 	
-	<c:forEach var = "i" begin = "1" end = "${monthDays}">
+
+	<c:forEach items="${eventsMap}" var="entry">
+        <c:set var="i" value="${entry.key}" />
+        <c:set var="value" value="${entry.value}" />
+        
 		<div>
 			<div>
-				<h1>${i}</h1>
+				<h1 id="month${i}">${i}</a></h1>
 			</div>
-
-			<c:forEach items="${events}" var="event">
-				<div class="my-1">
+            <c:forEach items="${value}" var="event">
+                <div class="my-1">
 					<div class="card">
 						<div class="card-body">
 							<div class="crayons-story__body">
 								<div class="crayons-story__indention">
 								<h2 class="crayons-story__title">
-									<a href="/eventline/month/${monthId}/day/${i}" id="article-link-1766481">${event.title} | ${event.date} | @${event.createdBy.username}</a>
+									<a href="/eventline/month/${monthIndex}/day/${i}" id="article-link-1766481">${event.title}</a>
 								</h2>
 								<div class="crayons-story__tags">
 									<a class="crayons-tag crayons-tag--filled  " style="
@@ -100,9 +103,7 @@
 						</div>
 					</div>
 				</div>
-			</c:forEach>
-			
-		</div>
-	</c:forEach>
+            </c:forEach>
+    </c:forEach>
 
 <%@ include file="../common/footer.jspf" %>

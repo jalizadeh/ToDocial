@@ -40,25 +40,25 @@
 				<div class="col-3">
 					<p>Fall</p>
 					<div class="row">
-						<div class="col">July</div>
-						<div class="col">Aug</div>
-						<div class="col">Sep</div>
+						<div class="col"><a class="btn btn-primary btn-sm" href="/eventline/month/7" role="button">July</a></div>
+						<div class="col"><a class="btn btn-primary btn-sm" href="/eventline/month/8" role="button">Aug</a></div>
+						<div class="col"><a class="btn btn-primary btn-sm" href="/eventline/month/9" role="button">Sep</a></div>
 					</div>
 				</div>
 		
 				<div class="col-3">
 					<p>Winter</p>
 					<div class="row">
-						<div class="col">Oct</div>
-						<div class="col">Nov</div>
-						<div class="col">Dec</div>
+						<div class="col"><a class="btn btn-primary btn-sm" href="/eventline/month/10" role="button">Oct</a></div>
+						<div class="col"><a class="btn btn-primary btn-sm" href="/eventline/month/11" role="button">Nov</a></div>
+						<div class="col"><a class="btn btn-primary btn-sm" href="/eventline/month/12" role="button">Dec</a></div>
 					</div>
 				</div>
 			</div>
 		
 		
 			<div class="my-2">
-				<a href="#">Latest</a> | <a href="#">Top</a>
+				<a href="#">Latest</a> | <a href="#">Top</a> | <a href="#">Upcoming</a> | <a href="#">Dont miss</a> | <a href="#">Music</a>
 			</div>
 
 			<div class="my-1">

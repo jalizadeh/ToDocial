@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/eventline")
@@ -28,20 +32,37 @@ public class EventController {
         return "eventline/home";
     }
 
-    @GetMapping("/month/{id}")
-    public String showMonth(@PathVariable Long id, ModelMap model){
+    @GetMapping("/month/{monthIndex}")
+    public String showMonth(@PathVariable int monthIndex, ModelMap model){
 
-        if(id == null || id < 1 || id > 12 )
+        if(monthIndex < 1 || monthIndex > 12 )
             return "redirect:/eventline";
 
-        List<Event> events = eventService.findAll();
+        List<Event> events = eventService.findAllByMonth(monthIndex);
+        int monthDays = eventService.getMonthDays(monthIndex);
 
-        model.put("monthId", id);
-        model.put("monthName", "January");
-        model.put("monthDays", 31);
+        //put each event in its day
+        Map<Integer, List<Event>> eventsMap = new HashMap<>();
+        for(int i = 0; i < monthDays; i++){
+            int day = i + 1;
+            List<Event> dayEvents = new ArrayList<>();
+            for(Event e : events) {
+                if(day == eventService.getDayOfMonth(e.getDate())) {
+                    dayEvents.add(e);
+                }
+            }
+
+            eventsMap.put(day, dayEvents);
+        }
+
+        model.put("monthIndex", monthIndex);
+        model.put("monthName", eventService.getMonthName(monthIndex));
+        model.put("monthDays", monthDays);
         model.put("events", events);
+        model.put("eventsMap", eventsMap);
         model.put("settings", settings);
         model.put("PageTitle", "Event Timeline");
+
         return "eventline/month";
     }
 }
