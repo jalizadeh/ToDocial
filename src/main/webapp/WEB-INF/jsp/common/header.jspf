@@ -39,6 +39,7 @@
 
 	<nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
 		<a class="navbar-brand" href="/"><li class="fas fa-home"></li></a>
+		<a class="navbar-brand" href="/eventline"><i class="fas fa-calendar-alt"></i></a>
 		<sec:authorize access="isAuthenticated()">
 			<a class="navbar-brand" href="/me"><li class="fas fa-seedling"></li></a>
 			<a class="navbar-brand" href="/todos"><i class="fas fa-calendar-check"></i></a>

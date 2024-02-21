@@ -105,6 +105,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 						"/forgot-password",
 						"/reset-password",
 						"/error",
+						"/eventline",
+						"/eventline/**",
 						"/",
 						"/@*"
 						).permitAll()
