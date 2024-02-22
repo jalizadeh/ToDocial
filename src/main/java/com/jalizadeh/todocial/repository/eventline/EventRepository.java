@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    @Query("Select e from Event e where (e.date >= :startTimestamp AND e.date < :endTimestamp) order by e.date")
-    List<Event> findAllBetween(@Param("startTimestamp") Date startTimestamp, @Param("endTimestamp") Date endTimestamp);
+    @Query("Select e from Event e where (e.date >= :startDate AND e.date < :endDate) order by e.date")
+    List<Event> findAllBetween(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

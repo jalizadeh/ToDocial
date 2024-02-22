@@ -1,11 +1,13 @@
 package com.jalizadeh.todocial.repository.todo;
 
+import com.jalizadeh.todocial.model.eventline.Event;
 import com.jalizadeh.todocial.model.todo.Todo;
 import com.jalizadeh.todocial.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
@@ -28,4 +30,6 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 	@Query("select t from Todo t where t.user.id=:#{principal.id} and (t.name LIKE %:query% OR t.description LIKE %:query% OR t.reason LIKE %:query%)")
 	List<Todo> searchAllByLoggedinUser(@Param("query") String query);
 
+	@Query("Select t from Todo t where (t.target_date >= :startDate AND t.target_date < :endDate AND t.isPublic = TRUE) order by t.target_date")
+    List<Todo> findAllPublicBetween(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }
