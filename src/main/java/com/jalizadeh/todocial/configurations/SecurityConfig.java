@@ -155,7 +155,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.tokenValiditySeconds(604800) //one week
 				.key("lssApplicationKey") //my own key to be used while hashing
 				//.useSecureCookie(true) //enable cookie only in secured connection = https
-				.rememberMeParameter("remember") //the element's name in login form
+				//.rememberMeParameter("remember") //the element's name in login form
 				
 				/*
 				 * Persistence-based

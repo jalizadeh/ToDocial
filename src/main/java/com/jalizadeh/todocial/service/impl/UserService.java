@@ -6,9 +6,11 @@ import com.jalizadeh.todocial.model.user.User;
 import com.jalizadeh.todocial.repository.user.RoleRepository;
 import com.jalizadeh.todocial.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
@@ -21,11 +23,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService, ApplicationListener<AuthenticationSuccessEvent> {
 	
 	@Autowired 
 	private UserRepository userRepository;
@@ -201,5 +204,13 @@ public class UserService implements UserDetailsService {
 		tokenService.deleteByUser(user);
 
 		userRepository.delete(user);
+	}
+
+	@Override
+	public void onApplicationEvent(AuthenticationSuccessEvent event) {
+		String userName = ((UserDetails) event.getAuthentication().getPrincipal()).getUsername();
+		User user = userRepository.findByUsername(userName);
+		user.setLastLoginDate(new Date());
+		userRepository.save(user);
 	}
 }

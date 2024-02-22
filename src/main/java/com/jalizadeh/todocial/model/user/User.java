@@ -1,6 +1,7 @@
 package com.jalizadeh.todocial.model.user;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -76,6 +77,9 @@ public class User implements UserDetails{
 	private boolean enabled;
 	
 	private String photo;
+
+	@Column(name = "last_login_date")
+	private Date lastLoginDate;
 	
 
 	@ManyToMany(fetch=FetchType.EAGER) //when the object is created , I need the role
@@ -238,6 +242,14 @@ public class User implements UserDetails{
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+
+	public Date getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(Date lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
 	}
 
 	@Override
