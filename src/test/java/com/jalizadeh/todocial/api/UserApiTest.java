@@ -147,17 +147,19 @@ class UserApiTest {
                         .content(dataUser))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.id").value(greaterThanOrEqualTo(1)))
-                .andExpect(jsonPath("$.firstname", is(firstname)))
-                .andExpect(jsonPath("$.lastname", is(lastname)))
-                .andExpect(jsonPath("$.username", is(username)))
-                .andExpect(jsonPath("$.email", is(email)))
-                .andExpect(jsonPath("$.enabled", is(false)))
-                .andExpect(jsonPath("$.photo", is("default.jpg")))
-                .andExpect(jsonPath("$.followers").isArray())
-                .andExpect(jsonPath("$.followers", hasSize(0)))
-                .andExpect(jsonPath("$.followings").isArray())
-                .andExpect(jsonPath("$.followings", hasSize(0)))
+                .andExpect(jsonPath("$.status", is("CREATED")))
+                .andExpect(jsonPath("$.message").value(is(nullValue())))
+                .andExpect(jsonPath("$.data.id").value(greaterThanOrEqualTo(1)))
+                .andExpect(jsonPath("$.data.firstname", is(firstname)))
+                .andExpect(jsonPath("$.data.lastname", is(lastname)))
+                .andExpect(jsonPath("$.data.username", is(username)))
+                .andExpect(jsonPath("$.data.email", is(email)))
+                .andExpect(jsonPath("$.data.enabled", is(false)))
+                .andExpect(jsonPath("$.data.photo", is("default.jpg")))
+                .andExpect(jsonPath("$.data.followers").isArray())
+                .andExpect(jsonPath("$.data.followers", hasSize(0)))
+                .andExpect(jsonPath("$.data.followings").isArray())
+                .andExpect(jsonPath("$.data.followings", hasSize(0)))
                 .andDo(MockMvcResultHandlers.print());
 
         User user = userService.findByUsername(username);
@@ -170,13 +172,14 @@ class UserApiTest {
     void createUser_existingUsername() throws Exception {
         setupTestUser();
 
-        String response = mvc.perform(post(BASE_URL)
+        mvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(dataUser))
                 .andExpect(status().isConflict())
-                .andReturn().getResponse().getContentAsString();
-
-        assertEquals("The username already exists", response);
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.status", is("CONFLICT")))
+                .andExpect(jsonPath("$.message", is("The username already exists")))
+                .andExpect(jsonPath("$.data").value(is(nullValue())));
     }
 
     @Test
