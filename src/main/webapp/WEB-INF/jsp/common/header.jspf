@@ -74,7 +74,7 @@
 						</div>
 					</form>
 
-					<li class="nav-item dropdown active">
+					<li class="nav-item dropdown active" id="navItemTodos">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTodos"
 							role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
 							<spring:message code="header.todos"/> 
@@ -88,7 +88,7 @@
 						</div>
 					</li>
 
-					<li class="nav-item dropdown">
+					<li class="nav-item dropdown" id="navItemGym">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownGym"
 							role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
 							<spring:message code="header.gym"/> 
@@ -107,19 +107,19 @@
 						</div>
 					</li>
 
-					<li class="nav-item">
+					<li class="nav-item" id="navItemDiary">
 						<a class="nav-link" href="/diary"><spring:message code="header.diary"/></a>
 					</li>
 
-					<li class="nav-item">
+					<li class="nav-item" id="navItemPLCT">
 						<a class="nav-link" href="/test"><spring:message code="header.test"/></a>
 					</li>
 
-					<li class="nav-item">
+					<li class="nav-item" id="navItemCalendar">
 						<a class="nav-link" href="#">Calendar</a>
 					</li>
 
-					<li class="nav-item">
+					<li class="nav-item" id="navItemExperience">
 						<a class="nav-link" href="#">Experience</a>
 					</li>
 				</sec:authorize>
@@ -138,17 +138,17 @@
 			<sec:authorize access="isAuthenticated()">
 				<div>
 					<ul class="navbar-nav ml-auto nav-flex-icons">
-						<li class="nav-item shop">
+						<li class="nav-item shop" id="navItemShop">
 							<a class="btn btn-outline-primary mt-auto" href="/gym/shop/cart">
 								<i class="fas fa-shopping-cart"></i> <span class="badge badge-light">${items.size()}</span>
 							</a>
 						</li>
 
-						<li class="nav-item avatar dropdown">
-							<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<li class="nav-item avatar dropdown" id="navItemUser">
+							<a class="nav-link dropdown-toggle" id="navbarDropdownUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<img class="img-profile rounded-circle" width="32px" height="32px" src="/photo/user/<sec:authentication property="principal.username"/>.jpg">
 							</a>
-							<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-55">
+							<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownUser-Secondary">
 								<a class="dropdown-item" href="/@<sec:authentication property="principal.username"/>">Logged in as <strong><sec:authentication property="principal.username" /></strong></a>
 								<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="/@<sec:authentication property="principal.username"/>"><spring:message code="header.yourprofile"/></a>
@@ -166,9 +166,9 @@
 				<sec:authorize access="hasAuthority('ROLE_ADMIN')">
 					<div>
 						<ul class="navbar-nav ml-auto nav-flex-icons">
-							<li class="nav-item avatar dropdown">
-								<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-cog fa-2x"></i></a>
-								<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-55">
+							<li class="nav-item avatar dropdown" id="navItemSettings">
+								<a class="nav-link dropdown-toggle" id="navbarDropdownSettings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-cog fa-2x"></i></a>
+								<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownSettings-Secondary">
 									<a class="dropdown-item" href="/admin/settings"><spring:message code="header.settings.general"/></a>
 									<a class="dropdown-item" href="/admin/settings/users"><spring:message code="header.settings.users"/></a>
 									<a class="dropdown-item" href="/admin/settings/todos"><spring:message code="header.settings.todos"/></a>

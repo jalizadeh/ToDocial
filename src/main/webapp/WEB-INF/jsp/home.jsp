@@ -1,7 +1,7 @@
 <%@ include file="common/header.jspf" %>
 
 	<div class="row">
-		<div class="col-3 mx-2">
+		<div class="col-3 mx-2" id="col-community">
 			<div class="row border-bottom">
 				<div class="col-7">
 					<p>Community</p>
@@ -18,7 +18,7 @@
 			</c:forEach>
 		</div>
 
-		<div class="col mx-2">
+		<div class="col mx-2" id="col-recent-activities">
 			<div class="row border-bottom">
 				<div class="col-7">
 					<p>Recent activities</p>
