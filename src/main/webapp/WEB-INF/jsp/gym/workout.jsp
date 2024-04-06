@@ -104,11 +104,11 @@
 		<div class="container px-4 py-5" id="featured-3">
 			<c:choose>
 				<c:when test="${logsByDate.size() > 0}">
-					<h2 class="pb-2 border-bottom">Your workout history for <mark>${logsByDate.size()}</mark> days</h2>
+					<h2 class="pb-2 border-bottom">Your workout history for <mark>${logsByDate.size()}</mark> sessions</h2>
 
 					<div id="container-chart-overall"></div>
 
-					<div id="container-chart-fullhistory"></div>
+					<!-- <div id="container-chart-fullhistory"></div> -->
 					
 					<!--
 					<table class="table table-striped table-hover mt-3">
